@@ -1,10 +1,8 @@
-# RESTful EPP - HTTP
+# RESTful Provisioning Protocol
 
-This repository contains the IETF draft for HTTP based core of the RESTful Provisioning Protocol 
+This repository contains the IETF draft for the RESTful Provisioning Protocol.
 
 The [draft](https://github.com/SIDN/ietf-rpp-core/blob/main/src/draft-rpp-core.md) is authored using [mmark](https://mmark.miek.nl/) Markdown.
-
-For more information about why we are working on the draft, see the short [presentation](https://www.sidnlabs.nl/downloads/6L2dl6xiV5eQY61EB14wzo/a950bcb1d4979c2b56d87d1ef6b83d45/ietf-118-restfull-epp-discussion.pdf) presented at the regext working group at IETF-118.
 
 Contributions in the form of a Pull Request are welcome.
 

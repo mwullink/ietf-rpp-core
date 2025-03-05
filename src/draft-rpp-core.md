@@ -133,7 +133,7 @@ A RPP request MUST contain all information required for the server to be able to
 
 # REST {#rest}
 
-RPP uses the REST architectural style, each HTTP method is assigned a distinct behavior, (#http-method) provides an overview of the behavior assigned to each method. RPP requests are expressed by a URL referring to a resource, a HTTP method, HTTP headers and an optional message body containing the EPP request message. 
+RPP uses the REST architectural style, each HTTP method is assigned a distinct behavior, requests are expressed by a URL referring to a resource, a HTTP method, HTTP headers and an optional message body containing the EPP request message. 
 
 A RPP HTTP message body MUST contain at most a single EPP request or response. HTTP requests MUST be processed independently of each other and in the same order as received by the server. A client MAY choose to send a new request, using an existing connection, before the response for the previous request has been received (pipelining). A server using HTTP/2 [@!RFC7540] or HTTP/3 [@!RFC9114] contains built-in support for stream multiplexing and MAY choose to support pipelining using this mechanism. The response MAY be returned out of order back to the client, because some requests require more processing time by the server.
 

@@ -1,0 +1,1906 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- name="GENERATOR" content="github.com/mmarkdown/mmark Mmark Markdown Processor - mmark.miek.nl" -->
+<rfc version="3" ipr="trust200902" docName="draft-rpp-core-01" submissionType="IETF" category="std" xml:lang="en" xmlns:xi="http://www.w3.org/2001/XInclude" indexInclude="true" tocDepth="4">
+
+<front>
+<title abbrev="RESTful Provisioning Protocol">RESTful Provisioning Protocol (RPP)</title><seriesInfo value="draft-rpp-core-01" stream="IETF" status="standard" name="Internet-Draft"></seriesInfo>
+<author initials="M." surname="Wullink" fullname="Maarten Wullink"><organization>SIDN Labs</organization><address><postal><street></street>
+</postal><email>maarten.wullink@sidn.nl</email>
+<uri>https://sidn.nl/</uri>
+</address></author><author initials="P." surname="Kowalik" fullname="Pawel Kowalik"><organization>DENIC</organization><address><postal><street></street>
+</postal><email>pawel.kowalik@denic.de</email>
+<uri>https://denic.de/</uri>
+</address></author><date/>
+<area>Internet</area>
+<workgroup>Network Working Group</workgroup>
+
+<abstract>
+<t>This document describes RESTful Provisioning Protocol (RPP), a data format agnostic, Application Programming Interface (API) alternative to the Extensible Provisioning Protocol <xref target="RFC5730"></xref>.</t>
+</abstract>
+
+</front>
+
+<middle>
+
+<section anchor="introduction"><name>Introduction</name>
+<t>This document describes an Application Programming Interface (API) API based on the HTTP protocol <xref target="RFC2616"></xref> and the principles of <xref target="REST"></xref>. Conforming to the REST constraints is generally referred to as being &quot;RESTful&quot;. Hence the API is dubbed: &quot;'RESTful Provisioning Protocol&quot; or &quot;RPP&quot; for short.</t>
+<t>RPP is data format agnostic, the client uses server-driven content negotiation. Allowing the client to select from a set of representation media types supported by the server, such as JSON <xref target="RFC8259"></xref>, XML or <xref target="YAML"></xref>.</t>
+</section>
+
+<section anchor="terminology"><name>Terminology</name>
+<t>In this document the following terminology is used.</t>
+<t>REST - Representational State Transfer (<xref target="REST"></xref>). An architectural style.</t>
+<t>RESTful - A RESTful web service is a web service or API implemented using HTTP and the principles of <xref target="REST"></xref>.</t>
+<t>EPP RFCs - This is a reference to the EPP version 1.0 specifications <xref target="RFC5730"></xref>, <xref target="RFC5731"></xref>, <xref target="RFC5732"></xref> and <xref target="RFC5733"></xref>.</t>
+<t>RESTful Provisioning Protocol or RPP - The protocol described in this document.</t>
+<t>URL - A Uniform Resource Locator as defined in <xref target="RFC3986"></xref>.</t>
+<t>Resource - An object having a type, data, and possible relationship to other resources, identified by a URL.</t>
+<t>RPP client - An HTTP user agent performing an RPP request</t>
+<t>RPP server - An HTTP server responsible for processing requests and returning results in any supported media type.</t>
+</section>
+
+<section anchor="conventions-used-in-this-document"><name>Conventions Used in This Document</name>
+<t>The key words &quot;MUST&quot;, &quot;MUST NOT&quot;, &quot;REQUIRED&quot;, &quot;SHALL&quot;, &quot;SHALL NOT&quot;,&quot;SHOULD&quot;, &quot;SHOULD NOT&quot;, &quot;RECOMMENDED&quot;, &quot;MAY&quot;, and &quot;OPTIONAL&quot; in this document are to be interpreted as described in <xref target="RFC2119"></xref>.</t>
+<t>In examples, lines starting with &quot;C:&quot; represent data sent by a RPP client and lines starting with &quot;S:&quot; represent data returned by a RPP server. Indentation and white space in examples are provided only to illustrate element relationships and are not REQUIRED features of the protocol.</t>
+<t>All example requests assume a RPP server using HTTP version 2 is listening on the standard HTTPS port on host rppp.example.nl. An authorization token has been provided by an out of band process and MUST be used by the client to authenticate each request.</t>
+</section>
+
+<section anchor="design-considerations"><name>Design Considerations</name>
+<t>RPP is designed to improve the ease of design, development, deployment, and management of an provisioning service. This section lists the main design criteria.</t>
+
+<ul>
+<li><t>Ease of use, provide a clear, clean, easy to use and self-explanatory interface that can easily be integrated into existing software systems. Based on these principles a <xref target="REST"></xref> architectural style was chosen, where a client  interacts with a RPP server via HTTP.</t>
+</li>
+<li><t>Scalability, HTTP allows the use of well know mechanisms for creating scalable systems, such as load balancing. Load balancing at the level of request messages is more efficient compared to load balancing based on TCP sessions. When using EPP over TCP, the TCP session can be used to transmit multiple request messages and these are then all processed by a single EPP server and not load balanced across a pool of available servers. During normal registry operations, the bulk of EPP requests can be expected to be of the informational type, load balancing and possibly separating these to dedicated compute resources may also improve registry services and provide better performance for the transform request types.</t>
+</li>
+<li><t>Stateless, <xref target="RFC5730"></xref> REQUIRES a stateful session between a client and server. A RPP server MUST be stateless and MUST NOT keep client session or any other application state. Each client request needs to provide all the information necessary for the server to successfully process the request.</t>
+</li>
+<li><t>Security, allow for the use of authentication and authorization solutions available for HTTP based applications. HTTP provides an Authorization header <xref target="RFC2616" sectionFormat="of" section="14.8"></xref>.</t>
+</li>
+<li><t>Content negotiation, A server may choose to include support for multiple media types.
+The client must be able to signal to the server what media type the server should expect for the request content and to use for the response content.</t>
+</li>
+<li><t>Compatibility with existing EPP semantics defined in the EPP RFCs.</t>
+</li>
+<li><t>Simplicity, when the semantics of a resource URL and HTTP method match an EPP command and request message, the use of a request message should be optional.</t>
+</li>
+<li><t>Performance, reducing the number of required request and response messages, improves the performance and network bandwidth requirements for both client and server. Not every request will require a message to be created, marshalled, and transmitted.</t>
+</li>
+</ul>
+</section>
+
+<section anchor="extension-framework"><name>Extension Framework</name>
+<t>TODO</t>
+</section>
+
+<section anchor="resource-naming-convention"><name>Resource Naming Convention</name>
+<t>A RPP resource can be a single unique object identifier e.g. a domain name or consist out of a collection of objects. A collection of objects available for registry operations MUST be identified by: <tt>/{context-root}/{version}/{collection}</tt></t>
+
+<ul>
+<li><t><tt>{context-root}</tt> is the base URL which MUST be specified, the {context-root} MAY be an empty, zero length string.</t>
+</li>
+<li><t><tt>{version}</tt> is a path segment which identifies the version of the RPP implementation. This
+is the equivalent of the Version element in the EPP RFCs. The version used in the RPP URL MUST match the version used in EPP Greeting message.</t>
+</li>
+<li><t><tt>{collection}</tt> MUST be substituted by &quot;domains&quot;, &quot;hosts&quot; or
+&quot;contacts&quot; or other supported objects, referring to either <xref target="RFC5731"></xref>, <xref target="RFC5732"></xref> or <xref target="RFC5733"></xref>.</t>
+</li>
+</ul>
+<t>A trailing slash MAY be added to each request. Implementations MUST consider requests which only differ with respect to this trailing slash as identical.</t>
+<t>A specific EPP object instance MUST be identified by {context-root}/ {version}/{collection}/{id} where {id} is a unique object identifier described in EPP RFCs.</t>
+<t>An example domain name resource, for domain name example.nl, would look like this:</t>
+<t><tt>/rpp/v1/domains/example.nl</tt></t>
+<t>The path segment after a collection path segment MUST be used to identify an object instance, the path segment after an object instance MUST be used to identify attributes or related collections of the object instance.</t>
+</section>
+
+<section anchor="session-management"><name>Session Management</name>
+<t>One of the main design considerations for RPP is to enable scalable EPP services, for this reason the RPP uses a stateless architecture and does not create and maintain client sessions. The Session concept is an anti-pattern in the context of a stateless service, the server MUST NOT maintain any state information relating to the client or EPP transaction.</t>
+<t>Session management as described in <xref target="RFC5730"></xref> requires a stateful server architecture for maintaining client and application state over multiple client request and is therefore no longer supported.</t>
+<t>A RPP request MUST contain all information required for the server to be able to successfully process the request. The client MUST include authentication credentials for each request. This MAY be done by using any of the available HTTP authentication mechanisms, such as those described in <xref target="RFC2617"></xref>.</t>
+</section>
+
+<section anchor="rest"><name>REST</name>
+<t>RPP uses the REST architectural style, each HTTP method is assigned a distinct behavior, requests are expressed by a URL referring to a resource, a HTTP method, HTTP headers and an optional message body containing the EPP request message.</t>
+<t>A RPP HTTP message body MUST contain at most a single EPP request or response. HTTP requests MUST be processed independently of each other and in the same order as received by the server. A client MAY choose to send a new request, using an existing connection, before the response for the previous request has been received (pipelining). A server using HTTP/2 <xref target="RFC7540"></xref> or HTTP/3 <xref target="RFC9114"></xref> contains built-in support for stream multiplexing and MAY choose to support pipelining using this mechanism. The response MAY be returned out of order back to the client, because some requests require more processing time by the server.</t>
+<t>HTTP/1 does not use persistent connections by default, the client MAY use the &quot;Connection&quot; header to request for the server not to close the existing connection, so it can be re-used for future requests. The server MAY choose not to honor this request.</t>
+
+<section anchor="content-negotiation"><name>Content negotiation</name>
+<t>The server MAY choose to support multiple data format for EPP object representations, such as XML and JSON.
+The client and server MUST support server-driven content negotiation and related HTTP headers for content negotiation, as described in <xref target="RFC2616" sectionFormat="of" section="12.2"></xref>.</t>
+<t>The client MUST use the following HTTP headers:</t>
+
+<ul spacing="compact">
+<li><tt>Content-Type</tt>: Used to indicate the media type for the content in the message body</li>
+<li><tt>Accept</tt>: Used to indicate the media type the server MUST use for the representation of objects, this MAY
+       be a list of types and related weight factors, as described in <xref target="RFC2616" sectionFormat="of" section="14.1"></xref></li>
+</ul>
+<t>The client MUST synchronize the value for the Content-Type and Accept headers, for example a client MUST NOT send an XML formatted request message to the server, while at the same time requesting a JSON formatted response message. The server MUST use the <tt>Content-Type</tt> HTTP header to indicate the media type used for the representation in the response message body. The server MUST return HTTP status code 406 (Not Acceptable) or 415 (Unsupported Media Type) when the client requests an unsupported media type.</t>
+</section>
+
+<section anchor="request"><name>Request</name>
+<t>In contrast to EPP over TCP <xref target="RFC5734"></xref>, a RPP request does not always require a EPP request message. The information conveyed by the HTTP method, URL, and request headers may be sufficient for the server to be able to successfully processes a request for most commands. However, the client MUST include the request message in the HTTP request body when the server requires additional attributes to be present in the request message. The RPP HTTP headers listed below use the &quot;RPP-&quot; prefix, following the recommendations in <xref target="RFC6648"></xref>.</t>
+<t><strong>TODO:</strong> the non standard headers mentioned below are linked to EPP and may need to be removed.</t>
+
+<ul>
+<li><t><tt>RPP-Cltrid</tt>:  The client transaction identifier is the equivalent of the <tt>clTRID</tt> element defined in <xref target="RFC5730"></xref> and MUST be used accordingly, when the HTTP message body does not contain an EPP request that includes a cltrid.</t>
+</li>
+<li><t><tt>RPP-Svcs</tt>: The namespace used by the client in the EPP request message, this is equivalent to the &quot;svcs&quot; element in the Login command defined in <xref target="RFC5730" sectionFormat="of" section="2.9.1.1"></xref>. The client MUST use this header if the media type of the request or response message body content requires the server to know what namespaces to use. Such as is the case for XML-based request and response messages. The header value MAY contain multiple comma separated namespaces.</t>
+</li>
+<li><t><tt>RPP-Svcs-Ext</tt>: The extension namespace used by the client in the EPP request message, this is equivalent to the &quot;svcExtension&quot; element in the Login command defined in <xref target="RFC5730" sectionFormat="of" section="2.9.1.1"></xref></t>
+</li>
+<li><t><tt>RPP-AuthInfo</tt>: The client MAY use this header for sending basic token-based authorization information, as described in <xref target="RFC5731" sectionFormat="of" section="2.6"></xref> and <xref target="RFC5733" sectionFormat="of" section="2.8"></xref>. If the authorization is linked to a contact object then the client MUST also include the RPP-Roid header.</t>
+</li>
+<li><t><tt>RPP-Roid</tt>: If the authorization info, is linked to a database object, the client MAY use this header for the Repository Object IDentifier (ROID), as described in <xref target="RFC5730" sectionFormat="of" section="4.2"></xref>.</t>
+</li>
+<li><t><tt>Accept-Language</tt>: The server MUST support the use of HTTP Accept-Language header by clients. The client MAY issue a Hello request to discover the languages supported by the server. Multiple servers in a load-balanced environment SHOULD reply with consistent &quot;lang&quot; elements in the Greeting response. The value of the Accept-Language header MUST match 1 of the languages from the Greeting. When the server receives a request using an unsupported language, the server MUST respond using the default language configured for the server.</t>
+</li>
+<li><t><tt>Connection</tt>: If the server uses HTTP/1.1 or lower, the client MAY choose to use this header to request the server to keep op the TCT-connection. The client MUST not use this header when the server uses HTTP/2 <xref target="RFC9113" sectionFormat="of" section="8.2.2"></xref> or HTTP/3 <xref target="RFC9113" sectionFormat="of" section="4.2"></xref></t>
+</li>
+<li><t><tt>Accept-Encoding</tt>: The client MAY choose to use the Accept-Encoding HTTP header to request the server to use compression for the response message body.</t>
+</li>
+</ul>
+</section>
+
+<section anchor="response"><name>Response</name>
+<t>The server HTTP response contains a status code, headers, and MAY contain an RPP response message in the message body. HTTP headers are used to transmit additional data to the client and MAY be used to send RPP process related data to the client. HTTP headers used by RPP MUST use the &quot;RPP-&quot; prefix, the following response headers have been defined for RPP.</t>
+<t><strong>TODO:</strong> the non standard headers mentioned below are linked to EPP and may need to be removed.</t>
+
+<ul>
+<li><t><tt>RPP-Svtrid</tt>:  This header is the equivalent of the &quot;svTRID&quot; element defined in <xref target="RFC5730"></xref> and MUST be used accordingly when the RPP response does not contain an EPP response in the HTTP message body. If an HTTP message body with the EPP XML equivalent &quot;svTRID&quot; exists, both values MUST be consistent.</t>
+</li>
+<li><t><tt>RPP-Cltrid</tt>: This header is the equivalent of the &quot;clTRID&quot; element defined in <xref target="RFC5730"></xref> and MUST be used accordingly when the RPP response does not contain an EPP response in the HTTP message body. If the contents of the HTTP message body contains a &quot;clTRID&quot; value, then both values MUST be consistent.</t>
+</li>
+<li><t><tt>RPP-Eppcode</tt>: This header is the equivalent of the EPP result code defined in <xref target="RFC5730"></xref> and MUST be used accordingly. This header MUST be added to all responses, except for the Greeting, and MAY be used by the client for easy access to the EPP result code, without having to parse the content of the HTTP response message body.</t>
+</li>
+<li><t><tt>RPP-Check-Avail</tt>: An alternative for the &quot;avail&quot; attribute of the object:name element in an Object Check response and MUST be used accordingly. The server does not return a HTTP message body in response to a RPP Object Check request.</t>
+</li>
+<li><t><tt>RPP-Check-Reason</tt>: An optional alternative for the &quot;object:reason&quot; element in an Object Check response and MUST be used accordingly.</t>
+</li>
+<li><t><tt>RPP-Queue-Size</tt>: Return the number of unacknowledged messages in the client message queue. The server MAY include this header in all RPP responses.
+</t>
+</li>
+<li><t><tt>Cache-Control</tt>:  The client MUST never cache results, the server MUST always return the value &quot;No-Store&quot; for this header, as described in <xref target="RFC7234" sectionFormat="of" section="5.2.1.5"></xref>.
+</t>
+</li>
+<li><t><tt>Content-Language</tt>: The server MUST include this header in every response that contains an EPP message in the message body.</t>
+</li>
+<li><t><tt>Content-Encoding</tt>: The server MAY choose to compress the responses message body, using an   algorithm selected from the list of algorithms provided by the client using the Accept-Encoding request header.</t>
+</li>
+</ul>
+<t>RPP does not always return an EPP response message in the HTTP message body. The <tt>Object Check</tt> request for example may return an empty HTTP response body. When the server does not return an EPP message, it MUST return at least the RPP-Svtrid, RPP-Cltrid and RPP-Eppcode headers.</t>
+</section>
+
+<section anchor="error-handling"><name>Error Handling</name>
+<t>RESTful Provisioning Protocol and HTTP protocol are both an application layer protocol, having their own status- and result codes.</t>
+</section>
+</section>
+
+<section anchor="command-mapping"><name>Commands</name>
+<t>RESTful Provisioning Protocol command contain 4 distinct elements.</t>
+
+<ol spacing="compact">
+<li>Resource defined by a URL</li>
+<li>HTTP method to be used on the resource</li>
+<li>Request message (Optional)</li>
+<li>EPP response message (Optional)</li>
+</ol>
+<t><xref target="tbl-cmd-mapping"></xref> lists an overview of RPP commands, the subsequent sections provide details for each commands. Resource URLs in the table are assumed to be using the prefix: &quot;/{context-root}/{version}/&quot;. Some RPP endpoints do not require a request and/or response message, as is indicated by the table columns &quot;Request&quot; and &quot;response&quot;.</t>
+
+<ul spacing="compact">
+<li><tt>{c}</tt>:  An abbreviation for {collection}: this MUST be substituted with
+&quot;domains&quot;, &quot;hosts&quot;, &quot;contacts&quot; or any other collection of objects.</li>
+<li><tt>{i}</tt>:  An abbreviation for an object id, this MUST be substituted with the value of a domain name, hostname, contact-id or a message-id or any other defined object.</li>
+<li><tt>Optional</tt>: A request message is only required when the server uses an EPP extension, which requires the use of XML elements and/or atributes that are not mapped to RPP.</li>
+</ul>
+<table anchor="tbl-cmd-mapping"><name>RPP Commands
+</name>
+<thead>
+<tr>
+<th>Command</th>
+<th>Method</th>
+<th>Resource</th>
+<th>Request</th>
+<th>Response</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Hello</td>
+<td>OPTIONS</td>
+<td>/</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>Login</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>N/A</td>
+</tr>
+
+<tr>
+<td>Logout</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>N/A</td>
+</tr>
+
+<tr>
+<td>Check</td>
+<td>HEAD</td>
+<td>/{c}/{i}</td>
+<td>No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>Info</td>
+<td>GET</td>
+<td>/{c}/{i}</td>
+<td>Optional</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>Poll Request</td>
+<td>GET</td>
+<td>/messages</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>Poll Ack</td>
+<td>DELETE</td>
+<td>/messages/{i}</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>Create</td>
+<td>POST</td>
+<td>/{c}</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>Delete</td>
+<td>DELETE</td>
+<td>/{c}/{i}</td>
+<td>Optional</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>Renew</td>
+<td>POST</td>
+<td>/{c}/{i}/renewals</td>
+<td>Optional</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>Transfer Request</td>
+<td>POST</td>
+<td>/{c}/{i}/transfers</td>
+<td>Optional</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>Transfer Query</td>
+<td>GET</td>
+<td>/{c}/{i}/transfers/latest</td>
+<td>Optional</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>Transfer Cancel</td>
+<td>DELETE</td>
+<td>/{c}/{i}/transfers/latest</td>
+<td>Optional</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>Transfer Approve</td>
+<td>PUT</td>
+<td>/{c}/{i}/transfers/latest</td>
+<td>Optional</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>Transfer Reject</td>
+<td>DELETE</td>
+<td>/{c}/{i}/transfers/latest</td>
+<td>Optional</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>Update</td>
+<td>PATCH</td>
+<td>/{c}/{i}</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>Extension [1]</td>
+<td>*</td>
+<td>/{c}/{i}/extension/*</td>
+<td>*</td>
+<td>*</td>
+</tr>
+
+<tr>
+<td>Extension [2]</td>
+<td>*</td>
+<td>/extension/*</td>
+<td>*</td>
+<td>*</td>
+</tr>
+</tbody>
+</table><t>[1] This mapping is used for Object extensions based on the extension mechanism as defined in [RFC5730, section 2.7.2]
+[2] This mapping is used for Protocol extensions based on the extension mechanism as defined in [RFC5730, seciton 2.7.1]</t>
+<t>When there is a mismatch between a resource identifier in the HTTP message body and the resource identifier in the URL used for a request, then the server MUST return HTTP status code 400 (Bad Request). The examples, in the sections below, assume the server does not use any EPP extensions and therefore the client does not add any request message to the HTTP message body.</t>
+
+<section anchor="hello"><name>Hello</name>
+
+<ul spacing="compact">
+<li>Request: OPTIONS /</li>
+<li>Request message: None</li>
+<li>Response message: Greeting response</li>
+</ul>
+<t>Due to the stateless nature of RPP, the server does not respond by sending a Greeting message when a connection is created, as described in <xref target="RFC5730" sectionFormat="of" section="2"></xref>. The client MUST request a Greeting by using the Hello request as described in <xref target="RFC5730" sectionFormat="of" section="2.3"></xref>. The server MUST respond by returning a Greeting response, as defined in <xref target="RFC5730" sectionFormat="of" section="2.4"></xref>.</t>
+<t>The version value used in the Hello response MUST match the version value used for the <tt>{version}</tt> path segment in the URL used for the Hello request.</t>
+<t>Example request:</t>
+
+<artwork><![CDATA[C: OPTIONS /rpp/v1/ HTTP/2
+C: Host: rpp.example.nl
+C: Authorization: Bearer <token>
+C: Accept: application/epp+xml
+C: Accept-Language: en
+C: Connection: keep-alive
+
+]]>
+</artwork>
+<t>Example response:</t>
+
+<sourcecode type="xml"><![CDATA[S: HTTP/2 200 OK
+S: Date: Wed, 24 Jan 2024 12:00:00 UTC
+S: Server: Example RPP server v1.0
+S: Content-Length: 799
+S: Content-Type: application/epp+xml
+S: Content-Language: en
+S:
+S: <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+S: <rpp xmlns="urn:ietf:params:xml:ns:rpp-1.0">
+S:   <greeting>
+S:      <svcMenu>
+S:         <version>1.0</version>
+S:         <!-- The rest of the response is omitted here -->
+S:      <svcMenu>
+S:   </greeting>
+S: </rpp>
+]]>
+</sourcecode>
+</section>
+
+<section anchor="login"><name>Login</name>
+<t>The Login command defined in <xref target="RFC5730" sectionFormat="of" section="2.9.1.1"></xref> is used to establish a session between client and server, this is part of the stateful nature of the EPP protocol. RPP is stateless and MUST NOT maintain any client state and does not include a Login command. The client MUST include all information in a RPP request, required for the server to be able to properly process the request. This includes request attributes defined as for Login command in <xref target="RFC5730" sectionFormat="of" section="2.9.1.1"></xref>.</t>
+<t>
+The request attributes from the Login command, used for configuring the client session, are moved to the HTTP layer.</t>
+
+<ul spacing="compact">
+<li><tt>clID</tt>: Replaced by HTTP authentication</li>
+<li><tt>pw:</tt>: Replaced by HTTP authentication</li>
+<li><tt>newPW</tt>: Replaced by out of band process</li>
+<li><tt>version</tt>: Replaced by the <tt>{version}</tt> path parameter in the request URL.</li>
+<li><tt>lang</tt>: Replaced by the <tt>Accept-Language</tt> HTTP header.</li>
+<li><tt>svcs</tt>: Replaced by the <tt>RPP-Svcs</tt> HTTP header.</li>
+<li><tt>svcExtension</tt>:  Replaced by the <tt>RPP-Svcs-Ext</tt> HTTP header.</li>
+</ul>
+<t>The server MUST check the namespaces used in the RPP-Svcs HTTP header. An unsupported namespace MUST result in the appropriate EPP result code.</t>
+</section>
+
+<section anchor="logout"><name>Logout</name>
+<t>Due to the stateless nature of RPP, the session concept is no longer used and therefore the Logout command MUST NOT be implemented by the server.</t>
+</section>
+
+<section anchor="query-resources"><name>Query Resources</name>
+<t>
+A RPP client MAY use the HTTP GET method for executing a query command only when no request data has to be added to the HTTP message body. Sending content using an HTTP GET request is discouraged in <xref target="RFC9110"></xref>, there exists no generally defined semantics for content received in a GET request. When an EPP object requires additional authInfo information, as described in <xref target="RFC5731"></xref> and <xref target="RFC5733"></xref>, the client MUST use the HTTP POST method and add the query command content to the HTTP message body.</t>
+
+<section anchor="check"><name>Check</name>
+
+<ul spacing="compact">
+<li>Request: HEAD /{collection}/{id}</li>
+<li>Request message: None</li>
+<li>Response message: None</li>
+</ul>
+<t>The HTTP HEAD method MUST be used for object existence check. The response MUST contain the <tt>RPP-Check-Avail</tt> header and MAY contain the <tt>RPP-Check-Reason</tt> header. The value of the <tt>RPP-Check-Avail</tt> header MUST be &quot;0&quot; or &quot;1&quot; as described in <xref target="RFC5730" sectionFormat="of" section="2.9.2.1"></xref>, depending on whether the object can be provisioned or not.</t>
+<t>The Check endpoint MUST be limited to checking only a single object-id per request. This may seem a limitation compared to the Check command defined in <xref target="RFC5730"></xref> where a Check message may contain multiple object-ids. The RPP Check request can be load balanced more efficiently when only a single object-id has to be checked.</t>
+<t>Example request for a domain name:</t>
+
+<artwork><![CDATA[C: HEAD /rpp/v1/domains/example.nl HTTP/2
+C: Host: rpp.example.nl
+C: Authorization: Bearer <token>
+C: Accept-Language: en
+C: RPP-Cltrid: ABC-12345
+C: RPP-Svcs: urn:ietf:params:xml:ns:domain-1.0
+
+]]>
+</artwork>
+<t>Example response:</t>
+
+<artwork><![CDATA[S: HTTP/2 200 OK
+S: Date: Wed, 24 Jan 2024 12:00:00 UTC
+S: Server: Example RPP server v1.0
+S: RPP-Cltrid: ABC-12345
+S: RPP-Svtrid: XYZ-12345
+S: RPP-Check-Avail: 0
+S: RPP-Check-Reason: In use
+S: RPP-result-code: 1000
+s: Content-Length: 0
+
+]]>
+</artwork>
+</section>
+
+<section anchor="info"><name>Info</name>
+<t>The Object Info request MUST use the HTTP GET method on a resource identifying an object instance, using an empty message body. If the object has authorization information attached and the authorization then the client MUST include the RPP-AuthInfo HTTP header. If the authorization is linked to a database object the client MUST include the RPP-Roid header.</t>
+<t>Example request for an object not using authorization information.</t>
+
+<ul spacing="compact">
+<li>Request: GET /{collection}/{id}</li>
+<li>Request message: Optional</li>
+<li>Response message: Info response</li>
+</ul>
+
+<artwork><![CDATA[C: GET /rpp/v1/domains/example.nl HTTP/2
+C: Host: rpp.example.nl
+C: Authorization: Bearer <token>
+C: Accept: application/epp+xml
+C: Accept-Language: en
+C: RPP-Cltrid: ABC-12345
+C: RPP-Svcs: urn:ietf:params:xml:ns:domain-1.0
+
+]]>
+</artwork>
+<t>Example request using RPP-AuthInfo header for an object that has attached authorization information.</t>
+
+<ul spacing="compact">
+<li>Request: GET /{collection}/{id}</li>
+<li>Request message: Optional</li>
+<li>Response message: Info response</li>
+</ul>
+
+<artwork><![CDATA[C: GET /rpp/v1/domains/example.nl HTTP/2
+C: Host: rpp.example.nl
+C: Authorization: Bearer <token>
+C: Accept: application/epp+xml
+C: Accept-Language: en
+C: RPP-Cltrid: ABC-12345
+C: RPP-AuthInfo: secret-token
+C: RPP-Roid: REG-XYZ-12345
+C: RPP-Svcs: urn:ietf:params:xml:ns:domain-1.0
+
+]]>
+</artwork>
+<t>Example Info response:</t>
+
+<sourcecode type="xml"><![CDATA[S: HTTP/2 200 OK
+S: Date: Wed, 24 Jan 2024 12:00:00 UTC
+S: Server: Example RPP server v1.0
+S: Content-Length: 424
+S: Content-Type: application/epp+xml
+S: Content-Language: en
+S: RPP-Eppcode: 1000
+S:
+S:<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+S:<rpp xmlns="urn:ietf:params:xml:ns:rpp-1.0">
+S:  <response>
+S:    <result code="1000">
+S:      <msg>Command completed successfully</msg>
+S:    </result>
+S:    <resData>
+S:      <domain:infData xmlns:domain="urn:ietf:params:xml:ns:domain-1.0">
+S:         < !-- The rest of the response is omitted here -- >
+S:      </domain:infData>
+S:    </resData>
+S:    <trID>
+S:      <clTRID>ABC-12345</clTRID>
+S:      <svTRID>XYZ-12345</svTRID>
+S:    </trID>
+S:  </response>
+S:</rpp>
+]]>
+</sourcecode>
+
+<section anchor="object-filtering"><name>Object Filtering</name>
+<t>
+The server MUST support the use of the <tt>filter</tt> and <tt>val</tt> query parameters for the purpose of limiting the number of objects in a response.</t>
+
+<ul spacing="compact">
+<li><tt>filter</tt>: The attribute or field name to apply the filter on</li>
+<li><tt>val</tt>: The value used for filtering</li>
+</ul>
+<t>The Domain Name Mapping <xref target="RFC5731" sectionFormat="bare" section="Section 3.1.2"></xref> describes an optional &quot;hosts&quot; attribute for the Domain Info command. This attribute may be used for filtering hosts returned in the Info response, and is mapped to the <tt>filter</tt> and <tt>val</tt> query parameters. If the filtering query parameters are absent from the request URL, the server MUST use the default filter value described in the corresponding EPP RFCs.</t>
+<t>URLs used for filtering based on <tt>hosts</tt> attribute for Domain Info request:</t>
+
+<ul spacing="compact">
+<li>default: GET /domains/{id}</li>
+<li>all: GET /domains/{id}?filter=hosts&amp;val=all</li>
+<li>del: GET /domains/{id}?filter=hosts&amp;val=del</li>
+<li>sub: GET /domains/{id}?filter=hosts&amp;val=sub</li>
+<li>none: GET /domains/{id}?filter=hosts&amp;val=none</li>
+</ul>
+<t>Example Domain Info request, the response should only include delegated hosts:</t>
+
+<artwork><![CDATA[C: GET /rpp/v1/domains/example.nl?filter=hosts&val=del HTTP/2
+C: Host: rpp.example.nl
+C: Authorization: Bearer <token>
+C: Accept: application/epp+xml
+C: Accept-Language: en
+C: RPP-Cltrid: ABC-12345
+C: RPP-Svcs: urn:ietf:params:xml:ns:domain-1.0
+
+]]>
+</artwork>
+</section>
+</section>
+
+<section anchor="poll"><name>Poll</name>
+
+<section anchor="poll-request"><name>Poll Request</name>
+
+<ul spacing="compact">
+<li>Request: GET /messages</li>
+<li>Request message: None</li>
+<li>Response message: Poll response</li>
+</ul>
+<t>The client MUST use the HTTP GET method on the messages resource collection to request the message at the head of the queue. The &quot;op=req&quot; semantics from <xref target="RFC5730" sectionFormat="bare" section="Section 2.9.2.3"></xref> are assigned to the HTTP GET method.</t>
+<t>Example request:</t>
+
+<artwork><![CDATA[C: GET /rpp/v1/messages HTTP/2
+C: Host: rpp.example.nl
+C: Authorization: Bearer <token>
+C: Accept: application/epp+xml
+C: Accept-Language: en
+C: RPP-Cltrid: ABC-12345
+
+]]>
+</artwork>
+<t>Example response:</t>
+
+<sourcecode type="xml"><![CDATA[S: HTTP/2 200 OK
+S: Date: Wed, 24 Jan 2024 12:00:00 UTC
+S: Server: Example RPP server v1.0
+S: Content-Length: 312
+S: Content-Type: application/epp+xml
+S: Content-Language: en
+S: RPP-Eppcode: 1301
+S:
+S:<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+S:<rpp xmlns="urn:ietf:params:xml:ns:rpp-1.0">
+S:  <response>
+S:    <result code="1301">
+S:      <msg>Command completed successfully; ack to dequeue</msg>
+S:    </result>
+S:    <msgQ count="5" id="12345">
+S:      <qDate>2000-06-08T22:00:00.0Z</qDate>
+S:      <msg>Transfer requested.</msg>
+S:    </msgQ>
+S:    <resData>
+S:       <!-- The rest of the response is omitted here -->
+S:    </resData>
+S:    <trID>
+S:      <clTRID>ABC-12345</clTRID>
+S:      <svTRID>XYZ-12345</svTRID>
+S:    </trID>
+S:  </response>
+S:</rpp>
+]]>
+</sourcecode>
+</section>
+
+<section anchor="poll-ack"><name>Poll Ack</name>
+
+<ul spacing="compact">
+<li>Request: DELETE /messages/{id}</li>
+<li>Request message: None</li>
+<li>Response message: Poll Ack response</li>
+</ul>
+<t>The client MUST use the HTTP DELETE method to acknowledge receipt of a message from the queue. The &quot;op=ack&quot; semantics from <xref target="RFC5730" sectionFormat="bare" section="Section 2.9.2.3"></xref> are assigned to the HTTP DELETE method. The &quot;msgID&quot; attribute of a received EPP Poll message MUST be included in the message resource URL, using the {id} path element. The server MUST use RPP headers to return the EPP result code and the number of messages left in the queue. The server MUST NOT add content to the HTTP message body of a successful response, the server may add content to the message body of an error response.</t>
+<t>Example request:</t>
+
+<artwork><![CDATA[C: DELETE /rpp/v1/messages/12345 HTTP/2
+C: Host: rpp.example.nl
+C: Authorization: Bearer <token>
+C: Accept: application/epp+xml
+C: Accept-Language: en
+C: RPP-Cltrid: ABC-12345
+
+]]>
+</artwork>
+<t>Example response:</t>
+
+<sourcecode type="xml"><![CDATA[S: HTTP/2 200 OK
+S: Date: Wed, 24 Jan 2024 12:00:00 UTC
+S: Server: Example RPP server v1.0
+S: Content-Language: en
+S: RPP-Eppcode: 1000
+S: RPP-Queue-Size: 0
+S: RPP-Svtrid: XYZ-12345
+S: RPP-Cltrid: ABC-12345
+S: Content-Length: 145
+S:
+S:<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+S:<rpp xmlns="urn:ietf:params:xml:ns:rpp-1.0">
+S:  <response>
+S:    <result code="1000">
+S:      <msg>Command completed successfully</msg>
+S:    </result>
+S:    <msgQ count="0" id="12345"/>
+S:    <trID>
+S:      <clTRID>ABC-12345</clTRID>
+S:      <svTRID>XYZ-12345</svTRID>
+S:    </trID>
+S:  </response>
+S:</rpp>
+]]>
+</sourcecode>
+</section>
+</section>
+
+<section anchor="transfer-query"><name>Transfer Query</name>
+<t>The Transfer Query request MUST use the special &quot;latest&quot; sub-resource to refer to the
+latest object transfer. A latest transfer object may not exist, when no transfer has been initiated for the specified object.
+The &quot;op=query&quot; semantics from <xref target="RFC5730" sectionFormat="bare" section="Section 2.9.3.4"></xref> are assigned to the HTTP GET method. The client MUST use the HTTP GET method and MUST NOT add content to the HTTP message body.</t>
+
+<ul spacing="compact">
+<li>Request: GET {collection}/{id}/transfers/latest</li>
+<li>Request message: Optional</li>
+<li>Response message: Transfer Query response</li>
+</ul>
+<t>Example domain name Transfer Query request without authorization information required:</t>
+
+<artwork><![CDATA[C: GET /rpp/v1/domains/example.nl/transfers/latest HTTP/2
+C: Host: rpp.example.nl
+C: Authorization: Bearer <token>
+C: Accept: application/epp+xml
+C: Accept-Language: en
+C: RPP-Cltrid: ABC-12345
+C: RPP-Svcs: urn:ietf:params:xml:ns:domain-1.0
+
+]]>
+</artwork>
+<t>If the requested object has associated authorization information that is not linked to another database object, then the HTTP GET method MUST be used and the authorization information MUST be included using the RPP-AuthInfo header.</t>
+<t>Example domain name Transfer Query request using RPP-AuthInfo header:</t>
+
+<artwork><![CDATA[C: GET /rpp/v1/domains/example.nl/transfers/latest HTTP/2
+C: Host: rpp.example.nl
+C: Authorization: Bearer <token>
+C: Accept: application/epp+xml
+C: Accept-Language: en
+C: RPP-Cltrid: ABC-12345
+C: RPP-AuthInfo: secret-token
+C: RPP-Svcs: urn:ietf:params:xml:ns:domain-1.0
+
+]]>
+</artwork>
+<t>If the requested object has associated authorization information linked to another database object, then the HTTP GET method MUST be used and both the RPP-AuthInfo and the RPP-Roid header MUST be included.</t>
+<t>Example domain name Transfer Query request and authorization using RPP-AuthInfo and the RPP-Roid header:</t>
+
+<artwork><![CDATA[C: GET /rpp/v1/domains/example.nl/transfers/latest HTTP/2
+C: Host: rpp.example.nl
+C: Authorization: Bearer <token>
+C: Accept: application/epp+xml
+C: Accept-Language: en
+C: RPP-AuthInfo: secret-token
+C: RPP-Roid: REG-XYZ-12345
+C: Content-Length: 0
+C:
+
+]]>
+</artwork>
+<t>Example Transfer Query response:</t>
+
+<sourcecode type="xml"><![CDATA[S: HTTP/2 200 OK
+S: Date: Wed, 24 Jan 2024 12:00:00 UTC
+S: Server: Example RPP server v1.0
+S: Content-Length: 230
+S: Content-Type: application/epp+xml
+S: Content-Language: en
+S: RPP-Eppcode: 1000
+S:
+S:<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+S:<rpp xmlns="urn:ietf:params:xml:ns:rpp-1.0">
+S:  <response>
+S:    <result code="1000">
+S:      <msg>Command completed successfully</msg>
+S:    </result>
+S:    <resData>
+S:      <!-- The rest of the response is omitted here -->
+S:    </resData>
+S:    <trID>
+S:      <clTRID>ABC-12345</clTRID>
+S:      <svTRID>XYZ-12345</svTRID>
+S:    </trID>
+S:  </response>
+S:</rpp>
+]]>
+</sourcecode>
+</section>
+</section>
+
+<section anchor="transform-resources"><name>Transform Resources</name>
+
+<section anchor="create"><name>Create</name>
+
+<ul spacing="compact">
+<li>Request: POST /{collection}</li>
+<li>Request message: Object Create request</li>
+<li>Response message: Object Create response</li>
+</ul>
+<t>The client MUST use the HTTP POST method to create a new object resource. If the EPP request results in a newly created object, then the server MUST return HTTP status code 200 (OK). The server MUST add the &quot;Location&quot; header to the response, the value of this header MUST be the URL for the newly created resource.</t>
+<t>Example Domain Create request:</t>
+
+<sourcecode type="xml"><![CDATA[C: POST /rpp/v1/domains HTTP/2
+C: Host: rpp.example.nl
+C: Authorization: Bearer <token>
+C: Accept: application/epp+xml
+C: Content-Type: application/epp+xml
+C: RPP-Svcs: urn:ietf:params:xml:ns:domain-1.0
+C: Accept-Language: en
+C: Content-Length: 220
+C:
+C:<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+C:<rpp xmlns="urn:ietf:params:xml:ns:rpp-1.0">
+C:  <request>
+C:    <body>
+C:      <domain:create
+C:       xmlns:domain="urn:ietf:params:xml:ns:domain-1.0">
+C:        <domain:name>example.nl</domain:name>
+C:        <!-- The rest of the request is omitted here -->
+C:      </domain:create>
+C:    </body>
+C:    <clTRID>ABC-12345</clTRID>
+C:  </request>
+C:</rpp>
+]]>
+</sourcecode>
+<t>Example Domain Create response:</t>
+
+<sourcecode type="xml"><![CDATA[S: HTTP/2 200
+S: Date: Wed, 24 Jan 2024 12:00:00 UTC
+S: Server: Example RPP server v1.0
+S: Content-Language: en
+S: Content-Length: 642
+S: Content-Type: application/epp+xml
+S: Location: https://rpp.example.nl/rpp/v1/domains/example.nl
+S: RPP-Eppcode: 1000
+S:
+S:<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+S:<rpp xmlns="urn:ietf:params:xml:ns:rpp-1.0"
+S:     xmlns:domain="urn:ietf:params:xml:ns:domain-1.0">
+S:   <response>
+S:      <result code="1000">
+S:         <msg>Command completed successfully</msg>
+S:      </result>
+S:      <resData>
+S:         <domain:creData>
+S:            <!-- The rest of the response is omitted here -->
+S:         </domain:creData>
+S:      </resData>
+S:      <trID>
+S:         <clTRID>ABC-12345</clTRID>
+S:         <svTRID>XYZ-12345</svTRID>
+S:      </trID>
+S:   </response>
+S:</rpp>
+]]>
+</sourcecode>
+</section>
+
+<section anchor="delete"><name>Delete</name>
+
+<ul spacing="compact">
+<li>Request: DELETE /{collection}/{id}</li>
+<li>Request message: Optional</li>
+<li>Response message: Status</li>
+</ul>
+<t>The client MUST the HTTP DELETE method and a resource identifying a unique object instance. The server MUST return HTTP status code 200 (OK) if the resource was deleted successfully.</t>
+<t>Example Domain Delete request:</t>
+
+<artwork><![CDATA[C: DELETE /rpp/v1/domains/example.nl HTTP/2
+C: Host: rpp.example.nl
+C: Authorization: Bearer <token>
+C: Accept: application/epp+xml
+C: Accept-Language: en
+C: RPP-Cltrid: ABC-12345
+
+]]>
+</artwork>
+<t>Example Domain Delete response:</t>
+
+<sourcecode type="xml"><![CDATA[S: HTTP/2 200 OK
+S: Date: Wed, 24 Jan 2024 12:00:00 UTC
+S: Server: Example RPP server v1.0
+S: Content-Length: 80
+S: RPP-Svtrid: XYZ-12345
+S: RPP-Cltrid: ABC-12345
+S: RPP-Eppcode: 1000
+S:
+S:<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+S:<rpp xmlns="urn:ietf:params:xml:ns:rpp-1.0">
+S:  <response>
+S:    <result code="1000">
+S:      <msg>Command completed successfully</msg>
+S:    </result>
+S:    <trID>
+S:      <clTRID>ABC-12345</clTRID>
+S:      <svTRID>XYZ-12345</svTRID>
+S:    </trID>
+S:  </response>
+S:</rpp>
+]]>
+</sourcecode>
+</section>
+
+<section anchor="renew"><name>Renew</name>
+
+<ul spacing="compact">
+<li>Request: POST /{collection}/{id}/renewals</li>
+<li>Request message: Optional</li>
+<li>Response message: Renew response</li>
+</ul>
+<t>The Renew command is mapped to a nested collection, named &quot;renewals&quot;. Not all EPP object types include support for the renew command. The current-date query parameter MAY be used for date on which the current validity period ends, as described in <xref target="RFC5731" sectionFormat="of" section="3.2.3"></xref>. The new period MAY be added to the request using the unit and value request parameters. The response MUST include the Location header for the renewed object.</t>
+<t>Example Domain Renew request:</t>
+
+<artwork><![CDATA[C: POST /rpp/v1/domains/example.nl/renewals?current-date=2024-01-01 HTTP/2
+C: Host: rpp.example.nl
+C: Authorization: Bearer <token>
+C: Accept: application/epp+xml
+C: Content-Type: application/epp+xml
+C: RPP-Svcs: urn:ietf:params:xml:ns:domain-1.0
+C: Accept-Language: en
+C: Content-Length: 0
+C: 
+]]>
+</artwork>
+<t>Example Domain Renew request, using 1 year period:</t>
+
+<artwork><![CDATA[C: POST /rpp/v1/domains/example.nl/renewals?current-date=2024-01-01?unit=y&value=1 HTTP/2
+C: Host: rpp.example.nl
+C: Authorization: Bearer <token>
+C: Accept: application/epp+xml
+C: Content-Type: application/epp+xml
+C: RPP-Svcs: urn:ietf:params:xml:ns:domain-1.0
+C: Accept-Language: en
+C: Content-Length: 0
+C: 
+]]>
+</artwork>
+<t>Example Renew response:</t>
+
+<sourcecode type="xml"><![CDATA[S: HTTP/2 200 OK
+S: Date: Wed, 24 Jan 2024 12:00:00 UTC
+S: Server: Example RPP server v1.0
+S: Content-Language: en
+S: Content-Length: 205
+S: Location: https://rpp.example.nl/rpp/v1/domains/example.nl
+S: Content-Type: application/epp+xml
+S: RPP-Eppcode: 1000
+S:
+S:<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+S:<rpp xmlns="urn:ietf:params:xml:ns:rpp-1.0">
+S:  <response>
+S:    <result code="1000">
+S:      <msg>Command completed successfully</msg>
+S:    </result>
+S:    <resData>
+S:      <!-- The rest of the response is omitted here -->
+S:    </resData>
+S:    <trID>
+S:      <clTRID>ABC-12345</clTRID>
+S:      <svTRID>XYZ-12345</svTRID>
+S:    </trID>
+S:  </response>
+S:</rpp>
+]]>
+</sourcecode>
+</section>
+
+<section anchor="transfer"><name>Transfer</name>
+<t>Transferring an object from one sponsoring client to another client is specified in <xref target="RFC5731"></xref> and <xref target="RFC5733"></xref>. The Transfer command is mapped to a nested resource, named &quot;transfers&quot;. The semantics of the HTTP DELETE method are determined by the role of the client executing the DELETE method. The DELETE method is defined as &quot;reject transfer&quot; for the current sponsoring client of the object. For the new sponsoring client the DELETE method is defined as &quot;cancel transfer&quot;.</t>
+
+<section anchor="request-1"><name>Request</name>
+
+<ul spacing="compact">
+<li>Request: POST /{collection}/{id}/transfers</li>
+<li>Request message: Optional</li>
+<li>Response message: Status</li>
+</ul>
+<t>The &quot;op=request&quot; semantics from <xref target="RFC5730" sectionFormat="bare" section="Section 2.9.3.4"></xref> are assigned to the HTTP POST method.
+In order to initiate a new object transfer process, the client MUST use the HTTP POST method on a unique resource to create a new transfer resource object. Not all EPP objects support the Transfer command as described in <xref target="RFC5730" sectionFormat="of" section="3.2.4"></xref>, <xref target="RFC5731" sectionFormat="of" section="3.2.4"></xref> and <xref target="RFC5733" sectionFormat="of" section="3.2.4"></xref>.</t>
+<t>If the transfer request is successful, then the response MUST include the Location header for the object being transferred.</t>
+<t>Example request not using object authorization:</t>
+
+<artwork><![CDATA[C: POST /rpp/v1/domains/example.nl/transfers HTTP/2
+C: Host: rpp.example.nl
+C: Authorization: Bearer <token>
+C: Accept: application/epp+xml
+C: RPP-Svcs: urn:ietf:params:xml:ns:domain-1.0
+C: Accept-Language: en
+C: RPP-Cltrid: ABC-12345
+C: Content-Length: 0
+
+]]>
+</artwork>
+<t>Example request using object authorization:</t>
+
+<sourcecode type="xml"><![CDATA[C: POST /rpp/v1/domains/example.nl/transfers HTTP/2
+C: Host: rpp.example.nl
+C: Authorization: Bearer <token>
+C: Accept: application/epp+xml
+C: RPP-Svcs: urn:ietf:params:xml:ns:domain-1.0
+C: RPP-Cltrid: ABC-12345
+C: RPP-AuthInfo: secret-token
+C: Accept-Language: en
+C: Content-Length: 0
+
+]]>
+</sourcecode>
+<t>Example request using 1 year renewal period, using the <tt>unit</tt> and <tt>value</tt> query parameters:</t>
+
+<artwork><![CDATA[C: POST /rpp/v1/domains/example.nl/transfers?unit=y&value=1 HTTP/2
+C: Host: rpp.example.nl
+C: Authorization: Bearer <token>
+C: Accept: application/epp+xml
+C: RPP-Svcs: urn:ietf:params:xml:ns:domain-1.0
+C: Accept-Language: en
+C: RPP-Cltrid: ABC-12345
+C: Content-Length: 0
+
+]]>
+</artwork>
+<t>Example Transfer response:</t>
+
+<sourcecode type="xml"><![CDATA[S: HTTP/2 200 OK
+S: Date: Wed, 24 Jan 2024 12:00:00 UTC
+S: Server: Example RPP server v1.0
+S: Content-Language: en
+S: Content-Length: 328
+S: Content-Type: application/epp+xml
+S: Location: https://rpp.example.nl/rpp/v1/domains/example.nl/transfers/latest
+S: RPP-Eppcode: 1001
+S:
+S:<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+S:<rpp xmlns="urn:ietf:params:xml:ns:rpp-1.0">
+S:  <response>
+S:    <result code="1001">
+S:      <msg>Command completed successfully; action pending</msg>
+S:    </result>
+S:    <resData>
+S:      <!-- The rest of the response is omitted here -->
+S:    </resData>
+S:    <trID>
+S:      <clTRID>ABC-12345</clTRID>
+S:      <svTRID>XYZ-12345</svTRID>
+S:    </trID>
+S:  </response>
+S:</rpp>
+]]>
+</sourcecode>
+</section>
+
+<section anchor="cancel"><name>Cancel</name>
+
+<ul spacing="compact">
+<li>Request: DELETE /{collection}/{id}/transfers/latest</li>
+<li>Request message: Optional</li>
+<li>Response message: Status</li>
+</ul>
+<t>The &quot;op=cancel&quot; semantics from <xref target="RFC5730" sectionFormat="bare" section="Section 2.9.3.4"></xref> are assigned to the HTTP DELETE method.
+The new sponsoring client MUST use the HTTP DELETE method to cancel a requested transfer.</t>
+<t>Example request:</t>
+
+<artwork><![CDATA[C: DELETE /rpp/v1/domains/example.nl/transfers/latest HTTP/2
+C: Host: rpp.example.nl
+C: Authorization: Bearer <token>
+C: Accept: application/epp+xml
+C: Accept-Language: en
+C: RPP-Cltrid: ABC-12345
+
+]]>
+</artwork>
+<t>Example response:</t>
+
+<sourcecode type="xml"><![CDATA[S: HTTP/2 200 OK
+S: Date: Wed, 24 Jan 2024 12:00:00 UTC
+S: Server: Example RPP server v1.0
+S: Content-Length: 80
+S: RPP-Svtrid: XYZ-12345
+S: RPP-Cltrid: ABC-12345
+S: RPP-Eppcode: 1000
+S:
+S:<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+S:<rpp xmlns="urn:ietf:params:xml:ns:rpp-1.0">
+S:  <response>
+S:    <result code="1000">
+S:      <msg>Command completed successfully</msg>
+S:    </result>
+S:    <trID>
+S:      <clTRID>ABC-12345</clTRID>
+S:      <svTRID>XYZ-12345</svTRID>
+S:    </trID>
+S:  </response>
+S:</rpp>
+]]>
+</sourcecode>
+</section>
+
+<section anchor="reject"><name>Reject</name>
+
+<ul spacing="compact">
+<li>Request: DELETE /{collection}/{id}/transfers/latest</li>
+<li>Request message:  None</li>
+<li>Response message: Status</li>
+</ul>
+<t>The &quot;op=reject&quot; semantics from <xref target="RFC5730" sectionFormat="bare" section="Section 2.9.3.4"></xref> are assigned to the HTTP DELETE method.
+The currently sponsoring client of the object MUST use the HTTP DELETE method to reject a started transfer process.</t>
+<t>Example request:</t>
+
+<artwork><![CDATA[C: DELETE /rpp/v1/domains/example.nl/transfers/latest HTTP/2
+C: Host: rpp.example.nl
+C: Authorization: Bearer <token>
+C: Accept: application/epp+xml
+C: Accept-Language: en
+C: RPP-Cltrid: ABC-12345
+
+]]>
+</artwork>
+<t>Example Reject response:</t>
+
+<sourcecode type="xml"><![CDATA[S: HTTP/2 200 OK
+S: Date: Wed, 24 Jan 2024 12:00:00 UTC
+S: Server: Example RPP server v1.0
+S: Content-Length: 80
+S: RPP-Svtrid: XYZ-12345
+S: RPP-Cltrid: ABC-12345
+S: RPP-Eppcode: 1000
+S:
+S:<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+S:<rpp xmlns="urn:ietf:params:xml:ns:rpp-1.0">
+S:  <response>
+S:    <result code="1000">
+S:      <msg>Command completed successfully</msg>
+S:    </result>
+S:    <trID>
+S:      <clTRID>ABC-12345</clTRID>
+S:      <svTRID>XYZ-12345</svTRID>
+S:    </trID>
+S:  </response>
+S:</rpp>
+
+]]>
+</sourcecode>
+</section>
+
+<section anchor="approve"><name>Approve</name>
+
+<ul spacing="compact">
+<li>Request: PUT /{collection}/{id}/transfers/latest</li>
+<li>Request message: Optional</li>
+<li>Response message: Status</li>
+</ul>
+<t>The &quot;op=approve&quot; semantics from <xref target="RFC5730" sectionFormat="bare" section="Section 2.9.3.4"></xref> are assigned to the HTTP PUT method.
+The currently sponsoring client MUST use the HTTP PUT method to approve a transfer requested by the new sponsoring client.</t>
+<t>Example Approve request:</t>
+
+<artwork><![CDATA[C: PUT /rpp/v1/domains/example.nl/transfers/latest HTTP/2
+C: Host: rpp.example.nl
+C: Authorization: Bearer <token>
+C: Accept: application/epp+xml
+C: Accept-Language: en
+C: RPP-Cltrid: ABC-12345
+C: Content-Length: 0
+
+]]>
+</artwork>
+<t>Example Approve response:</t>
+
+<sourcecode type="xml"><![CDATA[S: HTTP/2 200 OK
+S: Date: Wed, 24 Jan 2024 12:00:00 UTC
+S: Server: Example RPP server v1.0
+S: Content-Length: 80
+S: RPP-Svtrid: XYZ-12345
+S: RPP-Cltrid: ABC-12345
+S: RPP-Eppcode: 1000
+S:
+S:<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+S:<rpp xmlns="urn:ietf:params:xml:ns:rpp-1.0">
+S:  <response>
+S:    <result code="1000">
+S:      <msg>Command completed successfully</msg>
+S:    </result>
+S:    <trID>
+S:      <clTRID>ABC-12345</clTRID>
+S:      <svTRID>XYZ-12345</svTRID>
+S:    </trID>
+S:  </response>
+S:</rpp>
+]]>
+</sourcecode>
+</section>
+</section>
+
+<section anchor="update"><name>Update</name>
+
+<ul spacing="compact">
+<li>Request: PATCH /{collection}/{id}</li>
+<li>Request message: Object Update message</li>
+<li>Response message: Status</li>
+</ul>
+<t>An object Update request MUST be performed using the HTTP PATCH method. The request message body MUST contain an EPP Update request, and the object-id value in the request MUST match the value of the object-id path parameter in the URL.</t>
+<t>Example request:</t>
+
+<sourcecode type="xml"><![CDATA[C: PATCH /rpp/v1/domains/example.nl HTTP/2
+C: Host: rpp.example.nl
+C: Authorization: Bearer <token>
+C: Accept: application/epp+xml
+C: Content-Type: application/epp+xml
+C: Accept-Language: en
+C: RPP-Svcs: urn:ietf:params:xml:ns:domain-1.0
+C: Content-Length: 252
+C:
+C:<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+C:<rpp xmlns="urn:ietf:params:xml:ns:rpp-1.0">
+C:  <request>
+C:    <body>
+C:      <domain:update
+C:       xmlns:domain="urn:ietf:params:xml:ns:domain-1.0">
+C:        <domain:name>example.nl</domain:name>
+C:           <!-- The rest of the request is omitted here -->
+C:      </domain:update>
+C:    </body>
+C:    <clTRID>ABC-12345</clTRID>
+C:  </request>
+C:</rpp>
+]]>
+</sourcecode>
+<t>Example response:</t>
+
+<sourcecode type="xml"><![CDATA[S: HTTP/2 200 OK
+S: Date: Wed, 24 Jan 2024 12:00:00 UTC
+S: Server: Example RPP server v1.0
+S: Content-Length: 80
+S: RPP-Svtrid: XYZ-12345
+S: RPP-Cltrid: ABC-12345
+S: RPP-Eppcode: 1000
+S:
+S:<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+S:<rpp xmlns="urn:ietf:params:xml:ns:rpp-1.0">
+S:  <response>
+S:    <result code="1000">
+S:      <msg>Command completed successfully</msg>
+S:    </result>
+S:    <trID>
+S:      <clTRID>ABC-12345</clTRID>
+S:      <svTRID>XYZ-12345</svTRID>
+S:    </trID>
+S:  </response>
+S:</rpp>
+]]>
+</sourcecode>
+</section>
+</section>
+
+<section anchor="extension-framework-1"><name>Extension Framework</name>
+<t>The EPP Extension Framework allows for extending the EPP protocol at different locations, RPP defines additional REST resources for the Protocol and Command-Response extensions.</t>
+
+<section anchor="protocol-extension"><name>Protocol Extension</name>
+
+<ul spacing="compact">
+<li>Request: * /extensions/*</li>
+<li>Request message: *</li>
+<li>Response message: *</li>
+</ul>
+<t>EPP Protocol extensions, defined in <xref target="RFC5730" sectionFormat="of" section="2.7.1"></xref> are supported using the &quot;/extensions&quot; root resource.
+The HTTP method used for a new Protocol extension is not defined but must follow the RESTful principles.</t>
+<t>The example below, illustrates the use of the &quot;Domain Cancel Delete&quot; command as defined as a custom command in <xref target="SIDN-EXT"></xref>. The new command is created below the &quot;extensions&quot; path element and after this element follows the &quot;domains&quot; object collection, finally a special &quot;deletion&quot; path element is added to the end of the URL. A client MUST use the HTPP DELETE method on a domain name deletion resource to cancel an ongoing domain delete transaction and move the domain from the grace state back to the active state.</t>
+<t>Example Protocol Extension request:</t>
+
+<ul spacing="compact">
+<li>Request: DELETE /extensions/{collection}/{id}/deletion</li>
+<li>Request message: Optional</li>
+<li>Response message: Optional error response</li>
+</ul>
+
+<artwork><![CDATA[C: DELETE /rpp/v1/extensions/domains/example.nl/deletion HTTP/2
+C: Host: rpp.example.nl
+C: Authorization: Bearer <token>
+C: Accept: application/epp+xml
+C: Accept-Language: en
+C: RPP-Svcs: urn:ietf:params:xml:ns:domain-1.0
+C: RPP-Svcs-Ext: https://rxsd.domain-registry.nl/sidn-ext-epp-1.0
+C: RPP-Cltrid: ABC-12345
+
+]]>
+</artwork>
+<t>Example response:</t>
+
+<sourcecode type="xml"><![CDATA[S: HTTP/2 200 OK
+S: Date: Wed, 24 Jan 2024 12:00:00 UTC
+S: Server: Example RPP server v1.0
+S: Content-Language: en
+S: Content-Length: 0
+S: RPP-Svtrid: XYZ-12345
+S: RPP-Cltrid: ABC-12345
+S: RPP-Eppcode: 1000
+S:
+S:<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+S:<rpp xmlns="urn:ietf:params:xml:ns:rpp-1.0">
+S:  <response>
+S:    <result code="1000">
+S:      <msg>Command completed successfully</msg>
+S:    </result>
+S:    <trID>
+S:      <clTRID>ABC-12345</clTRID>
+S:      <svTRID>XYZ-12345</svTRID>
+S:    </trID>
+S:  </response>
+S:</rpp>
+]]>
+</sourcecode>
+</section>
+
+<section anchor="object-extension"><name>Object Extension</name>
+<t>An Object extension is differs from the other 2 extension types in the way that an Object extension is implemented using a new Object mapping for a new Object type, while re-using the existing EPP command and response structures. The newly created Object mapping, is similar to the existing Object mappings defined in <xref target="RFC5731"></xref>, <xref target="RFC5732"></xref> and <xref target="RFC5733"></xref>, and MUST be used in a similar fashion.</t>
+<t>A hypothetical new Object mapping for IP addresses, may result in a new resource collection named &quot;ips&quot;, the semantics for the HTTP methods would have to be defined. Creating a new IP address may use the HTTP POST method on the &quot;ips&quot; collection.</t>
+
+<ul spacing="compact">
+<li>Request: POST /{collection}/{id}</li>
+<li>Request message: IP Create Request message</li>
+<li>Response message: IP Create Response message</li>
+</ul>
+<t>Example request:</t>
+
+<sourcecode type="xml"><![CDATA[C: POST /rpp/v1/ips HTTP/2
+C: Host: rpp.example.nl
+C: Authorization: Bearer <token>
+C: Accept: application/epp+xml
+C: Accept-Language: en
+C: RPP-Svcs-Ext: https://example.nl/epp-ips-1.0
+C: RPP-Cltrid: ABC-12345
+C: Content-Type: application/epp+xml
+C: Content-Length: 220
+C:
+C:<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+C:<rpp xmlns="urn:ietf:params:xml:ns:rpp-1.0">
+C:  <request>
+C:    <body>
+C:      <ip:create
+C:       xmlns:ip="https://example.nl/epp-ip-1.0">
+C:        <ip:address>192.0.2.1</ip:address>
+C:        <!-- The rest of the request is omitted here -->
+C:      </ip:create>
+C:    </body>
+C:    <clTRID>ABC-12345</clTRID>
+C:  </request>
+C:</rpp>
+
+]]>
+</sourcecode>
+<t>Example response:</t>
+
+<sourcecode type="xml"><![CDATA[S: HTTP/2 200 OK
+S: Date: Wed, 24 Jan 2024 12:00:00 UTC
+S: Server: Example RPP server v1.0
+S: Content-Language: en
+S: Content-Length: 642
+S: Content-Type: application/epp+xml
+S: Location: https://rpp.example.nl/rpp/v1/ips/192.0.2.1
+S: RPP-Eppcode: 1000
+S:
+S:<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+S:<rpp xmlns="urn:ietf:params:xml:ns:rpp-1.0"
+S:     xmlns:ip="https://example.nl/epp-ip-1.0">
+S:   <response>
+S:      <result code="1000">
+S:         <msg>Command completed successfully</msg>
+S:      </result>
+S:      <resData>
+S:         <ip:creData>
+S:            <!-- The rest of the response is omitted here -->
+S:         </ip:creData>
+S:      </resData>
+S:      <trID>
+S:         <clTRID>ABC-12345</clTRID>
+S:         <svTRID>XYZ-12345</svTRID>
+S:      </trID>
+S:   </response>
+S:</rpp>
+
+]]>
+</sourcecode>
+</section>
+
+<section anchor="command-response-extension"><name>Command-Response Extension</name>
+<t>Command-Response Extensions allow for adding elements to an existing object mapping, therefore no new extension resource is required, the existing resources can be used for existing and future extensions of this type.</t>
+</section>
+</section>
+</section>
+
+<section anchor="protocol-considerations"><name>Protocol Considerations</name>
+<t>
+  </t>
+<t><xref target="RFC5730" sectionFormat="of" section="2.1"></xref> of the EPP protocol specification describes considerations to be addressed by a transport or protocol mapping. These are satisfied by a combination of RPP features and features provided by HTTP protocol and underlying transport protocols, as described below.</t>
+
+<ul>
+<li><t>The consideration: &quot;The transport mapping MUST preserve the stateful nature of the protocol&quot;, is updated to: &quot;The transport mapping MUST preserve the stateful nature of the protocol, when using a stateful transport protocol&quot;. RPP uses the REST architectural style for defining a stateless API based on the stateless HTTP protocol, and therefore satisfies the updated consideration.</t>
+</li>
+<li><t><xref target="rest"></xref> describes how HTTP multiplexing may be used for pipelining multiple requests. A server may allow pipelining, requests are to be processed in the order they have been received.</t>
+</li>
+<li><t>RPP is based on the HTTP protocol, which uses the client-server model.</t>
+</li>
+<li><t>RPP messages are transmitted using HTTP, this document refers to the HTTP <xref target="RFC2616"></xref> protocol specification for how data units are framed.</t>
+</li>
+<li><t>HTTP/1 and HTTP/2 use TCP as a transport protocol and this includes features to provide reliability, flow control, ordered delivery, and congestion control <xref target="RFC793" sectionFormat="of" section="1.5"></xref> describes these features in detail; congestion control principles are described further in <xref target="RFC2581"></xref> and <xref target="RFC2914"></xref>. HTTP/3 uses QUIC (UDP) as a transport protocol, which has built-in congestion control over UDP.</t>
+</li>
+<li><t><xref target="rest"></xref> describes how requests are processed independently of each other.</t>
+</li>
+<li><t>Errors while processing a RPP request are isolated to this request and do not affect other requests sent by the client or other clients, this is described in <xref target="error-handling"></xref>.</t>
+</li>
+<li><t>Batch-oriented processing (combining multiple EPP commands in a single HTTP request) is not permitted. To maximize scalability
+every request must contain a single command, as described in <xref target="rest"></xref>.</t>
+</li>
+</ul>
+</section>
+
+<section anchor="formal-syntax"><name>Formal Syntax</name>
+<t>This section contains the XML Schema notation defined for RPP, based on the XML schema defined in <xref target="RFC5730"></xref>.
+The XML schema defined in <xref target="RFC5730"></xref> contains XML elements and attributes that are no longer required in a RPP context.</t>
+<t>The following changes have been made:</t>
+
+<ul spacing="compact">
+<li>deleted hello from eppType</li>
+<li>renamed command to request in eppType</li>
+<li>deleted choice and all child elements from commandtype</li>
+<li>renamed commandtype to requestType</li>
+<li>renamed readWriteType to bodyType</li>
+<li>created body element for requestType</li>
+<li>deleted loginType</li>
+<li>deleted credsOptionsType</li>
+<li>deleted loginSvcType</li>
+<li>deleted pwType</li>
+<li>deleted pollType</li>
+<li>deleted transferType</li>
+<li>deleted transferOpType</li>
+</ul>
+<t>The formal syntax presented here is a complete schema representation of RPP suitable for automated validation of RPP XML instances.</t>
+
+<sourcecode type="xml"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+
+<schema targetNamespace="urn:ietf:params:xml:ns:rpp-1.0"
+xmlns:rpp="urn:ietf:params:xml:ns:rpp-1.0"
+xmlns:eppcom="urn:ietf:params:xml:ns:eppcom-1.0"
+xmlns="http://www.w3.org/2001/XMLSchema"
+elementFormDefault="qualified">
+
+   <!--
+   Import common element types.
+   -->
+     <import namespace="urn:ietf:params:xml:ns:eppcom-1.0"/>
+
+     <annotation>
+       <documentation>
+         RESTful Extensible Provisioning Protocol v1.0 schema.
+       </documentation>
+     </annotation>
+
+   <!--
+   Every EPP XML instance must begin with this element.
+   -->
+
+   <element name="rpp" type="rpp:eppType"/>
+
+   <!--
+   An EPP XML instance must contain a greeting, request, response, or extension.
+   -->
+     <complexType name="eppType">
+       <choice>
+         <element name="greeting" type="rpp:greetingType"/>
+         <element name="request" type="rpp:requestType"/>
+         <element name="response" type="rpp:responseType"/>
+         <element name="extension" type="rpp:extAnyType"/>
+       </choice>
+     </complexType>
+
+   <!--
+   A greeting is sent by a server in response to a client connection
+   or <hello>.
+   -->
+     <complexType name="greetingType">
+       <sequence>
+         <element name="svID" type="rpp:sIDType"/>
+         <element name="svDate" type="dateTime"/>
+         <element name="svcMenu" type="rpp:svcMenuType"/>
+         <element name="dcp" type="rpp:dcpType"/>
+       </sequence>
+     </complexType>
+
+   <!--
+   Server IDs are strings with minimum and maximum length restrictions.
+   -->
+     <simpleType name="sIDType">
+       <restriction base="normalizedString">
+         <minLength value="3"/>
+         <maxLength value="64"/>
+       </restriction>
+     </simpleType>
+
+   <!--
+   A server greeting identifies available object services.
+   -->
+     <complexType name="svcMenuType">
+       <sequence>
+         <element name="version" type="rpp:versionType"
+          maxOccurs="unbounded"/>
+         <element name="lang" type="language"
+          maxOccurs="unbounded"/>
+         <element name="objURI" type="anyURI"
+          maxOccurs="unbounded"/>
+         <element name="svcExtension" type="rpp:extURIType"
+          minOccurs="0"/>
+       </sequence>
+     </complexType>
+
+   <!--
+   Data Collection Policy types.
+   -->
+     <complexType name="dcpType">
+       <sequence>
+         <element name="access" type="rpp:dcpAccessType"/>
+         <element name="statement" type="rpp:dcpStatementType"
+          maxOccurs="unbounded"/>
+         <element name="expiry" type="rpp:dcpExpiryType"
+          minOccurs="0"/>
+       </sequence>
+     </complexType>
+
+     <complexType name="dcpAccessType">
+       <choice>
+         <element name="all"/>
+         <element name="none"/>
+         <element name="null"/>
+         <element name="other"/>
+         <element name="personal"/>
+         <element name="personalAndOther"/>
+       </choice>
+     </complexType>
+
+     <complexType name="dcpStatementType">
+       <sequence>
+         <element name="purpose" type="rpp:dcpPurposeType"/>
+         <element name="recipient" type="rpp:dcpRecipientType"/>
+         <element name="retention" type="rpp:dcpRetentionType"/>
+       </sequence>
+     </complexType>
+
+     <complexType name="dcpPurposeType">
+       <sequence>
+         <element name="admin"
+          minOccurs="0"/>
+         <element name="contact"
+          minOccurs="0"/>
+         <element name="other"
+          minOccurs="0"/>
+         <element name="prov"
+          minOccurs="0"/>
+       </sequence>
+     </complexType>
+
+     <complexType name="dcpRecipientType">
+       <sequence>
+         <element name="other"
+          minOccurs="0"/>
+         <element name="ours" type="rpp:dcpOursType"
+          minOccurs="0" maxOccurs="unbounded"/>
+         <element name="public"
+          minOccurs="0"/>
+         <element name="same"
+          minOccurs="0"/>
+         <element name="unrelated"
+          minOccurs="0"/>
+       </sequence>
+     </complexType>
+
+     <complexType name="dcpOursType">
+       <sequence>
+         <element name="recDesc" type="rpp:dcpRecDescType"
+          minOccurs="0"/>
+       </sequence>
+     </complexType>
+
+     <simpleType name="dcpRecDescType">
+       <restriction base="token">
+         <minLength value="1"/>
+         <maxLength value="255"/>
+       </restriction>
+     </simpleType>
+
+     <complexType name="dcpRetentionType">
+       <choice>
+         <element name="business"/>
+         <element name="indefinite"/>
+         <element name="legal"/>
+         <element name="none"/>
+         <element name="stated"/>
+       </choice>
+     </complexType>
+
+     <complexType name="dcpExpiryType">
+       <choice>
+         <element name="absolute" type="dateTime"/>
+         <element name="relative" type="duration"/>
+       </choice>
+     </complexType>
+
+   <!--
+   Extension framework types.
+   -->
+     <complexType name="extAnyType">
+       <sequence>
+         <any namespace="##other"
+          maxOccurs="unbounded"/>
+       </sequence>
+     </complexType>
+
+     <complexType name="extURIType">
+       <sequence>
+         <element name="extURI" type="anyURI"
+          maxOccurs="unbounded"/>
+       </sequence>
+     </complexType>
+
+   <!--
+   An EPP version number is a dotted pair of decimal numbers.
+   -->
+     <simpleType name="versionType">
+       <restriction base="token">
+         <pattern value="[1-9]+\.[0-9]+"/>
+         <enumeration value="1.0"/>
+       </restriction>
+     </simpleType>
+
+   <!--
+   Request type, reduced to a single <body> element for object-data.
+   -->
+
+<complexType name="requestType">
+  <sequence>
+    <element name="body" type="rpp:bodyType"/>
+    <element name="extension" type="rpp:extAnyType"
+     minOccurs="0"/>
+    <element name="clTRID" type="rpp:trIDStringType"
+     minOccurs="0"/>
+  </sequence>
+</complexType>
+
+ 
+   <!--
+     All other object-centric request bodies. EPP doesn't specify the syntax or
+     semantics of object-centric body elements.
+     The elements MUST be described in detail in another schema specific to the object.
+   -->
+     <complexType name="bodyType">
+       <sequence>
+         <any namespace="##other"/>
+       </sequence>
+     </complexType>
+
+     <complexType name="trIDType">
+       <sequence>
+         <element name="clTRID" type="rpp:trIDStringType"
+          minOccurs="0"/>
+         <element name="svTRID" type="rpp:trIDStringType"/>
+       </sequence>
+     </complexType>
+
+     <simpleType name="trIDStringType">
+       <restriction base="token">
+         <minLength value="3"/>
+         <maxLength value="64"/>
+       </restriction>
+     </simpleType>
+
+   <!--
+   Response types.
+   -->
+     <complexType name="responseType">
+       <sequence>
+         <element name="result" type="rpp:resultType"
+          maxOccurs="unbounded"/>
+         <element name="msgQ" type="rpp:msgQType"
+          minOccurs="0"/>
+
+         <element name="resData" type="rpp:extAnyType"
+          minOccurs="0"/>
+         <element name="extension" type="rpp:extAnyType"
+          minOccurs="0"/>
+         <element name="trID" type="rpp:trIDType"/>
+       </sequence>
+     </complexType>
+
+     <complexType name="resultType">
+       <sequence>
+         <element name="msg" type="rpp:msgType"/>
+         <choice minOccurs="0" maxOccurs="unbounded">
+           <element name="value" type="rpp:errValueType"/>
+           <element name="extValue" type="rpp:extErrValueType"/>
+         </choice>
+       </sequence>
+       <attribute name="code" type="rpp:resultCodeType"
+        use="required"/>
+     </complexType>
+
+     <complexType name="errValueType" mixed="true">
+       <sequence>
+         <any namespace="##any" processContents="skip"/>
+       </sequence>
+       <anyAttribute namespace="##any" processContents="skip"/>
+     </complexType>
+
+     <complexType name="extErrValueType">
+       <sequence>
+         <element name="value" type="rpp:errValueType"/>
+         <element name="reason" type="rpp:msgType"/>
+       </sequence>
+     </complexType>
+
+     <complexType name="msgQType">
+       <sequence>
+         <element name="qDate" type="dateTime"
+          minOccurs="0"/>
+         <element name="msg" type="rpp:mixedMsgType"
+          minOccurs="0"/>
+       </sequence>
+       <attribute name="count" type="unsignedLong"
+        use="required"/>
+       <attribute name="id" type="eppcom:minTokenType"
+        use="required"/>
+     </complexType>
+
+     <complexType name="mixedMsgType" mixed="true">
+       <sequence>
+         <any processContents="skip"
+          minOccurs="0" maxOccurs="unbounded"/>
+       </sequence>
+       <attribute name="lang" type="language"
+        default="en"/>
+     </complexType>
+
+   <!--
+   Human-readable text may be expressed in languages other than English.
+   -->
+     <complexType name="msgType">
+       <simpleContent>
+         <extension base="normalizedString">
+           <attribute name="lang" type="language"
+            default="en"/>
+         </extension>
+       </simpleContent>
+     </complexType>
+
+   <!--
+   EPP result codes.
+   -->
+     <simpleType name="resultCodeType">
+       <restriction base="unsignedShort">
+         <enumeration value="1000"/>
+         <enumeration value="1001"/>
+         <enumeration value="1300"/>
+         <enumeration value="1301"/>
+         <enumeration value="1500"/>
+         <enumeration value="2000"/>
+         <enumeration value="2001"/>
+         <enumeration value="2002"/>
+         <enumeration value="2003"/>
+         <enumeration value="2004"/>
+         <enumeration value="2005"/>
+         <enumeration value="2100"/>
+         <enumeration value="2101"/>
+         <enumeration value="2102"/>
+         <enumeration value="2103"/>
+         <enumeration value="2104"/>
+         <enumeration value="2105"/>
+         <enumeration value="2106"/>
+         <enumeration value="2200"/>
+         <enumeration value="2201"/>
+         <enumeration value="2202"/>
+         <enumeration value="2300"/>
+         <enumeration value="2301"/>
+         <enumeration value="2302"/>
+         <enumeration value="2303"/>
+         <enumeration value="2304"/>
+         <enumeration value="2305"/>
+         <enumeration value="2306"/>
+         <enumeration value="2307"/>
+         <enumeration value="2308"/>
+         <enumeration value="2400"/>
+         <enumeration value="2500"/>
+         <enumeration value="2501"/>
+         <enumeration value="2502"/>
+       </restriction>
+     </simpleType>
+
+   <!--
+   End of schema.
+   -->
+   </schema>
+]]>
+</sourcecode>
+</section>
+
+<section anchor="iana-considerations"><name>IANA Considerations</name>
+<t>The URNs used in this document for XML namespaces and XML schemas have been registered by the IANA as described by <xref target="RFC3688"></xref>.</t>
+<t>Registration request for the RPP namespace:</t>
+
+<ul spacing="compact">
+<li>URI: urn:ietf:params:xml:ns:rpp-1.0</li>
+<li>Registrant Contact: See the &quot;Author's Address&quot; section of this document.</li>
+<li>XML: None.  Namespace URIs do not represent an XML specification.</li>
+</ul>
+<t>Registration request for the EPP XML schema:</t>
+
+<ul spacing="compact">
+<li>URI: urn:ietf:params:xml:schema:rpp-1.0</li>
+<li>Registrant Contact: See the &quot;Author's Address&quot; section of this document.</li>
+<li>XML: See the <xref target="formal-syntax"></xref> section of this document.</li>
+</ul>
+</section>
+
+<section anchor="internationalization-considerations"><name>Internationalization Considerations</name>
+<t>[TBD: any? Accept-Language in HTTP Header]</t>
+</section>
+
+<section anchor="security-considerations"><name>Security Considerations</name>
+<t>Running RPP relies on the security of the underlying HTTP <xref target="RFC9110"></xref> transport, hence the best common practices for securing HTTP also apply to RPP. It is RECOMMENDED to follow them closely.</t>
+<t>Data confidentiality and integrity MUST be enforced, all data transport between a client and server MUST be encrypted using TLS <xref target="RFC5246"></xref>. <xref target="RFC5734" sectionFormat="bare" section="Section 9"></xref> describes the level of security that is REQUIRED for all RPP endpoints.</t>
+<t>The EPP Login command, described by <xref target="RFC5730"></xref>, for creating a client session MUST NOT be used anymore. Due to the stateless nature of RPP, the client MUST include the authentication credentials in each HTTP request. This MAY be done by using JSON Web Tokens (JWT) <xref target="RFC7519"></xref> or Basic authentication <xref target="RFC7617"></xref>.</t>
+<t>The management of authentication credentials, such as the &quot;Change password&quot; functionality of the EPP Login command, MUST be performed by an out-of-band process. RPP (HTTP) servers are vulnerable to common denial-of-service attacks. Therefore, the security considerations of <xref target="RFC5734"></xref> also apply to RPP.</t>
+</section>
+
+<section anchor="obsolete-epp-result-codes"><name>Obsolete EPP Result Codes</name>
+<t>The following EPP result codes specified in <xref target="RFC5730"></xref> are no longer
+meaningful in the context of RESTful Provisioning Protocol and MUST NOT be used.</t>
+<table><name>Obsolete EPP result codes
+</name>
+<thead>
+<tr>
+<th>Code</th>
+<th>Reason</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>1500</td>
+<td>Authentication functionality is delegated to the HTTP protocol layer</td>
+</tr>
+
+<tr>
+<td>2100</td>
+<td>The RPP URL includes a path segment for the version</td>
+</tr>
+
+<tr>
+<td>2200</td>
+<td>Authentication functionality is delegated to the HTTP protocol layer</td>
+</tr>
+
+<tr>
+<td>2501</td>
+<td>Authentication functionality is delegated to the HTTP protocol layer</td>
+</tr>
+
+<tr>
+<td>2502</td>
+<td>Rate limiting functionality is delegated to the HTTP protocol layer</td>
+</tr>
+</tbody>
+</table></section>
+
+<section anchor="overview-of-epp-modifications"><name>Overview of EPP modifications</name>
+<t>This section lists a non-exhaustive overview of the most important modifications made in RESTful Provisioning Protocol, compared to the EPP RFCs.</t>
+
+<ul spacing="compact">
+<li>The use of HTTP as an additional application layer protocol.</li>
+<li>HTTP adds additional status codes.</li>
+<li>Some Commands are no longer used, such as the Login and Logout command.</li>
+<li>No client sessions, every request needs to include authentication credentials.</li>
+<li>A command MUST only contain a single object to operate on, the check command. For example, the Check command only supports 1 object per request.</li>
+<li>Request messages may no longer be required for most commands</li>
+<li>Authentication and authorizations have become an out-of-band process.</li>
+<li>Support for additional data formats such as JSON.</li>
+</ul>
+</section>
+
+<section anchor="acknowledgments"><name>Acknowledgments</name>
+<t>The authors would like to thank Miek Gieben who worked with us on an earlier, similar draft.</t>
+</section>
+
+</middle>
+
+<back>
+<references><name>References</name>
+<references><name>Normative References</name>
+<reference anchor="REST" target="http://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm">
+  <front>
+    <title>Architectural Styles and the Design of Network-based Software Architectures</title>
+    <author fullname="Roy Fielding" initials="R." surname="Fielding">
+      <organization></organization>
+    </author>
+    <date year="2000"></date>
+  </front>
+</reference>
+<xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml"/>
+<xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.2581.xml"/>
+<xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.2616.xml"/>
+<xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.2617.xml"/>
+<xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.2914.xml"/>
+<xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.3688.xml"/>
+<xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.3986.xml"/>
+<xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.5246.xml"/>
+<xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.5730.xml"/>
+<xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.5731.xml"/>
+<xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.5732.xml"/>
+<xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.5733.xml"/>
+<xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.5734.xml"/>
+<xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.6648.xml"/>
+<xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.7234.xml"/>
+<xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.7519.xml"/>
+<xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.7540.xml"/>
+<xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.7617.xml"/>
+<xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.793.xml"/>
+<xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.8259.xml"/>
+<xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.9110.xml"/>
+<xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.9113.xml"/>
+<xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.9114.xml"/>
+<reference anchor="YAML" target="https://yaml.org/spec/1.2.2/">
+  <front>
+    <title>YAML: YAML Ain&#39;t Markup Language</title>
+    <author>
+      <organization>YAML Language Development Team</organization>
+    </author>
+    <date year="2000"></date>
+  </front>
+</reference>
+</references>
+<references><name>Informative References</name>
+<reference anchor="SIDN-EXT" target="http://rxsd.domain-registry.nl/sidn-ext-epp-1.0.xsd">
+  <front>
+    <title>Extensible Provisioning Protocol v1.0 schema .NL extensions</title>
+    <author>
+      <organization>SIDN</organization>
+    </author>
+    <date year="2019"></date>
+  </front>
+</reference>
+</references>
+</references>
+
+</back>
+
+</rfc>
