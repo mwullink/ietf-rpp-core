@@ -8,7 +8,7 @@
 <meta content="Maarten Wullink" name="author">
 <meta content="Pawel Kowalik" name="author">
 <meta content="
-       This document describes RESTful Provisioning Protocol (RPP), a data format agnostic, Application Programming Interface (API) alternative to the Extensible Provisioning Protocol  . 
+       This document describes a HTTP-based protocol for the provisioning and management of objects in a shared database. 
     " name="description">
 <meta content="xml2rfc 3.18.2" name="generator">
 <meta content="draft-rpp-core-01" name="ietf.draft">
@@ -1209,7 +1209,7 @@ li > p:last-of-type:only-child {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Wullink &amp; Kowalik</td>
-<td class="center">Expires 6 September 2025</td>
+<td class="center">Expires 7 September 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1222,12 +1222,12 @@ li > p:last-of-type:only-child {
 <dd class="internet-draft">draft-rpp-core-01</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-03-05" class="published">5 March 2025</time>
+<time datetime="2025-03-06" class="published">6 March 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-09-06">6 September 2025</time></dd>
+<dd class="expires"><time datetime="2025-09-07">7 September 2025</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1244,7 +1244,7 @@ li > p:last-of-type:only-child {
 <h1 id="title">RESTful Provisioning Protocol (RPP)</h1>
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
-<p id="section-abstract-1">This document describes RESTful Provisioning Protocol (RPP), a data format agnostic, Application Programming Interface (API) alternative to the Extensible Provisioning Protocol <span>[<a href="#RFC5730" class="cite xref">RFC5730</a>]</span>.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-1">This document describes a HTTP-based protocol for the provisioning and management of objects in a shared database.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 </section>
 <div id="status-of-memo">
 <section id="section-boilerplate.1">
@@ -1265,7 +1265,7 @@ li > p:last-of-type:only-child {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 6 September 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 7 September 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1316,7 +1316,7 @@ li > p:last-of-type:only-child {
             <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-session-management" class="internal xref">Session Management</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
-            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-rest" class="internal xref">REST</a></p>
+            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-http-layer" class="internal xref">HTTP Layer</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.1">
                 <p id="section-toc.1-1.8.2.1.1"><a href="#section-8.1" class="auto internal xref">8.1</a>.  <a href="#name-content-negotiation" class="internal xref">Content negotiation</a></p>
@@ -1425,42 +1425,19 @@ li > p:last-of-type:only-child {
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
-            <p id="section-toc.1-1.10.1"><a href="#section-10" class="auto internal xref">10</a>. <a href="#name-protocol-considerations" class="internal xref">Protocol Considerations</a></p>
+            <p id="section-toc.1-1.10.1"><a href="#section-10" class="auto internal xref">10</a>. <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11">
-            <p id="section-toc.1-1.11.1"><a href="#section-11" class="auto internal xref">11</a>. <a href="#name-formal-syntax" class="internal xref">Formal Syntax</a></p>
+            <p id="section-toc.1-1.11.1"><a href="#section-11" class="auto internal xref">11</a>. <a href="#name-internationalization-consid" class="internal xref">Internationalization Considerations</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12">
-            <p id="section-toc.1-1.12.1"><a href="#section-12" class="auto internal xref">12</a>. <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
+            <p id="section-toc.1-1.12.1"><a href="#section-12" class="auto internal xref">12</a>. <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13">
-            <p id="section-toc.1-1.13.1"><a href="#section-13" class="auto internal xref">13</a>. <a href="#name-internationalization-consid" class="internal xref">Internationalization Considerations</a></p>
+            <p id="section-toc.1-1.13.1"><a href="#section-13" class="auto internal xref">13</a>. <a href="#name-normative-references" class="internal xref">Normative References</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14">
-            <p id="section-toc.1-1.14.1"><a href="#section-14" class="auto internal xref">14</a>. <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
-</li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15">
-            <p id="section-toc.1-1.15.1"><a href="#section-15" class="auto internal xref">15</a>. <a href="#name-obsolete-epp-result-codes" class="internal xref">Obsolete EPP Result Codes</a></p>
-</li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.16">
-            <p id="section-toc.1-1.16.1"><a href="#section-16" class="auto internal xref">16</a>. <a href="#name-overview-of-epp-modificatio" class="internal xref">Overview of EPP modifications</a></p>
-</li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.17">
-            <p id="section-toc.1-1.17.1"><a href="#section-17" class="auto internal xref">17</a>. <a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
-</li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.18">
-            <p id="section-toc.1-1.18.1"><a href="#section-18" class="auto internal xref">18</a>. <a href="#name-references" class="internal xref">References</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.18.2.1">
-                <p id="section-toc.1-1.18.2.1.1"><a href="#section-18.1" class="auto internal xref">18.1</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.18.2.2">
-                <p id="section-toc.1-1.18.2.2.1"><a href="#section-18.2" class="auto internal xref">18.2</a>.  <a href="#name-informative-references" class="internal xref">Informative References</a></p>
-</li>
-            </ul>
-</li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.19">
-            <p id="section-toc.1-1.19.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
+            <p id="section-toc.1-1.14.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
 </li>
         </ul>
 </nav>
@@ -1472,7 +1449,8 @@ li > p:last-of-type:only-child {
 <a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
 <p id="section-1-1">This document describes an Application Programming Interface (API) API based on the HTTP protocol <span>[<a href="#RFC2616" class="cite xref">RFC2616</a>]</span> and the principles of <span>[<a href="#REST" class="cite xref">REST</a>]</span>. Conforming to the REST constraints is generally referred to as being "RESTful". Hence the API is dubbed: "'RESTful Provisioning Protocol" or "RPP" for short.<a href="#section-1-1" class="pilcrow">¶</a></p>
-<p id="section-1-2">RPP is data format agnostic, the client uses server-driven content negotiation. Allowing the client to select from a set of representation media types supported by the server, such as JSON <span>[<a href="#RFC8259" class="cite xref">RFC8259</a>]</span>, XML or <span>[<a href="#YAML" class="cite xref">YAML</a>]</span>.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-2">RPP is data format agnostic, this document describes a framework describing protocol messages in any data format.
+the client uses server-driven content negotiation. Allowing the client to select from a set of representation media types supported by the server, such as JSON <span>[<a href="#RFC8259" class="cite xref">RFC8259</a>]</span>, XML or <span>[<a href="#YAML" class="cite xref">YAML</a>]</span>.<a href="#section-1-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="terminology">
@@ -1549,25 +1527,24 @@ The client must be able to signal to the server what media type the server shoul
       <h2 id="name-resource-naming-convention">
 <a href="#section-6" class="section-number selfRef">6. </a><a href="#name-resource-naming-convention" class="section-name selfRef">Resource Naming Convention</a>
       </h2>
-<p id="section-6-1">A RPP resource can be a single unique object identifier e.g. a domain name or consist out of a collection of objects. A collection of objects available for registry operations MUST be identified by: <code>/{context-root}/{version}/{collection}</code><a href="#section-6-1" class="pilcrow">¶</a></p>
+<p id="section-6-1">The naming convention SHOULD follow best practices defined for RESTful APIs, where the resource name should be a noun.
+A RPP resource can be a single unique object identifier e.g. a domain name or consist out of a collection of objects. A collection of objects available for registry operations MUST be identified by: <code>/{context-root}/{version}/{collection}</code><a href="#section-6-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-6-2.1">
           <p id="section-6-2.1.1"><code>{context-root}</code> is the base URL which MUST be specified, the {context-root} MAY be an empty, zero length string.<a href="#section-6-2.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-6-2.2">
-          <p id="section-6-2.2.1"><code>{version}</code> is a path segment which identifies the version of the RPP implementation. This
-is the equivalent of the Version element in the EPP RFCs. The version used in the RPP URL MUST match the version used in EPP Greeting message.<a href="#section-6-2.2.1" class="pilcrow">¶</a></p>
+          <p id="section-6-2.2.1"><code>{version}</code> is a path segment which identifies the version of the RPP implementation.<a href="#section-6-2.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-6-2.3">
-          <p id="section-6-2.3.1"><code>{collection}</code> MUST be substituted by "domains", "hosts" or
-"contacts" or other supported objects, referring to either <span>[<a href="#RFC5731" class="cite xref">RFC5731</a>]</span>, <span>[<a href="#RFC5732" class="cite xref">RFC5732</a>]</span> or <span>[<a href="#RFC5733" class="cite xref">RFC5733</a>]</span>.<a href="#section-6-2.3.1" class="pilcrow">¶</a></p>
+          <p id="section-6-2.3.1"><code>{collection}</code> MUST be substituted by all collection of objects, e.g. "domains", "hosts" or "contacts" or other supported objects.<a href="#section-6-2.3.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <p id="section-6-3">A trailing slash MAY be added to each request. Implementations MUST consider requests which only differ with respect to this trailing slash as identical.<a href="#section-6-3" class="pilcrow">¶</a></p>
-<p id="section-6-4">A specific EPP object instance MUST be identified by {context-root}/ {version}/{collection}/{id} where {id} is a unique object identifier described in EPP RFCs.<a href="#section-6-4" class="pilcrow">¶</a></p>
-<p id="section-6-5">An example domain name resource, for domain name example.nl, would look like this:<a href="#section-6-5" class="pilcrow">¶</a></p>
+<p id="section-6-4">A specific RPP object instance MUST be identified by {context-root}/ {version}/{collection}/{id}<a href="#section-6-4" class="pilcrow">¶</a></p>
+<p id="section-6-5">An example domain name resource for domain name example.nl is encoded into the following URL:<a href="#section-6-5" class="pilcrow">¶</a></p>
 <p id="section-6-6"><code>/rpp/v1/domains/example.nl</code><a href="#section-6-6" class="pilcrow">¶</a></p>
-<p id="section-6-7">The path segment after a collection path segment MUST be used to identify an object instance, the path segment after an object instance MUST be used to identify attributes or related collections of the object instance.<a href="#section-6-7" class="pilcrow">¶</a></p>
+<p id="section-6-7">The path segment after a collection path segment MUST be used to identify an object instance, the path segment after an object instance MUST be used to identify attributes or related collections linked to the object instance.<a href="#section-6-7" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="session-management">
@@ -1575,25 +1552,25 @@ is the equivalent of the Version element in the EPP RFCs. The version used in th
       <h2 id="name-session-management">
 <a href="#section-7" class="section-number selfRef">7. </a><a href="#name-session-management" class="section-name selfRef">Session Management</a>
       </h2>
-<p id="section-7-1">One of the main design considerations for RPP is to enable scalable EPP services, for this reason the RPP uses a stateless architecture and does not create and maintain client sessions. The Session concept is an anti-pattern in the context of a stateless service, the server MUST NOT maintain any state information relating to the client or EPP transaction.<a href="#section-7-1" class="pilcrow">¶</a></p>
+<p id="section-7-1">One of the main design considerations for RPP is to enable scalable EPP services, for this reason the RPP uses a stateless architecture and does not create and maintain client sessions. The Session concept is an anti-pattern in the context of a stateless service, the server MUST NOT maintain any state information relating to the client or RPP transaction.<a href="#section-7-1" class="pilcrow">¶</a></p>
 <p id="section-7-2">Session management as described in <span>[<a href="#RFC5730" class="cite xref">RFC5730</a>]</span> requires a stateful server architecture for maintaining client and application state over multiple client request and is therefore no longer supported.<a href="#section-7-2" class="pilcrow">¶</a></p>
 <p id="section-7-3">A RPP request MUST contain all information required for the server to be able to successfully process the request. The client MUST include authentication credentials for each request. This MAY be done by using any of the available HTTP authentication mechanisms, such as those described in <span>[<a href="#RFC2617" class="cite xref">RFC2617</a>]</span>.<a href="#section-7-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="rest">
 <section id="section-8">
-      <h2 id="name-rest">
-<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-rest" class="section-name selfRef">REST</a>
+      <h2 id="name-http-layer">
+<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-http-layer" class="section-name selfRef">HTTP Layer</a>
       </h2>
-<p id="section-8-1">RPP uses the REST architectural style, each HTTP method is assigned a distinct behavior, requests are expressed by a URL referring to a resource, a HTTP method, HTTP headers and an optional message body containing the EPP request message.<a href="#section-8-1" class="pilcrow">¶</a></p>
-<p id="section-8-2">A RPP HTTP message body MUST contain at most a single EPP request or response. HTTP requests MUST be processed independently of each other and in the same order as received by the server. A client MAY choose to send a new request, using an existing connection, before the response for the previous request has been received (pipelining). A server using HTTP/2 <span>[<a href="#RFC7540" class="cite xref">RFC7540</a>]</span> or HTTP/3 <span>[<a href="#RFC9114" class="cite xref">RFC9114</a>]</span> contains built-in support for stream multiplexing and MAY choose to support pipelining using this mechanism. The response MAY be returned out of order back to the client, because some requests require more processing time by the server.<a href="#section-8-2" class="pilcrow">¶</a></p>
+<p id="section-8-1">RPP uses the REST architectural style, each HTTP method is assigned a distinct behavior, requests are expressed by a URL referring to a resource, a HTTP method, HTTP headers and an optional message body containing the request message.<a href="#section-8-1" class="pilcrow">¶</a></p>
+<p id="section-8-2">A RPP HTTP message body MUST contain at most a single request or response. HTTP requests MUST be processed independently of each other and in the same order as received by the server. A client MAY choose to send a new request, using an existing connection, before the response for the previous request has been received (pipelining). A server using HTTP/2 <span>[<a href="#RFC7540" class="cite xref">RFC7540</a>]</span> or HTTP/3 <span>[<a href="#RFC9114" class="cite xref">RFC9114</a>]</span> contains built-in support for stream multiplexing and MAY choose to support pipelining using this mechanism. The response MAY be returned out of order to the client, because some requests may require more processing time.<a href="#section-8-2" class="pilcrow">¶</a></p>
 <p id="section-8-3">HTTP/1 does not use persistent connections by default, the client MAY use the "Connection" header to request for the server not to close the existing connection, so it can be re-used for future requests. The server MAY choose not to honor this request.<a href="#section-8-3" class="pilcrow">¶</a></p>
 <div id="content-negotiation">
 <section id="section-8.1">
         <h3 id="name-content-negotiation">
 <a href="#section-8.1" class="section-number selfRef">8.1. </a><a href="#name-content-negotiation" class="section-name selfRef">Content negotiation</a>
         </h3>
-<p id="section-8.1-1">The server MAY choose to support multiple data format for EPP object representations, such as XML and JSON.
+<p id="section-8.1-1">The server MAY choose to support multiple data formats for object representations, such as JSON or YAML.
 The client and server MUST support server-driven content negotiation and related HTTP headers for content negotiation, as described in <span><a href="https://rfc-editor.org/rfc/rfc2616#section-12.2" class="relref">Section 12.2</a> of [<a href="#RFC2616" class="cite xref">RFC2616</a>]</span>.<a href="#section-8.1-1" class="pilcrow">¶</a></p>
 <p id="section-8.1-2">The client MUST use the following HTTP headers:<a href="#section-8.1-2" class="pilcrow">¶</a></p>
 <ul class="compact">
@@ -1605,7 +1582,7 @@ The client and server MUST support server-driven content negotiation and related
        be a list of types and related weight factors, as described in <span><a href="https://rfc-editor.org/rfc/rfc2616#section-14.1" class="relref">Section 14.1</a> of [<a href="#RFC2616" class="cite xref">RFC2616</a>]</span><a href="#section-8.1-3.2" class="pilcrow">¶</a>
 </li>
         </ul>
-<p id="section-8.1-4">The client MUST synchronize the value for the Content-Type and Accept headers, for example a client MUST NOT send an XML formatted request message to the server, while at the same time requesting a JSON formatted response message. The server MUST use the <code>Content-Type</code> HTTP header to indicate the media type used for the representation in the response message body. The server MUST return HTTP status code 406 (Not Acceptable) or 415 (Unsupported Media Type) when the client requests an unsupported media type.<a href="#section-8.1-4" class="pilcrow">¶</a></p>
+<p id="section-8.1-4">The client MUST synchronize the value for the Content-Type and Accept headers, for example a client MUST NOT send an JSON formatted request message to the server, while at the same time requesting a YAML formatted response message. The server MUST use the <code>Content-Type</code> HTTP header to indicate the media type used for the representation in the response message body. The server MUST return HTTP status code 406 (Not Acceptable) or 415 (Unsupported Media Type) when the client requests an unsupported media type.<a href="#section-8.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="request">
@@ -1613,32 +1590,26 @@ The client and server MUST support server-driven content negotiation and related
         <h3 id="name-request">
 <a href="#section-8.2" class="section-number selfRef">8.2. </a><a href="#name-request" class="section-name selfRef">Request</a>
         </h3>
-<p id="section-8.2-1">In contrast to EPP over TCP <span>[<a href="#RFC5734" class="cite xref">RFC5734</a>]</span>, a RPP request does not always require a EPP request message. The information conveyed by the HTTP method, URL, and request headers may be sufficient for the server to be able to successfully processes a request for most commands. However, the client MUST include the request message in the HTTP request body when the server requires additional attributes to be present in the request message. The RPP HTTP headers listed below use the "RPP-" prefix, following the recommendations in <span>[<a href="#RFC6648" class="cite xref">RFC6648</a>]</span>.<a href="#section-8.2-1" class="pilcrow">¶</a></p>
-<p id="section-8.2-2"><strong>TODO:</strong> the non standard headers mentioned below are linked to EPP and may need to be removed.<a href="#section-8.2-2" class="pilcrow">¶</a></p>
+<p id="section-8.2-1">In contrast to EPP over TCP <span>[<a href="#RFC5734" class="cite xref">RFC5734</a>]</span>, a RPP request does not always require a request message body. The information conveyed by the HTTP method, URL, and request headers may be sufficient for the server to be able to successfully processes a request for most commands. However, the client MUST include the request message in the HTTP request body when the server requires additional attributes to be present in the request message. The RPP HTTP headers listed below use the "RPP-" prefix, following the recommendations in <span>[<a href="#RFC6648" class="cite xref">RFC6648</a>]</span>.<a href="#section-8.2-1" class="pilcrow">¶</a></p>
+<p id="section-8.2-2"><strong>TODO:</strong> the non standard headers mentioned below are linked to EPP and may need to be removed or modified<a href="#section-8.2-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-8.2-3.1">
             <p id="section-8.2-3.1.1"><code>RPP-Cltrid</code>:  The client transaction identifier is the equivalent of the <code>clTRID</code> element defined in <span>[<a href="#RFC5730" class="cite xref">RFC5730</a>]</span> and MUST be used accordingly, when the HTTP message body does not contain an EPP request that includes a cltrid.<a href="#section-8.2-3.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-8.2-3.2">
-            <p id="section-8.2-3.2.1"><code>RPP-Svcs</code>: The namespace used by the client in the EPP request message, this is equivalent to the "svcs" element in the Login command defined in <span><a href="https://rfc-editor.org/rfc/rfc5730#section-2.9.1.1" class="relref">Section 2.9.1.1</a> of [<a href="#RFC5730" class="cite xref">RFC5730</a>]</span>. The client MUST use this header if the media type of the request or response message body content requires the server to know what namespaces to use. Such as is the case for XML-based request and response messages. The header value MAY contain multiple comma separated namespaces.<a href="#section-8.2-3.2.1" class="pilcrow">¶</a></p>
+            <p id="section-8.2-3.2.1"><code>RPP-AuthInfo</code>: The client MAY use this header for sending basic token-based authorization information, as described in <span><a href="https://rfc-editor.org/rfc/rfc5731#section-2.6" class="relref">Section 2.6</a> of [<a href="#RFC5731" class="cite xref">RFC5731</a>]</span> and <span><a href="https://rfc-editor.org/rfc/rfc5733#section-2.8" class="relref">Section 2.8</a> of [<a href="#RFC5733" class="cite xref">RFC5733</a>]</span>. If the authorization is linked to a contact object then the client MUST also include the RPP-Roid header.<a href="#section-8.2-3.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-8.2-3.3">
-            <p id="section-8.2-3.3.1"><code>RPP-Svcs-Ext</code>: The extension namespace used by the client in the EPP request message, this is equivalent to the "svcExtension" element in the Login command defined in <span><a href="https://rfc-editor.org/rfc/rfc5730#section-2.9.1.1" class="relref">Section 2.9.1.1</a> of [<a href="#RFC5730" class="cite xref">RFC5730</a>]</span><a href="#section-8.2-3.3.1" class="pilcrow">¶</a></p>
+            <p id="section-8.2-3.3.1"><code>RPP-Roid</code>: If the authorization info, is linked to a database object, the client MAY use this header for the Repository Object IDentifier (ROID), as described in <span><a href="https://rfc-editor.org/rfc/rfc5730#section-4.2" class="relref">Section 4.2</a> of [<a href="#RFC5730" class="cite xref">RFC5730</a>]</span>.<a href="#section-8.2-3.3.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-8.2-3.4">
-            <p id="section-8.2-3.4.1"><code>RPP-AuthInfo</code>: The client MAY use this header for sending basic token-based authorization information, as described in <span><a href="https://rfc-editor.org/rfc/rfc5731#section-2.6" class="relref">Section 2.6</a> of [<a href="#RFC5731" class="cite xref">RFC5731</a>]</span> and <span><a href="https://rfc-editor.org/rfc/rfc5733#section-2.8" class="relref">Section 2.8</a> of [<a href="#RFC5733" class="cite xref">RFC5733</a>]</span>. If the authorization is linked to a contact object then the client MUST also include the RPP-Roid header.<a href="#section-8.2-3.4.1" class="pilcrow">¶</a></p>
+            <p id="section-8.2-3.4.1"><code>Accept-Language</code>: The server MUST support the use of HTTP Accept-Language header by clients. The client MAY issue a Hello request to discover the languages supported by the server. Multiple servers in a load-balanced environment SHOULD reply with consistent "lang" elements in the Greeting response. The value of the Accept-Language header MUST match 1 of the languages from the Greeting. When the server receives a request using an unsupported language, the server MUST respond using the default language configured for the server.<a href="#section-8.2-3.4.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-8.2-3.5">
-            <p id="section-8.2-3.5.1"><code>RPP-Roid</code>: If the authorization info, is linked to a database object, the client MAY use this header for the Repository Object IDentifier (ROID), as described in <span><a href="https://rfc-editor.org/rfc/rfc5730#section-4.2" class="relref">Section 4.2</a> of [<a href="#RFC5730" class="cite xref">RFC5730</a>]</span>.<a href="#section-8.2-3.5.1" class="pilcrow">¶</a></p>
+            <p id="section-8.2-3.5.1"><code>Connection</code>: If the server uses HTTP/1.1 or lower, the client MAY choose to use this header to request the server to keep op the TCT-connection. The client MUST not use this header when the server uses HTTP/2 <span><a href="https://rfc-editor.org/rfc/rfc9113#section-8.2.2" class="relref">Section 8.2.2</a> of [<a href="#RFC9113" class="cite xref">RFC9113</a>]</span> or HTTP/3 <span><a href="https://rfc-editor.org/rfc/rfc9113#section-4.2" class="relref">Section 4.2</a> of [<a href="#RFC9113" class="cite xref">RFC9113</a>]</span><a href="#section-8.2-3.5.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-8.2-3.6">
-            <p id="section-8.2-3.6.1"><code>Accept-Language</code>: The server MUST support the use of HTTP Accept-Language header by clients. The client MAY issue a Hello request to discover the languages supported by the server. Multiple servers in a load-balanced environment SHOULD reply with consistent "lang" elements in the Greeting response. The value of the Accept-Language header MUST match 1 of the languages from the Greeting. When the server receives a request using an unsupported language, the server MUST respond using the default language configured for the server.<a href="#section-8.2-3.6.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-8.2-3.7">
-            <p id="section-8.2-3.7.1"><code>Connection</code>: If the server uses HTTP/1.1 or lower, the client MAY choose to use this header to request the server to keep op the TCT-connection. The client MUST not use this header when the server uses HTTP/2 <span><a href="https://rfc-editor.org/rfc/rfc9113#section-8.2.2" class="relref">Section 8.2.2</a> of [<a href="#RFC9113" class="cite xref">RFC9113</a>]</span> or HTTP/3 <span><a href="https://rfc-editor.org/rfc/rfc9113#section-4.2" class="relref">Section 4.2</a> of [<a href="#RFC9113" class="cite xref">RFC9113</a>]</span><a href="#section-8.2-3.7.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-8.2-3.8">
-            <p id="section-8.2-3.8.1"><code>Accept-Encoding</code>: The client MAY choose to use the Accept-Encoding HTTP header to request the server to use compression for the response message body.<a href="#section-8.2-3.8.1" class="pilcrow">¶</a></p>
+            <p id="section-8.2-3.6.1"><code>Accept-Encoding</code>: The client MAY choose to use the Accept-Encoding HTTP header to request the server to use compression for the response message body.<a href="#section-8.2-3.6.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
@@ -1658,7 +1629,7 @@ The client and server MUST support server-driven content negotiation and related
             <p id="section-8.3-3.2.1"><code>RPP-Cltrid</code>: This header is the equivalent of the "clTRID" element defined in <span>[<a href="#RFC5730" class="cite xref">RFC5730</a>]</span> and MUST be used accordingly when the RPP response does not contain an EPP response in the HTTP message body. If the contents of the HTTP message body contains a "clTRID" value, then both values MUST be consistent.<a href="#section-8.3-3.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-8.3-3.3">
-            <p id="section-8.3-3.3.1"><code>RPP-Eppcode</code>: This header is the equivalent of the EPP result code defined in <span>[<a href="#RFC5730" class="cite xref">RFC5730</a>]</span> and MUST be used accordingly. This header MUST be added to all responses, except for the Greeting, and MAY be used by the client for easy access to the EPP result code, without having to parse the content of the HTTP response message body.<a href="#section-8.3-3.3.1" class="pilcrow">¶</a></p>
+            <p id="section-8.3-3.3.1"><code>RPP-code</code>: This header is the equivalent of the EPP result code defined in <span>[<a href="#RFC5730" class="cite xref">RFC5730</a>]</span> and MUST be used accordingly. This header MUST be added to all responses, except for the Greeting, and MAY be used by the client for easy access to the EPP result code, without having to parse the content of the HTTP response message body.<a href="#section-8.3-3.3.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-8.3-3.4">
             <p id="section-8.3-3.4.1"><code>RPP-Check-Avail</code>: An alternative for the "avail" attribute of the object:name element in an Object Check response and MUST be used accordingly. The server does not return a HTTP message body in response to a RPP Object Check request.<a href="#section-8.3-3.4.1" class="pilcrow">¶</a></p>
@@ -1679,7 +1650,7 @@ The client and server MUST support server-driven content negotiation and related
             <p id="section-8.3-3.9.1"><code>Content-Encoding</code>: The server MAY choose to compress the responses message body, using an   algorithm selected from the list of algorithms provided by the client using the Accept-Encoding request header.<a href="#section-8.3-3.9.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-8.3-4">RPP does not always return an EPP response message in the HTTP message body. The <code>Object Check</code> request for example may return an empty HTTP response body. When the server does not return an EPP message, it MUST return at least the RPP-Svtrid, RPP-Cltrid and RPP-Eppcode headers.<a href="#section-8.3-4" class="pilcrow">¶</a></p>
+<p id="section-8.3-4">RPP does not always return an response in the HTTP message body. The <code>Object Check</code> request for example may return an empty HTTP response body. When the server does not return an EPP message, it MUST return at least the RPP-Svtrid, RPP-Cltrid and RPP-code headers.<a href="#section-8.3-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="error-handling">
@@ -1687,7 +1658,7 @@ The client and server MUST support server-driven content negotiation and related
         <h3 id="name-error-handling">
 <a href="#section-8.4" class="section-number selfRef">8.4. </a><a href="#name-error-handling" class="section-name selfRef">Error Handling</a>
         </h3>
-<p id="section-8.4-1">RESTful Provisioning Protocol and HTTP protocol are both an application layer protocol, having their own status- and result codes.<a href="#section-8.4-1" class="pilcrow">¶</a></p>
+<p id="section-8.4-1">RESTful Provisioning Protocol and HTTP protocol are both an application layer protocol, having their own status- and result codes and the server MUST NOT mix these two distinct codes.<a href="#section-8.4-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1697,7 +1668,7 @@ The client and server MUST support server-driven content negotiation and related
       <h2 id="name-commands">
 <a href="#section-9" class="section-number selfRef">9. </a><a href="#name-commands" class="section-name selfRef">Commands</a>
       </h2>
-<p id="section-9-1">RESTful Provisioning Protocol command contain 4 distinct elements.<a href="#section-9-1" class="pilcrow">¶</a></p>
+<p id="section-9-1">A RPP command contains 4 distinct elements.<a href="#section-9-1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="compact type-1" id="section-9-2">
 <li id="section-9-2.1">Resource defined by a URL<a href="#section-9-2.1" class="pilcrow">¶</a>
 </li>
@@ -1705,10 +1676,10 @@ The client and server MUST support server-driven content negotiation and related
 </li>
         <li id="section-9-2.3">Request message (Optional)<a href="#section-9-2.3" class="pilcrow">¶</a>
 </li>
-        <li id="section-9-2.4">EPP response message (Optional)<a href="#section-9-2.4" class="pilcrow">¶</a>
+        <li id="section-9-2.4">Response message (Optional)<a href="#section-9-2.4" class="pilcrow">¶</a>
 </li>
       </ol>
-<p id="section-9-3"><a href="#tbl-cmd-mapping" class="auto internal xref">Table 1</a> lists an overview of RPP commands, the subsequent sections provide details for each commands. Resource URLs in the table are assumed to be using the prefix: "/{context-root}/{version}/". Some RPP endpoints do not require a request and/or response message, as is indicated by the table columns "Request" and "response".<a href="#section-9-3" class="pilcrow">¶</a></p>
+<p id="section-9-3"><a href="#tbl-cmd-mapping" class="auto internal xref">Section 9, Paragraph 5</a> lists an overview of RPP commands, the subsequent sections provide details for each command. Resource URLs in the table are assumed to be using the prefix: "/{context-root}/{version}/". Some RPP endpoints do not require a request and/or response message, as is indicated by the table columns "Request" and "response".<a href="#section-9-3" class="pilcrow">¶</a></p>
 <ul class="compact">
 <li class="compact" id="section-9-4.1">
           <code>{c}</code>:  An abbreviation for {collection}: this MUST be substituted with
@@ -1718,25 +1689,18 @@ The client and server MUST support server-driven content negotiation and related
           <code>{i}</code>:  An abbreviation for an object id, this MUST be substituted with the value of a domain name, hostname, contact-id or a message-id or any other defined object.<a href="#section-9-4.2" class="pilcrow">¶</a>
 </li>
         <li class="compact" id="section-9-4.3">
-          <code>Optional</code>: A request message is only required when the server uses an EPP extension, which requires the use of XML elements and/or atributes that are not mapped to RPP.<a href="#section-9-4.3" class="pilcrow">¶</a>
+          <code>Optional</code>: A request message is only required when the server requires additional data not avaliable otherwise.<a href="#section-9-4.3" class="pilcrow">¶</a>
 </li>
       </ul>
-<span id="name-rpp-commands"></span><div id="tbl-cmd-mapping">
-<table class="center" id="table-1">
+<div id="tbl-cmd-mapping">
+<p id="section-9-5">Command            | Method   | Resource                  | Request     | Response<a href="#section-9-5" class="pilcrow">¶</a></p>
+</div>
+<span id="name-rpp-commands"></span><table class="center" id="table-1">
         <caption>
 <a href="#table-1" class="selfRef">Table 1</a>:
 <a href="#name-rpp-commands" class="selfRef">RPP Commands</a>
         </caption>
-<thead>
-          <tr>
-            <th class="text-left" rowspan="1" colspan="1">Command</th>
-            <th class="text-left" rowspan="1" colspan="1">Method</th>
-            <th class="text-left" rowspan="1" colspan="1">Resource</th>
-            <th class="text-left" rowspan="1" colspan="1">Request</th>
-            <th class="text-left" rowspan="1" colspan="1">Response</th>
-          </tr>
-        </thead>
-        <tbody>
+<tbody>
           <tr>
             <td class="text-left" rowspan="1" colspan="1">Hello</td>
             <td class="text-left" rowspan="1" colspan="1">OPTIONS</td>
@@ -1803,42 +1767,42 @@ The client and server MUST support server-driven content negotiation and related
           <tr>
             <td class="text-left" rowspan="1" colspan="1">Renew</td>
             <td class="text-left" rowspan="1" colspan="1">POST</td>
-            <td class="text-left" rowspan="1" colspan="1">/{c}/{i}/renewals</td>
+            <td class="text-left" rowspan="1" colspan="1">/{c}/{i}/renewal</td>
             <td class="text-left" rowspan="1" colspan="1">Optional</td>
             <td class="text-left" rowspan="1" colspan="1">Yes</td>
           </tr>
           <tr>
             <td class="text-left" rowspan="1" colspan="1">Transfer Request</td>
             <td class="text-left" rowspan="1" colspan="1">POST</td>
-            <td class="text-left" rowspan="1" colspan="1">/{c}/{i}/transfers</td>
+            <td class="text-left" rowspan="1" colspan="1">/{c}/{i}/transfer</td>
             <td class="text-left" rowspan="1" colspan="1">Optional</td>
             <td class="text-left" rowspan="1" colspan="1">Yes</td>
           </tr>
           <tr>
             <td class="text-left" rowspan="1" colspan="1">Transfer Query</td>
             <td class="text-left" rowspan="1" colspan="1">GET</td>
-            <td class="text-left" rowspan="1" colspan="1">/{c}/{i}/transfers/latest</td>
+            <td class="text-left" rowspan="1" colspan="1">/{c}/{i}/transfer</td>
             <td class="text-left" rowspan="1" colspan="1">Optional</td>
             <td class="text-left" rowspan="1" colspan="1">Yes</td>
           </tr>
           <tr>
             <td class="text-left" rowspan="1" colspan="1">Transfer Cancel</td>
             <td class="text-left" rowspan="1" colspan="1">DELETE</td>
-            <td class="text-left" rowspan="1" colspan="1">/{c}/{i}/transfers/latest</td>
+            <td class="text-left" rowspan="1" colspan="1">/{c}/{i}/transfer</td>
             <td class="text-left" rowspan="1" colspan="1">Optional</td>
             <td class="text-left" rowspan="1" colspan="1">Yes</td>
           </tr>
           <tr>
             <td class="text-left" rowspan="1" colspan="1">Transfer Approve</td>
             <td class="text-left" rowspan="1" colspan="1">PUT</td>
-            <td class="text-left" rowspan="1" colspan="1">/{c}/{i}/transfers/latest</td>
+            <td class="text-left" rowspan="1" colspan="1">/{c}/{i}/transfer</td>
             <td class="text-left" rowspan="1" colspan="1">Optional</td>
             <td class="text-left" rowspan="1" colspan="1">Yes</td>
           </tr>
           <tr>
             <td class="text-left" rowspan="1" colspan="1">Transfer Reject</td>
             <td class="text-left" rowspan="1" colspan="1">DELETE</td>
-            <td class="text-left" rowspan="1" colspan="1">/{c}/{i}/transfers/latest</td>
+            <td class="text-left" rowspan="1" colspan="1">/{c}/{i}/transfer</td>
             <td class="text-left" rowspan="1" colspan="1">Optional</td>
             <td class="text-left" rowspan="1" colspan="1">Yes</td>
           </tr>
@@ -1856,40 +1820,30 @@ The client and server MUST support server-driven content negotiation and related
             <td class="text-left" rowspan="1" colspan="1">*</td>
             <td class="text-left" rowspan="1" colspan="1">*</td>
           </tr>
-          <tr>
-            <td class="text-left" rowspan="1" colspan="1">Extension [2]</td>
-            <td class="text-left" rowspan="1" colspan="1">*</td>
-            <td class="text-left" rowspan="1" colspan="1">/extension/*</td>
-            <td class="text-left" rowspan="1" colspan="1">*</td>
-            <td class="text-left" rowspan="1" colspan="1">*</td>
-          </tr>
         </tbody>
       </table>
-</div>
-<p id="section-9-6">[1] This mapping is used for Object extensions based on the extension mechanism as defined in [RFC5730, section 2.7.2]
-[2] This mapping is used for Protocol extensions based on the extension mechanism as defined in [RFC5730, seciton 2.7.1]<a href="#section-9-6" class="pilcrow">¶</a></p>
-<p id="section-9-7">When there is a mismatch between a resource identifier in the HTTP message body and the resource identifier in the URL used for a request, then the server MUST return HTTP status code 400 (Bad Request). The examples, in the sections below, assume the server does not use any EPP extensions and therefore the client does not add any request message to the HTTP message body.<a href="#section-9-7" class="pilcrow">¶</a></p>
+<p id="section-9-7">[1] This mapping is used as a placeholder for future extensions<a href="#section-9-7" class="pilcrow">¶</a></p>
 <div id="hello">
 <section id="section-9.1">
         <h3 id="name-hello">
 <a href="#section-9.1" class="section-number selfRef">9.1. </a><a href="#name-hello" class="section-name selfRef">Hello</a>
         </h3>
+<p id="section-9.1-1"><strong>TODO:</strong> rename "Hello" and make it a new command for retrieving server details, such as supported extensions?<a href="#section-9.1-1" class="pilcrow">¶</a></p>
 <ul class="compact">
-<li class="compact" id="section-9.1-1.1">Request: OPTIONS /<a href="#section-9.1-1.1" class="pilcrow">¶</a>
+<li class="compact" id="section-9.1-2.1">Request: OPTIONS /<a href="#section-9.1-2.1" class="pilcrow">¶</a>
 </li>
-          <li class="compact" id="section-9.1-1.2">Request message: None<a href="#section-9.1-1.2" class="pilcrow">¶</a>
+          <li class="compact" id="section-9.1-2.2">Request message: None<a href="#section-9.1-2.2" class="pilcrow">¶</a>
 </li>
-          <li class="compact" id="section-9.1-1.3">Response message: Greeting response<a href="#section-9.1-1.3" class="pilcrow">¶</a>
+          <li class="compact" id="section-9.1-2.3">Response message: Greeting response<a href="#section-9.1-2.3" class="pilcrow">¶</a>
 </li>
         </ul>
-<p id="section-9.1-2">Due to the stateless nature of RPP, the server does not respond by sending a Greeting message when a connection is created, as described in <span><a href="https://rfc-editor.org/rfc/rfc5730#section-2" class="relref">Section 2</a> of [<a href="#RFC5730" class="cite xref">RFC5730</a>]</span>. The client MUST request a Greeting by using the Hello request as described in <span><a href="https://rfc-editor.org/rfc/rfc5730#section-2.3" class="relref">Section 2.3</a> of [<a href="#RFC5730" class="cite xref">RFC5730</a>]</span>. The server MUST respond by returning a Greeting response, as defined in <span><a href="https://rfc-editor.org/rfc/rfc5730#section-2.4" class="relref">Section 2.4</a> of [<a href="#RFC5730" class="cite xref">RFC5730</a>]</span>.<a href="#section-9.1-2" class="pilcrow">¶</a></p>
-<p id="section-9.1-3">The version value used in the Hello response MUST match the version value used for the <code>{version}</code> path segment in the URL used for the Hello request.<a href="#section-9.1-3" class="pilcrow">¶</a></p>
+<p id="section-9.1-3">The API version value used in the Hello response MUST match the version value used for the <code>{version}</code> path segment in the URL used for the Hello request.<a href="#section-9.1-3" class="pilcrow">¶</a></p>
 <p id="section-9.1-4">Example request:<a href="#section-9.1-4" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-9.1-5">
 <pre>C: OPTIONS /rpp/v1/ HTTP/2
 C: Host: rpp.example.nl
 C: Authorization: Bearer &lt;token&gt;
-C: Accept: application/epp+xml
+C: Accept: application/rpp+json
 C: Accept-Language: en
 C: Connection: keep-alive
 
@@ -1897,23 +1851,15 @@ C: Connection: keep-alive
 </pre><a href="#section-9.1-5" class="pilcrow">¶</a>
 </div>
 <p id="section-9.1-6">Example response:<a href="#section-9.1-6" class="pilcrow">¶</a></p>
-<div class="lang-xml sourcecode" id="section-9.1-7">
+<div class="alignLeft art-text artwork" id="section-9.1-7">
 <pre>S: HTTP/2 200 OK
 S: Date: Wed, 24 Jan 2024 12:00:00 UTC
 S: Server: Example RPP server v1.0
 S: Content-Length: 799
-S: Content-Type: application/epp+xml
+S: Content-Type: application/rpp+json
 S: Content-Language: en
 S:
-S: &lt;?xml version="1.0" encoding="UTF-8" standalone="no"?&gt;
-S: &lt;rpp xmlns="urn:ietf:params:xml:ns:rpp-1.0"&gt;
-S:   &lt;greeting&gt;
-S:      &lt;svcMenu&gt;
-S:         &lt;version&gt;1.0&lt;/version&gt;
-S:         &lt;!-- The rest of the response is omitted here --&gt;
-S:      &lt;svcMenu&gt;
-S:   &lt;/greeting&gt;
-S: &lt;/rpp&gt;
+S: TODO
 
 </pre><a href="#section-9.1-7" class="pilcrow">¶</a>
 </div>
@@ -1924,33 +1870,8 @@ S: &lt;/rpp&gt;
         <h3 id="name-login">
 <a href="#section-9.2" class="section-number selfRef">9.2. </a><a href="#name-login" class="section-name selfRef">Login</a>
         </h3>
-<p id="section-9.2-1">The Login command defined in <span><a href="https://rfc-editor.org/rfc/rfc5730#section-2.9.1.1" class="relref">Section 2.9.1.1</a> of [<a href="#RFC5730" class="cite xref">RFC5730</a>]</span> is used to establish a session between client and server, this is part of the stateful nature of the EPP protocol. RPP is stateless and MUST NOT maintain any client state and does not include a Login command. The client MUST include all information in a RPP request, required for the server to be able to properly process the request. This includes request attributes defined as for Login command in <span><a href="https://rfc-editor.org/rfc/rfc5730#section-2.9.1.1" class="relref">Section 2.9.1.1</a> of [<a href="#RFC5730" class="cite xref">RFC5730</a>]</span>.<a href="#section-9.2-1" class="pilcrow">¶</a></p>
-<p id="section-9.2-2">
-The request attributes from the Login command, used for configuring the client session, are moved to the HTTP layer.<a href="#section-9.2-2" class="pilcrow">¶</a></p>
-<ul class="compact">
-<li class="compact" id="section-9.2-3.1">
-            <code>clID</code>: Replaced by HTTP authentication<a href="#section-9.2-3.1" class="pilcrow">¶</a>
-</li>
-          <li class="compact" id="section-9.2-3.2">
-            <code>pw:</code>: Replaced by HTTP authentication<a href="#section-9.2-3.2" class="pilcrow">¶</a>
-</li>
-          <li class="compact" id="section-9.2-3.3">
-            <code>newPW</code>: Replaced by out of band process<a href="#section-9.2-3.3" class="pilcrow">¶</a>
-</li>
-          <li class="compact" id="section-9.2-3.4">
-            <code>version</code>: Replaced by the <code>{version}</code> path parameter in the request URL.<a href="#section-9.2-3.4" class="pilcrow">¶</a>
-</li>
-          <li class="compact" id="section-9.2-3.5">
-            <code>lang</code>: Replaced by the <code>Accept-Language</code> HTTP header.<a href="#section-9.2-3.5" class="pilcrow">¶</a>
-</li>
-          <li class="compact" id="section-9.2-3.6">
-            <code>svcs</code>: Replaced by the <code>RPP-Svcs</code> HTTP header.<a href="#section-9.2-3.6" class="pilcrow">¶</a>
-</li>
-          <li class="compact" id="section-9.2-3.7">
-            <code>svcExtension</code>:  Replaced by the <code>RPP-Svcs-Ext</code> HTTP header.<a href="#section-9.2-3.7" class="pilcrow">¶</a>
-</li>
-        </ul>
-<p id="section-9.2-4">The server MUST check the namespaces used in the RPP-Svcs HTTP header. An unsupported namespace MUST result in the appropriate EPP result code.<a href="#section-9.2-4" class="pilcrow">¶</a></p>
+<p id="section-9.2-1">RPP is stateless and MUST NOT maintain any client state and does not include a Login command. The client MUST include all information in a RPP request, required for the server to be able to properly process the request.<a href="#section-9.2-1" class="pilcrow">¶</a></p>
+<p id="section-9.2-2">TODO<a href="#section-9.2-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="logout">
@@ -1958,7 +1879,7 @@ The request attributes from the Login command, used for configuring the client s
         <h3 id="name-logout">
 <a href="#section-9.3" class="section-number selfRef">9.3. </a><a href="#name-logout" class="section-name selfRef">Logout</a>
         </h3>
-<p id="section-9.3-1">Due to the stateless nature of RPP, the session concept is no longer used and therefore the Logout command MUST NOT be implemented by the server.<a href="#section-9.3-1" class="pilcrow">¶</a></p>
+<p id="section-9.3-1">TODO<a href="#section-9.3-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="query-resources">
@@ -1966,8 +1887,7 @@ The request attributes from the Login command, used for configuring the client s
         <h3 id="name-query-resources">
 <a href="#section-9.4" class="section-number selfRef">9.4. </a><a href="#name-query-resources" class="section-name selfRef">Query Resources</a>
         </h3>
-<p id="section-9.4-1">
-A RPP client MAY use the HTTP GET method for executing a query command only when no request data has to be added to the HTTP message body. Sending content using an HTTP GET request is discouraged in <span>[<a href="#RFC9110" class="cite xref">RFC9110</a>]</span>, there exists no generally defined semantics for content received in a GET request. When an EPP object requires additional authInfo information, as described in <span>[<a href="#RFC5731" class="cite xref">RFC5731</a>]</span> and <span>[<a href="#RFC5733" class="cite xref">RFC5733</a>]</span>, the client MUST use the HTTP POST method and add the query command content to the HTTP message body.<a href="#section-9.4-1" class="pilcrow">¶</a></p>
+<p id="section-9.4-1">A RPP client MAY use the HTTP GET method for executing a query command only when no request data has to be added to the HTTP message body. Sending content using an HTTP GET request is discouraged in <span>[<a href="#RFC9110" class="cite xref">RFC9110</a>]</span>, there exists no generally defined semantics for content received in a GET request. When an RPP object requires additional information, the client MUST use the HTTP POST method and add the query command content to the HTTP message body.<a href="#section-9.4-1" class="pilcrow">¶</a></p>
 <div id="check">
 <section id="section-9.4.1">
           <h4 id="name-check">
@@ -1981,22 +1901,22 @@ A RPP client MAY use the HTTP GET method for executing a query command only when
             <li class="compact" id="section-9.4.1-1.3">Response message: None<a href="#section-9.4.1-1.3" class="pilcrow">¶</a>
 </li>
           </ul>
-<p id="section-9.4.1-2">The HTTP HEAD method MUST be used for object existence check. The response MUST contain the <code>RPP-Check-Avail</code> header and MAY contain the <code>RPP-Check-Reason</code> header. The value of the <code>RPP-Check-Avail</code> header MUST be "0" or "1" as described in <span><a href="https://rfc-editor.org/rfc/rfc5730#section-2.9.2.1" class="relref">Section 2.9.2.1</a> of [<a href="#RFC5730" class="cite xref">RFC5730</a>]</span>, depending on whether the object can be provisioned or not.<a href="#section-9.4.1-2" class="pilcrow">¶</a></p>
-<p id="section-9.4.1-3">The Check endpoint MUST be limited to checking only a single object-id per request. This may seem a limitation compared to the Check command defined in <span>[<a href="#RFC5730" class="cite xref">RFC5730</a>]</span> where a Check message may contain multiple object-ids. The RPP Check request can be load balanced more efficiently when only a single object-id has to be checked.<a href="#section-9.4.1-3" class="pilcrow">¶</a></p>
-<p id="section-9.4.1-4">Example request for a domain name:<a href="#section-9.4.1-4" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-9.4.1-5">
+<p id="section-9.4.1-2"><strong>TODO</strong>: allow more more finegrained status response from a check, not just 0 or 1<a href="#section-9.4.1-2" class="pilcrow">¶</a></p>
+<p id="section-9.4.1-3">The HTTP HEAD method MUST be used for object existence check. The response MUST contain the <code>RPP-Check-Avail</code> header and MAY contain the <code>RPP-Check-Reason</code> header. The value of the <code>RPP-Check-Avail</code> header MUST be "0" or "1", depending on whether the object can be provisioned or not.<a href="#section-9.4.1-3" class="pilcrow">¶</a></p>
+<p id="section-9.4.1-4">The Check endpoint MUST be limited to checking only a single object-id per request, to allow the server to effiently load balance requests.<a href="#section-9.4.1-4" class="pilcrow">¶</a></p>
+<p id="section-9.4.1-5">Example request for a domain name:<a href="#section-9.4.1-5" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-9.4.1-6">
 <pre>C: HEAD /rpp/v1/domains/example.nl HTTP/2
 C: Host: rpp.example.nl
 C: Authorization: Bearer &lt;token&gt;
 C: Accept-Language: en
 C: RPP-Cltrid: ABC-12345
-C: RPP-Svcs: urn:ietf:params:xml:ns:domain-1.0
 
 
-</pre><a href="#section-9.4.1-5" class="pilcrow">¶</a>
+</pre><a href="#section-9.4.1-6" class="pilcrow">¶</a>
 </div>
-<p id="section-9.4.1-6">Example response:<a href="#section-9.4.1-6" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-9.4.1-7">
+<p id="section-9.4.1-7">Example response:<a href="#section-9.4.1-7" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-9.4.1-8">
 <pre>S: HTTP/2 200 OK
 S: Date: Wed, 24 Jan 2024 12:00:00 UTC
 S: Server: Example RPP server v1.0
@@ -2008,7 +1928,7 @@ S: RPP-result-code: 1000
 s: Content-Length: 0
 
 
-</pre><a href="#section-9.4.1-7" class="pilcrow">¶</a>
+</pre><a href="#section-9.4.1-8" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
@@ -2031,10 +1951,9 @@ s: Content-Length: 0
 <pre>C: GET /rpp/v1/domains/example.nl HTTP/2
 C: Host: rpp.example.nl
 C: Authorization: Bearer &lt;token&gt;
-C: Accept: application/epp+xml
+C: Accept: application/rpp+json
 C: Accept-Language: en
 C: RPP-Cltrid: ABC-12345
-C: RPP-Svcs: urn:ietf:params:xml:ns:domain-1.0
 
 
 </pre><a href="#section-9.4.2-4" class="pilcrow">¶</a>
@@ -2052,43 +1971,26 @@ C: RPP-Svcs: urn:ietf:params:xml:ns:domain-1.0
 <pre>C: GET /rpp/v1/domains/example.nl HTTP/2
 C: Host: rpp.example.nl
 C: Authorization: Bearer &lt;token&gt;
-C: Accept: application/epp+xml
+C: Accept: application/rpp+json
 C: Accept-Language: en
 C: RPP-Cltrid: ABC-12345
 C: RPP-AuthInfo: secret-token
 C: RPP-Roid: REG-XYZ-12345
-C: RPP-Svcs: urn:ietf:params:xml:ns:domain-1.0
 
 
 </pre><a href="#section-9.4.2-7" class="pilcrow">¶</a>
 </div>
 <p id="section-9.4.2-8">Example Info response:<a href="#section-9.4.2-8" class="pilcrow">¶</a></p>
-<div class="lang-xml sourcecode" id="section-9.4.2-9">
+<div class="alignLeft art-text artwork" id="section-9.4.2-9">
 <pre>S: HTTP/2 200 OK
 S: Date: Wed, 24 Jan 2024 12:00:00 UTC
 S: Server: Example RPP server v1.0
 S: Content-Length: 424
-S: Content-Type: application/epp+xml
+S: Content-Type: application/rpp+json
 S: Content-Language: en
-S: RPP-Eppcode: 1000
+S: RPP-code: 1000
 S:
-S:&lt;?xml version="1.0" encoding="UTF-8" standalone="no"?&gt;
-S:&lt;rpp xmlns="urn:ietf:params:xml:ns:rpp-1.0"&gt;
-S:  &lt;response&gt;
-S:    &lt;result code="1000"&gt;
-S:      &lt;msg&gt;Command completed successfully&lt;/msg&gt;
-S:    &lt;/result&gt;
-S:    &lt;resData&gt;
-S:      &lt;domain:infData xmlns:domain="urn:ietf:params:xml:ns:domain-1.0"&gt;
-S:         &lt; !-- The rest of the response is omitted here -- &gt;
-S:      &lt;/domain:infData&gt;
-S:    &lt;/resData&gt;
-S:    &lt;trID&gt;
-S:      &lt;clTRID&gt;ABC-12345&lt;/clTRID&gt;
-S:      &lt;svTRID&gt;XYZ-12345&lt;/svTRID&gt;
-S:    &lt;/trID&gt;
-S:  &lt;/response&gt;
-S:&lt;/rpp&gt;
+S: TODO
 
 </pre><a href="#section-9.4.2-9" class="pilcrow">¶</a>
 </div>
@@ -2126,10 +2028,9 @@ The server MUST support the use of the <code>filter</code> and <code>val</code> 
 <pre>C: GET /rpp/v1/domains/example.nl?filter=hosts&amp;val=del HTTP/2
 C: Host: rpp.example.nl
 C: Authorization: Bearer &lt;token&gt;
-C: Accept: application/epp+xml
+C: Accept: application/rpp+json
 C: Accept-Language: en
 C: RPP-Cltrid: ABC-12345
-C: RPP-Svcs: urn:ietf:params:xml:ns:domain-1.0
 
 
 </pre><a href="#section-9.4.2.1-7" class="pilcrow">¶</a>
@@ -2156,13 +2057,13 @@ C: RPP-Svcs: urn:ietf:params:xml:ns:domain-1.0
               <li class="compact" id="section-9.4.3.1-1.3">Response message: Poll response<a href="#section-9.4.3.1-1.3" class="pilcrow">¶</a>
 </li>
             </ul>
-<p id="section-9.4.3.1-2">The client MUST use the HTTP GET method on the messages resource collection to request the message at the head of the queue. The "op=req" semantics from <a href="https://rfc-editor.org/rfc/rfc5730#appendix-Section%202.9.2.3" class="relref">Section 2.9.2.3</a> are assigned to the HTTP GET method.<a href="#section-9.4.3.1-2" class="pilcrow">¶</a></p>
+<p id="section-9.4.3.1-2">The client MUST use the HTTP GET method on the messages resource collection to request the message at the head of the queue.<a href="#section-9.4.3.1-2" class="pilcrow">¶</a></p>
 <p id="section-9.4.3.1-3">Example request:<a href="#section-9.4.3.1-3" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-9.4.3.1-4">
 <pre>C: GET /rpp/v1/messages HTTP/2
 C: Host: rpp.example.nl
 C: Authorization: Bearer &lt;token&gt;
-C: Accept: application/epp+xml
+C: Accept: application/rpp+json
 C: Accept-Language: en
 C: RPP-Cltrid: ABC-12345
 
@@ -2170,34 +2071,16 @@ C: RPP-Cltrid: ABC-12345
 </pre><a href="#section-9.4.3.1-4" class="pilcrow">¶</a>
 </div>
 <p id="section-9.4.3.1-5">Example response:<a href="#section-9.4.3.1-5" class="pilcrow">¶</a></p>
-<div class="lang-xml sourcecode" id="section-9.4.3.1-6">
+<div class="alignLeft art-text artwork" id="section-9.4.3.1-6">
 <pre>S: HTTP/2 200 OK
 S: Date: Wed, 24 Jan 2024 12:00:00 UTC
 S: Server: Example RPP server v1.0
 S: Content-Length: 312
-S: Content-Type: application/epp+xml
+S: Content-Type: application/rpp+json
 S: Content-Language: en
-S: RPP-Eppcode: 1301
+S: RPP-code: 1301
 S:
-S:&lt;?xml version="1.0" encoding="UTF-8" standalone="no"?&gt;
-S:&lt;rpp xmlns="urn:ietf:params:xml:ns:rpp-1.0"&gt;
-S:  &lt;response&gt;
-S:    &lt;result code="1301"&gt;
-S:      &lt;msg&gt;Command completed successfully; ack to dequeue&lt;/msg&gt;
-S:    &lt;/result&gt;
-S:    &lt;msgQ count="5" id="12345"&gt;
-S:      &lt;qDate&gt;2000-06-08T22:00:00.0Z&lt;/qDate&gt;
-S:      &lt;msg&gt;Transfer requested.&lt;/msg&gt;
-S:    &lt;/msgQ&gt;
-S:    &lt;resData&gt;
-S:       &lt;!-- The rest of the response is omitted here --&gt;
-S:    &lt;/resData&gt;
-S:    &lt;trID&gt;
-S:      &lt;clTRID&gt;ABC-12345&lt;/clTRID&gt;
-S:      &lt;svTRID&gt;XYZ-12345&lt;/svTRID&gt;
-S:    &lt;/trID&gt;
-S:  &lt;/response&gt;
-S:&lt;/rpp&gt;
+S: TODO
 
 </pre><a href="#section-9.4.3.1-6" class="pilcrow">¶</a>
 </div>
@@ -2216,13 +2099,13 @@ S:&lt;/rpp&gt;
               <li class="compact" id="section-9.4.3.2-1.3">Response message: Poll Ack response<a href="#section-9.4.3.2-1.3" class="pilcrow">¶</a>
 </li>
             </ul>
-<p id="section-9.4.3.2-2">The client MUST use the HTTP DELETE method to acknowledge receipt of a message from the queue. The "op=ack" semantics from <a href="https://rfc-editor.org/rfc/rfc5730#appendix-Section%202.9.2.3" class="relref">Section 2.9.2.3</a> are assigned to the HTTP DELETE method. The "msgID" attribute of a received EPP Poll message MUST be included in the message resource URL, using the {id} path element. The server MUST use RPP headers to return the EPP result code and the number of messages left in the queue. The server MUST NOT add content to the HTTP message body of a successful response, the server may add content to the message body of an error response.<a href="#section-9.4.3.2-2" class="pilcrow">¶</a></p>
+<p id="section-9.4.3.2-2">The client MUST use the HTTP DELETE method to acknowledge receipt of a message from the queue. The "msgID" attribute of a received RPP Poll message MUST be included in the message resource URL, using the {id} path element. The server MUST use RPP headers to return the RPP result code and the number of messages left in the queue. The server MUST NOT add content to the HTTP message body of a successful response, the server may add content to the message body of an error response.<a href="#section-9.4.3.2-2" class="pilcrow">¶</a></p>
 <p id="section-9.4.3.2-3">Example request:<a href="#section-9.4.3.2-3" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-9.4.3.2-4">
 <pre>C: DELETE /rpp/v1/messages/12345 HTTP/2
 C: Host: rpp.example.nl
 C: Authorization: Bearer &lt;token&gt;
-C: Accept: application/epp+xml
+C: Accept: application/rpp+json
 C: Accept-Language: en
 C: RPP-Cltrid: ABC-12345
 
@@ -2230,30 +2113,18 @@ C: RPP-Cltrid: ABC-12345
 </pre><a href="#section-9.4.3.2-4" class="pilcrow">¶</a>
 </div>
 <p id="section-9.4.3.2-5">Example response:<a href="#section-9.4.3.2-5" class="pilcrow">¶</a></p>
-<div class="lang-xml sourcecode" id="section-9.4.3.2-6">
+<div class="alignLeft art-text artwork" id="section-9.4.3.2-6">
 <pre>S: HTTP/2 200 OK
 S: Date: Wed, 24 Jan 2024 12:00:00 UTC
 S: Server: Example RPP server v1.0
 S: Content-Language: en
-S: RPP-Eppcode: 1000
+S: RPP-code: 1000
 S: RPP-Queue-Size: 0
 S: RPP-Svtrid: XYZ-12345
 S: RPP-Cltrid: ABC-12345
 S: Content-Length: 145
 S:
-S:&lt;?xml version="1.0" encoding="UTF-8" standalone="no"?&gt;
-S:&lt;rpp xmlns="urn:ietf:params:xml:ns:rpp-1.0"&gt;
-S:  &lt;response&gt;
-S:    &lt;result code="1000"&gt;
-S:      &lt;msg&gt;Command completed successfully&lt;/msg&gt;
-S:    &lt;/result&gt;
-S:    &lt;msgQ count="0" id="12345"/&gt;
-S:    &lt;trID&gt;
-S:      &lt;clTRID&gt;ABC-12345&lt;/clTRID&gt;
-S:      &lt;svTRID&gt;XYZ-12345&lt;/svTRID&gt;
-S:    &lt;/trID&gt;
-S:  &lt;/response&gt;
-S:&lt;/rpp&gt;
+S: TODO
 
 </pre><a href="#section-9.4.3.2-6" class="pilcrow">¶</a>
 </div>
@@ -2266,11 +2137,10 @@ S:&lt;/rpp&gt;
           <h4 id="name-transfer-query">
 <a href="#section-9.4.4" class="section-number selfRef">9.4.4. </a><a href="#name-transfer-query" class="section-name selfRef">Transfer Query</a>
           </h4>
-<p id="section-9.4.4-1">The Transfer Query request MUST use the special "latest" sub-resource to refer to the
-latest object transfer. A latest transfer object may not exist, when no transfer has been initiated for the specified object.
-The "op=query" semantics from <a href="https://rfc-editor.org/rfc/rfc5730#appendix-Section%202.9.3.4" class="relref">Section 2.9.3.4</a> are assigned to the HTTP GET method. The client MUST use the HTTP GET method and MUST NOT add content to the HTTP message body.<a href="#section-9.4.4-1" class="pilcrow">¶</a></p>
+<p id="section-9.4.4-1">A transfer object may not exist, when no transfer has been initiated for the specified object.
+The client MUST use the HTTP GET method and MUST NOT add content to the HTTP message body.<a href="#section-9.4.4-1" class="pilcrow">¶</a></p>
 <ul class="compact">
-<li class="compact" id="section-9.4.4-2.1">Request: GET {collection}/{id}/transfers/latest<a href="#section-9.4.4-2.1" class="pilcrow">¶</a>
+<li class="compact" id="section-9.4.4-2.1">Request: GET {collection}/{id}/transfer<a href="#section-9.4.4-2.1" class="pilcrow">¶</a>
 </li>
             <li class="compact" id="section-9.4.4-2.2">Request message: Optional<a href="#section-9.4.4-2.2" class="pilcrow">¶</a>
 </li>
@@ -2279,13 +2149,12 @@ The "op=query" semantics from <a href="https://rfc-editor.org/rfc/rfc5730#append
           </ul>
 <p id="section-9.4.4-3">Example domain name Transfer Query request without authorization information required:<a href="#section-9.4.4-3" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-9.4.4-4">
-<pre>C: GET /rpp/v1/domains/example.nl/transfers/latest HTTP/2
+<pre>C: GET /rpp/v1/domains/example.nl/transfer HTTP/2
 C: Host: rpp.example.nl
 C: Authorization: Bearer &lt;token&gt;
-C: Accept: application/epp+xml
+C: Accept: application/rpp+json
 C: Accept-Language: en
 C: RPP-Cltrid: ABC-12345
-C: RPP-Svcs: urn:ietf:params:xml:ns:domain-1.0
 
 
 </pre><a href="#section-9.4.4-4" class="pilcrow">¶</a>
@@ -2293,14 +2162,13 @@ C: RPP-Svcs: urn:ietf:params:xml:ns:domain-1.0
 <p id="section-9.4.4-5">If the requested object has associated authorization information that is not linked to another database object, then the HTTP GET method MUST be used and the authorization information MUST be included using the RPP-AuthInfo header.<a href="#section-9.4.4-5" class="pilcrow">¶</a></p>
 <p id="section-9.4.4-6">Example domain name Transfer Query request using RPP-AuthInfo header:<a href="#section-9.4.4-6" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-9.4.4-7">
-<pre>C: GET /rpp/v1/domains/example.nl/transfers/latest HTTP/2
+<pre>C: GET /rpp/v1/domains/example.nl/transfer HTTP/2
 C: Host: rpp.example.nl
 C: Authorization: Bearer &lt;token&gt;
-C: Accept: application/epp+xml
+C: Accept: application/rpp+json
 C: Accept-Language: en
 C: RPP-Cltrid: ABC-12345
 C: RPP-AuthInfo: secret-token
-C: RPP-Svcs: urn:ietf:params:xml:ns:domain-1.0
 
 
 </pre><a href="#section-9.4.4-7" class="pilcrow">¶</a>
@@ -2308,10 +2176,10 @@ C: RPP-Svcs: urn:ietf:params:xml:ns:domain-1.0
 <p id="section-9.4.4-8">If the requested object has associated authorization information linked to another database object, then the HTTP GET method MUST be used and both the RPP-AuthInfo and the RPP-Roid header MUST be included.<a href="#section-9.4.4-8" class="pilcrow">¶</a></p>
 <p id="section-9.4.4-9">Example domain name Transfer Query request and authorization using RPP-AuthInfo and the RPP-Roid header:<a href="#section-9.4.4-9" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-9.4.4-10">
-<pre>C: GET /rpp/v1/domains/example.nl/transfers/latest HTTP/2
+<pre>C: GET /rpp/v1/domains/example.nl/transfer HTTP/2
 C: Host: rpp.example.nl
 C: Authorization: Bearer &lt;token&gt;
-C: Accept: application/epp+xml
+C: Accept: application/rpp+json
 C: Accept-Language: en
 C: RPP-AuthInfo: secret-token
 C: RPP-Roid: REG-XYZ-12345
@@ -2322,30 +2190,16 @@ C:
 </pre><a href="#section-9.4.4-10" class="pilcrow">¶</a>
 </div>
 <p id="section-9.4.4-11">Example Transfer Query response:<a href="#section-9.4.4-11" class="pilcrow">¶</a></p>
-<div class="lang-xml sourcecode" id="section-9.4.4-12">
+<div class="alignLeft art-text artwork" id="section-9.4.4-12">
 <pre>S: HTTP/2 200 OK
 S: Date: Wed, 24 Jan 2024 12:00:00 UTC
 S: Server: Example RPP server v1.0
 S: Content-Length: 230
-S: Content-Type: application/epp+xml
+S: Content-Type: application/rpp+json
 S: Content-Language: en
-S: RPP-Eppcode: 1000
+S: RPP-code: 1000
 S:
-S:&lt;?xml version="1.0" encoding="UTF-8" standalone="no"?&gt;
-S:&lt;rpp xmlns="urn:ietf:params:xml:ns:rpp-1.0"&gt;
-S:  &lt;response&gt;
-S:    &lt;result code="1000"&gt;
-S:      &lt;msg&gt;Command completed successfully&lt;/msg&gt;
-S:    &lt;/result&gt;
-S:    &lt;resData&gt;
-S:      &lt;!-- The rest of the response is omitted here --&gt;
-S:    &lt;/resData&gt;
-S:    &lt;trID&gt;
-S:      &lt;clTRID&gt;ABC-12345&lt;/clTRID&gt;
-S:      &lt;svTRID&gt;XYZ-12345&lt;/svTRID&gt;
-S:    &lt;/trID&gt;
-S:  &lt;/response&gt;
-S:&lt;/rpp&gt;
+S: TODO
 
 </pre><a href="#section-9.4.4-12" class="pilcrow">¶</a>
 </div>
@@ -2371,63 +2225,33 @@ S:&lt;/rpp&gt;
             <li class="compact" id="section-9.5.1-1.3">Response message: Object Create response<a href="#section-9.5.1-1.3" class="pilcrow">¶</a>
 </li>
           </ul>
-<p id="section-9.5.1-2">The client MUST use the HTTP POST method to create a new object resource. If the EPP request results in a newly created object, then the server MUST return HTTP status code 200 (OK). The server MUST add the "Location" header to the response, the value of this header MUST be the URL for the newly created resource.<a href="#section-9.5.1-2" class="pilcrow">¶</a></p>
+<p id="section-9.5.1-2">The client MUST use the HTTP POST method to create a new object resource. If the RPP request results in a newly created object, then the server MUST return HTTP status code 200 (OK). The server MUST add the "Location" header to the response, the value of this header MUST be the URL for the newly created resource.<a href="#section-9.5.1-2" class="pilcrow">¶</a></p>
 <p id="section-9.5.1-3">Example Domain Create request:<a href="#section-9.5.1-3" class="pilcrow">¶</a></p>
-<div class="lang-xml sourcecode" id="section-9.5.1-4">
+<div class="alignLeft art-text artwork" id="section-9.5.1-4">
 <pre>C: POST /rpp/v1/domains HTTP/2
 C: Host: rpp.example.nl
 C: Authorization: Bearer &lt;token&gt;
-C: Accept: application/epp+xml
-C: Content-Type: application/epp+xml
-C: RPP-Svcs: urn:ietf:params:xml:ns:domain-1.0
+C: Accept: application/rpp+json
+C: Content-Type: application/rpp+json
 C: Accept-Language: en
 C: Content-Length: 220
 C:
-C:&lt;?xml version="1.0" encoding="UTF-8" standalone="no"?&gt;
-C:&lt;rpp xmlns="urn:ietf:params:xml:ns:rpp-1.0"&gt;
-C:  &lt;request&gt;
-C:    &lt;body&gt;
-C:      &lt;domain:create
-C:       xmlns:domain="urn:ietf:params:xml:ns:domain-1.0"&gt;
-C:        &lt;domain:name&gt;example.nl&lt;/domain:name&gt;
-C:        &lt;!-- The rest of the request is omitted here --&gt;
-C:      &lt;/domain:create&gt;
-C:    &lt;/body&gt;
-C:    &lt;clTRID&gt;ABC-12345&lt;/clTRID&gt;
-C:  &lt;/request&gt;
-C:&lt;/rpp&gt;
+S: TODO
 
 </pre><a href="#section-9.5.1-4" class="pilcrow">¶</a>
 </div>
 <p id="section-9.5.1-5">Example Domain Create response:<a href="#section-9.5.1-5" class="pilcrow">¶</a></p>
-<div class="lang-xml sourcecode" id="section-9.5.1-6">
+<div class="alignLeft art-text artwork" id="section-9.5.1-6">
 <pre>S: HTTP/2 200
 S: Date: Wed, 24 Jan 2024 12:00:00 UTC
 S: Server: Example RPP server v1.0
 S: Content-Language: en
 S: Content-Length: 642
-S: Content-Type: application/epp+xml
+S: Content-Type: application/rpp+json
 S: Location: https://rpp.example.nl/rpp/v1/domains/example.nl
-S: RPP-Eppcode: 1000
+S: RPP-code: 1000
 S:
-S:&lt;?xml version="1.0" encoding="UTF-8" standalone="no"?&gt;
-S:&lt;rpp xmlns="urn:ietf:params:xml:ns:rpp-1.0"
-S:     xmlns:domain="urn:ietf:params:xml:ns:domain-1.0"&gt;
-S:   &lt;response&gt;
-S:      &lt;result code="1000"&gt;
-S:         &lt;msg&gt;Command completed successfully&lt;/msg&gt;
-S:      &lt;/result&gt;
-S:      &lt;resData&gt;
-S:         &lt;domain:creData&gt;
-S:            &lt;!-- The rest of the response is omitted here --&gt;
-S:         &lt;/domain:creData&gt;
-S:      &lt;/resData&gt;
-S:      &lt;trID&gt;
-S:         &lt;clTRID&gt;ABC-12345&lt;/clTRID&gt;
-S:         &lt;svTRID&gt;XYZ-12345&lt;/svTRID&gt;
-S:      &lt;/trID&gt;
-S:   &lt;/response&gt;
-S:&lt;/rpp&gt;
+S: TODO
 
 </pre><a href="#section-9.5.1-6" class="pilcrow">¶</a>
 </div>
@@ -2452,7 +2276,7 @@ S:&lt;/rpp&gt;
 <pre>C: DELETE /rpp/v1/domains/example.nl HTTP/2
 C: Host: rpp.example.nl
 C: Authorization: Bearer &lt;token&gt;
-C: Accept: application/epp+xml
+C: Accept: application/rpp+json
 C: Accept-Language: en
 C: RPP-Cltrid: ABC-12345
 
@@ -2460,27 +2284,16 @@ C: RPP-Cltrid: ABC-12345
 </pre><a href="#section-9.5.2-4" class="pilcrow">¶</a>
 </div>
 <p id="section-9.5.2-5">Example Domain Delete response:<a href="#section-9.5.2-5" class="pilcrow">¶</a></p>
-<div class="lang-xml sourcecode" id="section-9.5.2-6">
+<div class="alignLeft art-text artwork" id="section-9.5.2-6">
 <pre>S: HTTP/2 200 OK
 S: Date: Wed, 24 Jan 2024 12:00:00 UTC
 S: Server: Example RPP server v1.0
 S: Content-Length: 80
 S: RPP-Svtrid: XYZ-12345
 S: RPP-Cltrid: ABC-12345
-S: RPP-Eppcode: 1000
+S: RPP-code: 1000
 S:
-S:&lt;?xml version="1.0" encoding="UTF-8" standalone="no"?&gt;
-S:&lt;rpp xmlns="urn:ietf:params:xml:ns:rpp-1.0"&gt;
-S:  &lt;response&gt;
-S:    &lt;result code="1000"&gt;
-S:      &lt;msg&gt;Command completed successfully&lt;/msg&gt;
-S:    &lt;/result&gt;
-S:    &lt;trID&gt;
-S:      &lt;clTRID&gt;ABC-12345&lt;/clTRID&gt;
-S:      &lt;svTRID&gt;XYZ-12345&lt;/svTRID&gt;
-S:    &lt;/trID&gt;
-S:  &lt;/response&gt;
-S:&lt;/rpp&gt;
+S: TODO
 
 </pre><a href="#section-9.5.2-6" class="pilcrow">¶</a>
 </div>
@@ -2492,22 +2305,21 @@ S:&lt;/rpp&gt;
 <a href="#section-9.5.3" class="section-number selfRef">9.5.3. </a><a href="#name-renew" class="section-name selfRef">Renew</a>
           </h4>
 <ul class="compact">
-<li class="compact" id="section-9.5.3-1.1">Request: POST /{collection}/{id}/renewals<a href="#section-9.5.3-1.1" class="pilcrow">¶</a>
+<li class="compact" id="section-9.5.3-1.1">Request: POST /{collection}/{id}/renewal<a href="#section-9.5.3-1.1" class="pilcrow">¶</a>
 </li>
             <li class="compact" id="section-9.5.3-1.2">Request message: Optional<a href="#section-9.5.3-1.2" class="pilcrow">¶</a>
 </li>
             <li class="compact" id="section-9.5.3-1.3">Response message: Renew response<a href="#section-9.5.3-1.3" class="pilcrow">¶</a>
 </li>
           </ul>
-<p id="section-9.5.3-2">The Renew command is mapped to a nested collection, named "renewals". Not all EPP object types include support for the renew command. The current-date query parameter MAY be used for date on which the current validity period ends, as described in <span><a href="https://rfc-editor.org/rfc/rfc5731#section-3.2.3" class="relref">Section 3.2.3</a> of [<a href="#RFC5731" class="cite xref">RFC5731</a>]</span>. The new period MAY be added to the request using the unit and value request parameters. The response MUST include the Location header for the renewed object.<a href="#section-9.5.3-2" class="pilcrow">¶</a></p>
+<p id="section-9.5.3-2">Not all EPP object types include support for the renew command. The current-date query parameter MAY be used for date on which the current validity period ends, as described in <span><a href="https://rfc-editor.org/rfc/rfc5731#section-3.2.3" class="relref">Section 3.2.3</a> of [<a href="#RFC5731" class="cite xref">RFC5731</a>]</span>. The new period MAY be added to the request using the unit and value request parameters. The response MUST include the Location header for the renewed object.<a href="#section-9.5.3-2" class="pilcrow">¶</a></p>
 <p id="section-9.5.3-3">Example Domain Renew request:<a href="#section-9.5.3-3" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-9.5.3-4">
-<pre>C: POST /rpp/v1/domains/example.nl/renewals?current-date=2024-01-01 HTTP/2
+<pre>C: POST /rpp/v1/domains/example.nl/renewal?current-date=2024-01-01 HTTP/2
 C: Host: rpp.example.nl
 C: Authorization: Bearer &lt;token&gt;
-C: Accept: application/epp+xml
-C: Content-Type: application/epp+xml
-C: RPP-Svcs: urn:ietf:params:xml:ns:domain-1.0
+C: Accept: application/rpp+json
+C: Content-Type: application/rpp+json
 C: Accept-Language: en
 C: Content-Length: 0
 C:
@@ -2516,12 +2328,11 @@ C:
 </div>
 <p id="section-9.5.3-5">Example Domain Renew request, using 1 year period:<a href="#section-9.5.3-5" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-9.5.3-6">
-<pre>C: POST /rpp/v1/domains/example.nl/renewals?current-date=2024-01-01?unit=y&amp;value=1 HTTP/2
+<pre>C: POST /rpp/v1/domains/example.nl/renewal?current-date=2024-01-01?unit=y&amp;value=1 HTTP/2
 C: Host: rpp.example.nl
 C: Authorization: Bearer &lt;token&gt;
-C: Accept: application/epp+xml
-C: Content-Type: application/epp+xml
-C: RPP-Svcs: urn:ietf:params:xml:ns:domain-1.0
+C: Accept: application/rpp+json
+C: Content-Type: application/rpp+json
 C: Accept-Language: en
 C: Content-Length: 0
 C:
@@ -2529,31 +2340,17 @@ C:
 </pre><a href="#section-9.5.3-6" class="pilcrow">¶</a>
 </div>
 <p id="section-9.5.3-7">Example Renew response:<a href="#section-9.5.3-7" class="pilcrow">¶</a></p>
-<div class="lang-xml sourcecode" id="section-9.5.3-8">
+<div class="alignLeft art-text artwork" id="section-9.5.3-8">
 <pre>S: HTTP/2 200 OK
 S: Date: Wed, 24 Jan 2024 12:00:00 UTC
 S: Server: Example RPP server v1.0
 S: Content-Language: en
 S: Content-Length: 205
 S: Location: https://rpp.example.nl/rpp/v1/domains/example.nl
-S: Content-Type: application/epp+xml
-S: RPP-Eppcode: 1000
+S: Content-Type: application/rpp+json
+S: RPP-code: 1000
 S:
-S:&lt;?xml version="1.0" encoding="UTF-8" standalone="no"?&gt;
-S:&lt;rpp xmlns="urn:ietf:params:xml:ns:rpp-1.0"&gt;
-S:  &lt;response&gt;
-S:    &lt;result code="1000"&gt;
-S:      &lt;msg&gt;Command completed successfully&lt;/msg&gt;
-S:    &lt;/result&gt;
-S:    &lt;resData&gt;
-S:      &lt;!-- The rest of the response is omitted here --&gt;
-S:    &lt;/resData&gt;
-S:    &lt;trID&gt;
-S:      &lt;clTRID&gt;ABC-12345&lt;/clTRID&gt;
-S:      &lt;svTRID&gt;XYZ-12345&lt;/svTRID&gt;
-S:    &lt;/trID&gt;
-S:  &lt;/response&gt;
-S:&lt;/rpp&gt;
+S: TODO
 
 </pre><a href="#section-9.5.3-8" class="pilcrow">¶</a>
 </div>
@@ -2564,30 +2361,29 @@ S:&lt;/rpp&gt;
           <h4 id="name-transfer">
 <a href="#section-9.5.4" class="section-number selfRef">9.5.4. </a><a href="#name-transfer" class="section-name selfRef">Transfer</a>
           </h4>
-<p id="section-9.5.4-1">Transferring an object from one sponsoring client to another client is specified in <span>[<a href="#RFC5731" class="cite xref">RFC5731</a>]</span> and <span>[<a href="#RFC5733" class="cite xref">RFC5733</a>]</span>. The Transfer command is mapped to a nested resource, named "transfers". The semantics of the HTTP DELETE method are determined by the role of the client executing the DELETE method. The DELETE method is defined as "reject transfer" for the current sponsoring client of the object. For the new sponsoring client the DELETE method is defined as "cancel transfer".<a href="#section-9.5.4-1" class="pilcrow">¶</a></p>
+<p id="section-9.5.4-1">The Transfer command is mapped to a nested resource, named "transfer". The semantics of the HTTP DELETE method are determined by the role of the client executing the DELETE method. The DELETE method is defined as "reject transfer" for the current sponsoring client of the object. For the new sponsoring client the DELETE method is defined as "cancel transfer".<a href="#section-9.5.4-1" class="pilcrow">¶</a></p>
+<p id="section-9.5.4-2"><strong>TODO:</strong> allow for alternative more client friendly methods for transferring objects, maybe use interactive oauth2.0 flows?<a href="#section-9.5.4-2" class="pilcrow">¶</a></p>
 <div id="request-1">
 <section id="section-9.5.4.1">
             <h5 id="name-request-2">
 <a href="#section-9.5.4.1" class="section-number selfRef">9.5.4.1. </a><a href="#name-request-2" class="section-name selfRef">Request</a>
             </h5>
 <ul class="compact">
-<li class="compact" id="section-9.5.4.1-1.1">Request: POST /{collection}/{id}/transfers<a href="#section-9.5.4.1-1.1" class="pilcrow">¶</a>
+<li class="compact" id="section-9.5.4.1-1.1">Request: POST /{collection}/{id}/transfer<a href="#section-9.5.4.1-1.1" class="pilcrow">¶</a>
 </li>
               <li class="compact" id="section-9.5.4.1-1.2">Request message: Optional<a href="#section-9.5.4.1-1.2" class="pilcrow">¶</a>
 </li>
               <li class="compact" id="section-9.5.4.1-1.3">Response message: Status<a href="#section-9.5.4.1-1.3" class="pilcrow">¶</a>
 </li>
             </ul>
-<p id="section-9.5.4.1-2">The "op=request" semantics from <a href="https://rfc-editor.org/rfc/rfc5730#appendix-Section%202.9.3.4" class="relref">Section 2.9.3.4</a> are assigned to the HTTP POST method.
-In order to initiate a new object transfer process, the client MUST use the HTTP POST method on a unique resource to create a new transfer resource object. Not all EPP objects support the Transfer command as described in <span><a href="https://rfc-editor.org/rfc/rfc5730#section-3.2.4" class="relref">Section 3.2.4</a> of [<a href="#RFC5730" class="cite xref">RFC5730</a>]</span>, <span><a href="https://rfc-editor.org/rfc/rfc5731#section-3.2.4" class="relref">Section 3.2.4</a> of [<a href="#RFC5731" class="cite xref">RFC5731</a>]</span> and <span><a href="https://rfc-editor.org/rfc/rfc5733#section-3.2.4" class="relref">Section 3.2.4</a> of [<a href="#RFC5733" class="cite xref">RFC5733</a>]</span>.<a href="#section-9.5.4.1-2" class="pilcrow">¶</a></p>
+<p id="section-9.5.4.1-2">In order to initiate a new object transfer process, the client MUST use the HTTP POST method on a unique resource to create a new transfer resource object. Not all RPP objects support the Transfer command.<a href="#section-9.5.4.1-2" class="pilcrow">¶</a></p>
 <p id="section-9.5.4.1-3">If the transfer request is successful, then the response MUST include the Location header for the object being transferred.<a href="#section-9.5.4.1-3" class="pilcrow">¶</a></p>
 <p id="section-9.5.4.1-4">Example request not using object authorization:<a href="#section-9.5.4.1-4" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-9.5.4.1-5">
-<pre>C: POST /rpp/v1/domains/example.nl/transfers HTTP/2
+<pre>C: POST /rpp/v1/domains/example.nl/transfer HTTP/2
 C: Host: rpp.example.nl
 C: Authorization: Bearer &lt;token&gt;
-C: Accept: application/epp+xml
-C: RPP-Svcs: urn:ietf:params:xml:ns:domain-1.0
+C: Accept: application/rpp+json
 C: Accept-Language: en
 C: RPP-Cltrid: ABC-12345
 C: Content-Length: 0
@@ -2596,12 +2392,11 @@ C: Content-Length: 0
 </pre><a href="#section-9.5.4.1-5" class="pilcrow">¶</a>
 </div>
 <p id="section-9.5.4.1-6">Example request using object authorization:<a href="#section-9.5.4.1-6" class="pilcrow">¶</a></p>
-<div class="lang-xml sourcecode" id="section-9.5.4.1-7">
-<pre>C: POST /rpp/v1/domains/example.nl/transfers HTTP/2
+<div class="alignLeft art-text artwork" id="section-9.5.4.1-7">
+<pre>C: POST /rpp/v1/domains/example.nl/transfer HTTP/2
 C: Host: rpp.example.nl
 C: Authorization: Bearer &lt;token&gt;
-C: Accept: application/epp+xml
-C: RPP-Svcs: urn:ietf:params:xml:ns:domain-1.0
+C: Accept: application/rpp+json
 C: RPP-Cltrid: ABC-12345
 C: RPP-AuthInfo: secret-token
 C: Accept-Language: en
@@ -2612,11 +2407,10 @@ C: Content-Length: 0
 </div>
 <p id="section-9.5.4.1-8">Example request using 1 year renewal period, using the <code>unit</code> and <code>value</code> query parameters:<a href="#section-9.5.4.1-8" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-9.5.4.1-9">
-<pre>C: POST /rpp/v1/domains/example.nl/transfers?unit=y&amp;value=1 HTTP/2
+<pre>C: POST /rpp/v1/domains/example.nl/transfer?unit=y&amp;value=1 HTTP/2
 C: Host: rpp.example.nl
 C: Authorization: Bearer &lt;token&gt;
-C: Accept: application/epp+xml
-C: RPP-Svcs: urn:ietf:params:xml:ns:domain-1.0
+C: Accept: application/rpp+json
 C: Accept-Language: en
 C: RPP-Cltrid: ABC-12345
 C: Content-Length: 0
@@ -2625,31 +2419,17 @@ C: Content-Length: 0
 </pre><a href="#section-9.5.4.1-9" class="pilcrow">¶</a>
 </div>
 <p id="section-9.5.4.1-10">Example Transfer response:<a href="#section-9.5.4.1-10" class="pilcrow">¶</a></p>
-<div class="lang-xml sourcecode" id="section-9.5.4.1-11">
+<div class="alignLeft art-text artwork" id="section-9.5.4.1-11">
 <pre>S: HTTP/2 200 OK
 S: Date: Wed, 24 Jan 2024 12:00:00 UTC
 S: Server: Example RPP server v1.0
 S: Content-Language: en
 S: Content-Length: 328
-S: Content-Type: application/epp+xml
-S: Location: https://rpp.example.nl/rpp/v1/domains/example.nl/transfers/latest
-S: RPP-Eppcode: 1001
+S: Content-Type: application/rpp+json
+S: Location: https://rpp.example.nl/rpp/v1/domains/example.nl/transfer
+S: RPP-code: 1001
 S:
-S:&lt;?xml version="1.0" encoding="UTF-8" standalone="no"?&gt;
-S:&lt;rpp xmlns="urn:ietf:params:xml:ns:rpp-1.0"&gt;
-S:  &lt;response&gt;
-S:    &lt;result code="1001"&gt;
-S:      &lt;msg&gt;Command completed successfully; action pending&lt;/msg&gt;
-S:    &lt;/result&gt;
-S:    &lt;resData&gt;
-S:      &lt;!-- The rest of the response is omitted here --&gt;
-S:    &lt;/resData&gt;
-S:    &lt;trID&gt;
-S:      &lt;clTRID&gt;ABC-12345&lt;/clTRID&gt;
-S:      &lt;svTRID&gt;XYZ-12345&lt;/svTRID&gt;
-S:    &lt;/trID&gt;
-S:  &lt;/response&gt;
-S:&lt;/rpp&gt;
+S: TODO
 
 </pre><a href="#section-9.5.4.1-11" class="pilcrow">¶</a>
 </div>
@@ -2661,21 +2441,20 @@ S:&lt;/rpp&gt;
 <a href="#section-9.5.4.2" class="section-number selfRef">9.5.4.2. </a><a href="#name-cancel" class="section-name selfRef">Cancel</a>
             </h5>
 <ul class="compact">
-<li class="compact" id="section-9.5.4.2-1.1">Request: DELETE /{collection}/{id}/transfers/latest<a href="#section-9.5.4.2-1.1" class="pilcrow">¶</a>
+<li class="compact" id="section-9.5.4.2-1.1">Request: DELETE /{collection}/{id}/transfer<a href="#section-9.5.4.2-1.1" class="pilcrow">¶</a>
 </li>
               <li class="compact" id="section-9.5.4.2-1.2">Request message: Optional<a href="#section-9.5.4.2-1.2" class="pilcrow">¶</a>
 </li>
               <li class="compact" id="section-9.5.4.2-1.3">Response message: Status<a href="#section-9.5.4.2-1.3" class="pilcrow">¶</a>
 </li>
             </ul>
-<p id="section-9.5.4.2-2">The "op=cancel" semantics from <a href="https://rfc-editor.org/rfc/rfc5730#appendix-Section%202.9.3.4" class="relref">Section 2.9.3.4</a> are assigned to the HTTP DELETE method.
-The new sponsoring client MUST use the HTTP DELETE method to cancel a requested transfer.<a href="#section-9.5.4.2-2" class="pilcrow">¶</a></p>
+<p id="section-9.5.4.2-2">The new sponsoring client MUST use the HTTP DELETE method to cancel a requested transfer.<a href="#section-9.5.4.2-2" class="pilcrow">¶</a></p>
 <p id="section-9.5.4.2-3">Example request:<a href="#section-9.5.4.2-3" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-9.5.4.2-4">
-<pre>C: DELETE /rpp/v1/domains/example.nl/transfers/latest HTTP/2
+<pre>C: DELETE /rpp/v1/domains/example.nl/transfer HTTP/2
 C: Host: rpp.example.nl
 C: Authorization: Bearer &lt;token&gt;
-C: Accept: application/epp+xml
+C: Accept: application/rpp+json
 C: Accept-Language: en
 C: RPP-Cltrid: ABC-12345
 
@@ -2683,27 +2462,16 @@ C: RPP-Cltrid: ABC-12345
 </pre><a href="#section-9.5.4.2-4" class="pilcrow">¶</a>
 </div>
 <p id="section-9.5.4.2-5">Example response:<a href="#section-9.5.4.2-5" class="pilcrow">¶</a></p>
-<div class="lang-xml sourcecode" id="section-9.5.4.2-6">
+<div class="alignLeft art-text artwork" id="section-9.5.4.2-6">
 <pre>S: HTTP/2 200 OK
 S: Date: Wed, 24 Jan 2024 12:00:00 UTC
 S: Server: Example RPP server v1.0
 S: Content-Length: 80
 S: RPP-Svtrid: XYZ-12345
 S: RPP-Cltrid: ABC-12345
-S: RPP-Eppcode: 1000
+S: RPP-code: 1000
 S:
-S:&lt;?xml version="1.0" encoding="UTF-8" standalone="no"?&gt;
-S:&lt;rpp xmlns="urn:ietf:params:xml:ns:rpp-1.0"&gt;
-S:  &lt;response&gt;
-S:    &lt;result code="1000"&gt;
-S:      &lt;msg&gt;Command completed successfully&lt;/msg&gt;
-S:    &lt;/result&gt;
-S:    &lt;trID&gt;
-S:      &lt;clTRID&gt;ABC-12345&lt;/clTRID&gt;
-S:      &lt;svTRID&gt;XYZ-12345&lt;/svTRID&gt;
-S:    &lt;/trID&gt;
-S:  &lt;/response&gt;
-S:&lt;/rpp&gt;
+S: TODO
 
 </pre><a href="#section-9.5.4.2-6" class="pilcrow">¶</a>
 </div>
@@ -2715,21 +2483,20 @@ S:&lt;/rpp&gt;
 <a href="#section-9.5.4.3" class="section-number selfRef">9.5.4.3. </a><a href="#name-reject" class="section-name selfRef">Reject</a>
             </h5>
 <ul class="compact">
-<li class="compact" id="section-9.5.4.3-1.1">Request: DELETE /{collection}/{id}/transfers/latest<a href="#section-9.5.4.3-1.1" class="pilcrow">¶</a>
+<li class="compact" id="section-9.5.4.3-1.1">Request: DELETE /{collection}/{id}/transfer<a href="#section-9.5.4.3-1.1" class="pilcrow">¶</a>
 </li>
               <li class="compact" id="section-9.5.4.3-1.2">Request message:  None<a href="#section-9.5.4.3-1.2" class="pilcrow">¶</a>
 </li>
               <li class="compact" id="section-9.5.4.3-1.3">Response message: Status<a href="#section-9.5.4.3-1.3" class="pilcrow">¶</a>
 </li>
             </ul>
-<p id="section-9.5.4.3-2">The "op=reject" semantics from <a href="https://rfc-editor.org/rfc/rfc5730#appendix-Section%202.9.3.4" class="relref">Section 2.9.3.4</a> are assigned to the HTTP DELETE method.
-The currently sponsoring client of the object MUST use the HTTP DELETE method to reject a started transfer process.<a href="#section-9.5.4.3-2" class="pilcrow">¶</a></p>
+<p id="section-9.5.4.3-2">The currently sponsoring client of the object MUST use the HTTP DELETE method to reject a started transfer process.<a href="#section-9.5.4.3-2" class="pilcrow">¶</a></p>
 <p id="section-9.5.4.3-3">Example request:<a href="#section-9.5.4.3-3" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-9.5.4.3-4">
 <pre>C: DELETE /rpp/v1/domains/example.nl/transfers/latest HTTP/2
 C: Host: rpp.example.nl
 C: Authorization: Bearer &lt;token&gt;
-C: Accept: application/epp+xml
+C: Accept: application/rpp+json
 C: Accept-Language: en
 C: RPP-Cltrid: ABC-12345
 
@@ -2737,27 +2504,16 @@ C: RPP-Cltrid: ABC-12345
 </pre><a href="#section-9.5.4.3-4" class="pilcrow">¶</a>
 </div>
 <p id="section-9.5.4.3-5">Example Reject response:<a href="#section-9.5.4.3-5" class="pilcrow">¶</a></p>
-<div class="lang-xml sourcecode" id="section-9.5.4.3-6">
+<div class="alignLeft art-text artwork" id="section-9.5.4.3-6">
 <pre>S: HTTP/2 200 OK
 S: Date: Wed, 24 Jan 2024 12:00:00 UTC
 S: Server: Example RPP server v1.0
 S: Content-Length: 80
 S: RPP-Svtrid: XYZ-12345
 S: RPP-Cltrid: ABC-12345
-S: RPP-Eppcode: 1000
+S: RPP-code: 1000
 S:
-S:&lt;?xml version="1.0" encoding="UTF-8" standalone="no"?&gt;
-S:&lt;rpp xmlns="urn:ietf:params:xml:ns:rpp-1.0"&gt;
-S:  &lt;response&gt;
-S:    &lt;result code="1000"&gt;
-S:      &lt;msg&gt;Command completed successfully&lt;/msg&gt;
-S:    &lt;/result&gt;
-S:    &lt;trID&gt;
-S:      &lt;clTRID&gt;ABC-12345&lt;/clTRID&gt;
-S:      &lt;svTRID&gt;XYZ-12345&lt;/svTRID&gt;
-S:    &lt;/trID&gt;
-S:  &lt;/response&gt;
-S:&lt;/rpp&gt;
+S: TODO
 
 
 </pre><a href="#section-9.5.4.3-6" class="pilcrow">¶</a>
@@ -2777,14 +2533,13 @@ S:&lt;/rpp&gt;
               <li class="compact" id="section-9.5.4.4-1.3">Response message: Status<a href="#section-9.5.4.4-1.3" class="pilcrow">¶</a>
 </li>
             </ul>
-<p id="section-9.5.4.4-2">The "op=approve" semantics from <a href="https://rfc-editor.org/rfc/rfc5730#appendix-Section%202.9.3.4" class="relref">Section 2.9.3.4</a> are assigned to the HTTP PUT method.
-The currently sponsoring client MUST use the HTTP PUT method to approve a transfer requested by the new sponsoring client.<a href="#section-9.5.4.4-2" class="pilcrow">¶</a></p>
+<p id="section-9.5.4.4-2">The currently sponsoring client MUST use the HTTP PUT method to approve a transfer requested by the new sponsoring client.<a href="#section-9.5.4.4-2" class="pilcrow">¶</a></p>
 <p id="section-9.5.4.4-3">Example Approve request:<a href="#section-9.5.4.4-3" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-9.5.4.4-4">
-<pre>C: PUT /rpp/v1/domains/example.nl/transfers/latest HTTP/2
+<pre>C: PUT /rpp/v1/domains/example.nl/transfer HTTP/2
 C: Host: rpp.example.nl
 C: Authorization: Bearer &lt;token&gt;
-C: Accept: application/epp+xml
+C: Accept: application/rpp+json
 C: Accept-Language: en
 C: RPP-Cltrid: ABC-12345
 C: Content-Length: 0
@@ -2793,27 +2548,16 @@ C: Content-Length: 0
 </pre><a href="#section-9.5.4.4-4" class="pilcrow">¶</a>
 </div>
 <p id="section-9.5.4.4-5">Example Approve response:<a href="#section-9.5.4.4-5" class="pilcrow">¶</a></p>
-<div class="lang-xml sourcecode" id="section-9.5.4.4-6">
+<div class="alignLeft art-text artwork" id="section-9.5.4.4-6">
 <pre>S: HTTP/2 200 OK
 S: Date: Wed, 24 Jan 2024 12:00:00 UTC
 S: Server: Example RPP server v1.0
 S: Content-Length: 80
 S: RPP-Svtrid: XYZ-12345
 S: RPP-Cltrid: ABC-12345
-S: RPP-Eppcode: 1000
+S: RPP-code: 1000
 S:
-S:&lt;?xml version="1.0" encoding="UTF-8" standalone="no"?&gt;
-S:&lt;rpp xmlns="urn:ietf:params:xml:ns:rpp-1.0"&gt;
-S:  &lt;response&gt;
-S:    &lt;result code="1000"&gt;
-S:      &lt;msg&gt;Command completed successfully&lt;/msg&gt;
-S:    &lt;/result&gt;
-S:    &lt;trID&gt;
-S:      &lt;clTRID&gt;ABC-12345&lt;/clTRID&gt;
-S:      &lt;svTRID&gt;XYZ-12345&lt;/svTRID&gt;
-S:    &lt;/trID&gt;
-S:  &lt;/response&gt;
-S:&lt;/rpp&gt;
+S: TODO
 
 </pre><a href="#section-9.5.4.4-6" class="pilcrow">¶</a>
 </div>
@@ -2835,57 +2579,34 @@ S:&lt;/rpp&gt;
 </li>
           </ul>
 <p id="section-9.5.5-2">An object Update request MUST be performed using the HTTP PATCH method. The request message body MUST contain an EPP Update request, and the object-id value in the request MUST match the value of the object-id path parameter in the URL.<a href="#section-9.5.5-2" class="pilcrow">¶</a></p>
-<p id="section-9.5.5-3">Example request:<a href="#section-9.5.5-3" class="pilcrow">¶</a></p>
-<div class="lang-xml sourcecode" id="section-9.5.5-4">
+<p id="section-9.5.5-3"><strong>TODO:</strong> when using JSON, also allow for JSON patch so client can send partial update data only?<a href="#section-9.5.5-3" class="pilcrow">¶</a></p>
+<p id="section-9.5.5-4">Example request:<a href="#section-9.5.5-4" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-9.5.5-5">
 <pre>C: PATCH /rpp/v1/domains/example.nl HTTP/2
 C: Host: rpp.example.nl
 C: Authorization: Bearer &lt;token&gt;
-C: Accept: application/epp+xml
-C: Content-Type: application/epp+xml
+C: Accept: application/rpp+json
+C: Content-Type: application/rpp+json
 C: Accept-Language: en
-C: RPP-Svcs: urn:ietf:params:xml:ns:domain-1.0
 C: Content-Length: 252
 C:
-C:&lt;?xml version="1.0" encoding="UTF-8" standalone="no"?&gt;
-C:&lt;rpp xmlns="urn:ietf:params:xml:ns:rpp-1.0"&gt;
-C:  &lt;request&gt;
-C:    &lt;body&gt;
-C:      &lt;domain:update
-C:       xmlns:domain="urn:ietf:params:xml:ns:domain-1.0"&gt;
-C:        &lt;domain:name&gt;example.nl&lt;/domain:name&gt;
-C:           &lt;!-- The rest of the request is omitted here --&gt;
-C:      &lt;/domain:update&gt;
-C:    &lt;/body&gt;
-C:    &lt;clTRID&gt;ABC-12345&lt;/clTRID&gt;
-C:  &lt;/request&gt;
-C:&lt;/rpp&gt;
+S: TODO
 
-</pre><a href="#section-9.5.5-4" class="pilcrow">¶</a>
+</pre><a href="#section-9.5.5-5" class="pilcrow">¶</a>
 </div>
-<p id="section-9.5.5-5">Example response:<a href="#section-9.5.5-5" class="pilcrow">¶</a></p>
-<div class="lang-xml sourcecode" id="section-9.5.5-6">
+<p id="section-9.5.5-6">Example response:<a href="#section-9.5.5-6" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-9.5.5-7">
 <pre>S: HTTP/2 200 OK
 S: Date: Wed, 24 Jan 2024 12:00:00 UTC
 S: Server: Example RPP server v1.0
 S: Content-Length: 80
 S: RPP-Svtrid: XYZ-12345
 S: RPP-Cltrid: ABC-12345
-S: RPP-Eppcode: 1000
+S: RPP-code: 1000
 S:
-S:&lt;?xml version="1.0" encoding="UTF-8" standalone="no"?&gt;
-S:&lt;rpp xmlns="urn:ietf:params:xml:ns:rpp-1.0"&gt;
-S:  &lt;response&gt;
-S:    &lt;result code="1000"&gt;
-S:      &lt;msg&gt;Command completed successfully&lt;/msg&gt;
-S:    &lt;/result&gt;
-S:    &lt;trID&gt;
-S:      &lt;clTRID&gt;ABC-12345&lt;/clTRID&gt;
-S:      &lt;svTRID&gt;XYZ-12345&lt;/svTRID&gt;
-S:    &lt;/trID&gt;
-S:  &lt;/response&gt;
-S:&lt;/rpp&gt;
+S: TODO
 
-</pre><a href="#section-9.5.5-6" class="pilcrow">¶</a>
+</pre><a href="#section-9.5.5-7" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
@@ -2896,7 +2617,7 @@ S:&lt;/rpp&gt;
         <h3 id="name-extension-framework-2">
 <a href="#section-9.6" class="section-number selfRef">9.6. </a><a href="#name-extension-framework-2" class="section-name selfRef">Extension Framework</a>
         </h3>
-<p id="section-9.6-1">The EPP Extension Framework allows for extending the EPP protocol at different locations, RPP defines additional REST resources for the Protocol and Command-Response extensions.<a href="#section-9.6-1" class="pilcrow">¶</a></p>
+<p id="section-9.6-1">TODO<a href="#section-9.6-1" class="pilcrow">¶</a></p>
 <div id="protocol-extension">
 <section id="section-9.6.1">
           <h4 id="name-protocol-extension">
@@ -2912,7 +2633,7 @@ S:&lt;/rpp&gt;
           </ul>
 <p id="section-9.6.1-2">EPP Protocol extensions, defined in <span><a href="https://rfc-editor.org/rfc/rfc5730#section-2.7.1" class="relref">Section 2.7.1</a> of [<a href="#RFC5730" class="cite xref">RFC5730</a>]</span> are supported using the "/extensions" root resource.
 The HTTP method used for a new Protocol extension is not defined but must follow the RESTful principles.<a href="#section-9.6.1-2" class="pilcrow">¶</a></p>
-<p id="section-9.6.1-3">The example below, illustrates the use of the "Domain Cancel Delete" command as defined as a custom command in <span>[<a href="#SIDN-EXT" class="cite xref">SIDN-EXT</a>]</span>. The new command is created below the "extensions" path element and after this element follows the "domains" object collection, finally a special "deletion" path element is added to the end of the URL. A client MUST use the HTPP DELETE method on a domain name deletion resource to cancel an ongoing domain delete transaction and move the domain from the grace state back to the active state.<a href="#section-9.6.1-3" class="pilcrow">¶</a></p>
+<p id="section-9.6.1-3">The example below, illustrates the use of the "Domain Cancel Delete" command. The new command is created below the "extensions" path element and after this element follows the "domains" object collection, finally a special "deletion" path element is added to the end of the URL. A client MUST use the HTPP DELETE method on a domain name deletion resource to cancel an ongoing domain delete transaction and move the domain from the grace state back to the active state.<a href="#section-9.6.1-3" class="pilcrow">¶</a></p>
 <p id="section-9.6.1-4">Example Protocol Extension request:<a href="#section-9.6.1-4" class="pilcrow">¶</a></p>
 <ul class="compact">
 <li class="compact" id="section-9.6.1-5.1">Request: DELETE /extensions/{collection}/{id}/deletion<a href="#section-9.6.1-5.1" class="pilcrow">¶</a>
@@ -2926,17 +2647,15 @@ The HTTP method used for a new Protocol extension is not defined but must follow
 <pre>C: DELETE /rpp/v1/extensions/domains/example.nl/deletion HTTP/2
 C: Host: rpp.example.nl
 C: Authorization: Bearer &lt;token&gt;
-C: Accept: application/epp+xml
+C: Accept: application/rpp+json
 C: Accept-Language: en
-C: RPP-Svcs: urn:ietf:params:xml:ns:domain-1.0
-C: RPP-Svcs-Ext: https://rxsd.domain-registry.nl/sidn-ext-epp-1.0
 C: RPP-Cltrid: ABC-12345
 
 
 </pre><a href="#section-9.6.1-6" class="pilcrow">¶</a>
 </div>
 <p id="section-9.6.1-7">Example response:<a href="#section-9.6.1-7" class="pilcrow">¶</a></p>
-<div class="lang-xml sourcecode" id="section-9.6.1-8">
+<div class="alignLeft art-text artwork" id="section-9.6.1-8">
 <pre>S: HTTP/2 200 OK
 S: Date: Wed, 24 Jan 2024 12:00:00 UTC
 S: Server: Example RPP server v1.0
@@ -2944,20 +2663,9 @@ S: Content-Language: en
 S: Content-Length: 0
 S: RPP-Svtrid: XYZ-12345
 S: RPP-Cltrid: ABC-12345
-S: RPP-Eppcode: 1000
+S: RPP-code: 1000
 S:
-S:&lt;?xml version="1.0" encoding="UTF-8" standalone="no"?&gt;
-S:&lt;rpp xmlns="urn:ietf:params:xml:ns:rpp-1.0"&gt;
-S:  &lt;response&gt;
-S:    &lt;result code="1000"&gt;
-S:      &lt;msg&gt;Command completed successfully&lt;/msg&gt;
-S:    &lt;/result&gt;
-S:    &lt;trID&gt;
-S:      &lt;clTRID&gt;ABC-12345&lt;/clTRID&gt;
-S:      &lt;svTRID&gt;XYZ-12345&lt;/svTRID&gt;
-S:    &lt;/trID&gt;
-S:  &lt;/response&gt;
-S:&lt;/rpp&gt;
+S: TODO
 
 </pre><a href="#section-9.6.1-8" class="pilcrow">¶</a>
 </div>
@@ -2979,63 +2687,33 @@ S:&lt;/rpp&gt;
 </li>
           </ul>
 <p id="section-9.6.2-4">Example request:<a href="#section-9.6.2-4" class="pilcrow">¶</a></p>
-<div class="lang-xml sourcecode" id="section-9.6.2-5">
+<div class="alignLeft art-text artwork" id="section-9.6.2-5">
 <pre>C: POST /rpp/v1/ips HTTP/2
 C: Host: rpp.example.nl
 C: Authorization: Bearer &lt;token&gt;
-C: Accept: application/epp+xml
+C: Accept: application/rpp+json
 C: Accept-Language: en
-C: RPP-Svcs-Ext: https://example.nl/epp-ips-1.0
 C: RPP-Cltrid: ABC-12345
-C: Content-Type: application/epp+xml
+C: Content-Type: application/rpp+json
 C: Content-Length: 220
 C:
-C:&lt;?xml version="1.0" encoding="UTF-8" standalone="no"?&gt;
-C:&lt;rpp xmlns="urn:ietf:params:xml:ns:rpp-1.0"&gt;
-C:  &lt;request&gt;
-C:    &lt;body&gt;
-C:      &lt;ip:create
-C:       xmlns:ip="https://example.nl/epp-ip-1.0"&gt;
-C:        &lt;ip:address&gt;192.0.2.1&lt;/ip:address&gt;
-C:        &lt;!-- The rest of the request is omitted here --&gt;
-C:      &lt;/ip:create&gt;
-C:    &lt;/body&gt;
-C:    &lt;clTRID&gt;ABC-12345&lt;/clTRID&gt;
-C:  &lt;/request&gt;
-C:&lt;/rpp&gt;
+S: TODO
 
 
 </pre><a href="#section-9.6.2-5" class="pilcrow">¶</a>
 </div>
 <p id="section-9.6.2-6">Example response:<a href="#section-9.6.2-6" class="pilcrow">¶</a></p>
-<div class="lang-xml sourcecode" id="section-9.6.2-7">
+<div class="alignLeft art-text artwork" id="section-9.6.2-7">
 <pre>S: HTTP/2 200 OK
 S: Date: Wed, 24 Jan 2024 12:00:00 UTC
 S: Server: Example RPP server v1.0
 S: Content-Language: en
 S: Content-Length: 642
-S: Content-Type: application/epp+xml
+S: Content-Type: application/rpp+json
 S: Location: https://rpp.example.nl/rpp/v1/ips/192.0.2.1
-S: RPP-Eppcode: 1000
+S: RPP-code: 1000
 S:
-S:&lt;?xml version="1.0" encoding="UTF-8" standalone="no"?&gt;
-S:&lt;rpp xmlns="urn:ietf:params:xml:ns:rpp-1.0"
-S:     xmlns:ip="https://example.nl/epp-ip-1.0"&gt;
-S:   &lt;response&gt;
-S:      &lt;result code="1000"&gt;
-S:         &lt;msg&gt;Command completed successfully&lt;/msg&gt;
-S:      &lt;/result&gt;
-S:      &lt;resData&gt;
-S:         &lt;ip:creData&gt;
-S:            &lt;!-- The rest of the response is omitted here --&gt;
-S:         &lt;/ip:creData&gt;
-S:      &lt;/resData&gt;
-S:      &lt;trID&gt;
-S:         &lt;clTRID&gt;ABC-12345&lt;/clTRID&gt;
-S:         &lt;svTRID&gt;XYZ-12345&lt;/svTRID&gt;
-S:      &lt;/trID&gt;
-S:   &lt;/response&gt;
-S:&lt;/rpp&gt;
+S: TODO
 
 
 </pre><a href="#section-9.6.2-7" class="pilcrow">¶</a>
@@ -3047,695 +2725,130 @@ S:&lt;/rpp&gt;
           <h4 id="name-command-response-extension">
 <a href="#section-9.6.3" class="section-number selfRef">9.6.3. </a><a href="#name-command-response-extension" class="section-name selfRef">Command-Response Extension</a>
           </h4>
-<p id="section-9.6.3-1">Command-Response Extensions allow for adding elements to an existing object mapping, therefore no new extension resource is required, the existing resources can be used for existing and future extensions of this type.<a href="#section-9.6.3-1" class="pilcrow">¶</a></p>
+<p id="section-9.6.3-1">TODO<a href="#section-9.6.3-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
-</div>
-</section>
-</div>
-<div id="protocol-considerations">
-<section id="section-10">
-      <h2 id="name-protocol-considerations">
-<a href="#section-10" class="section-number selfRef">10. </a><a href="#name-protocol-considerations" class="section-name selfRef">Protocol Considerations</a>
-      </h2>
-<p id="section-10-1"></p>
-<p id="section-10-2"><span><a href="https://rfc-editor.org/rfc/rfc5730#section-2.1" class="relref">Section 2.1</a> of [<a href="#RFC5730" class="cite xref">RFC5730</a>]</span> of the EPP protocol specification describes considerations to be addressed by a transport or protocol mapping. These are satisfied by a combination of RPP features and features provided by HTTP protocol and underlying transport protocols, as described below.<a href="#section-10-2" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-10-3.1">
-          <p id="section-10-3.1.1">The consideration: "The transport mapping MUST preserve the stateful nature of the protocol", is updated to: "The transport mapping MUST preserve the stateful nature of the protocol, when using a stateful transport protocol". RPP uses the REST architectural style for defining a stateless API based on the stateless HTTP protocol, and therefore satisfies the updated consideration.<a href="#section-10-3.1.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="section-10-3.2">
-          <p id="section-10-3.2.1"><a href="#rest" class="auto internal xref">Section 8</a> describes how HTTP multiplexing may be used for pipelining multiple requests. A server may allow pipelining, requests are to be processed in the order they have been received.<a href="#section-10-3.2.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="section-10-3.3">
-          <p id="section-10-3.3.1">RPP is based on the HTTP protocol, which uses the client-server model.<a href="#section-10-3.3.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="section-10-3.4">
-          <p id="section-10-3.4.1">RPP messages are transmitted using HTTP, this document refers to the HTTP <span>[<a href="#RFC2616" class="cite xref">RFC2616</a>]</span> protocol specification for how data units are framed.<a href="#section-10-3.4.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="section-10-3.5">
-          <p id="section-10-3.5.1">HTTP/1 and HTTP/2 use TCP as a transport protocol and this includes features to provide reliability, flow control, ordered delivery, and congestion control <span><a href="https://rfc-editor.org/rfc/rfc793#section-1.5" class="relref">Section 1.5</a> of [<a href="#RFC793" class="cite xref">RFC793</a>]</span> describes these features in detail; congestion control principles are described further in <span>[<a href="#RFC2581" class="cite xref">RFC2581</a>]</span> and <span>[<a href="#RFC2914" class="cite xref">RFC2914</a>]</span>. HTTP/3 uses QUIC (UDP) as a transport protocol, which has built-in congestion control over UDP.<a href="#section-10-3.5.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="section-10-3.6">
-          <p id="section-10-3.6.1"><a href="#rest" class="auto internal xref">Section 8</a> describes how requests are processed independently of each other.<a href="#section-10-3.6.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="section-10-3.7">
-          <p id="section-10-3.7.1">Errors while processing a RPP request are isolated to this request and do not affect other requests sent by the client or other clients, this is described in <a href="#error-handling" class="auto internal xref">Section 8.4</a>.<a href="#section-10-3.7.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="section-10-3.8">
-          <p id="section-10-3.8.1">Batch-oriented processing (combining multiple EPP commands in a single HTTP request) is not permitted. To maximize scalability
-every request must contain a single command, as described in <a href="#rest" class="auto internal xref">Section 8</a>.<a href="#section-10-3.8.1" class="pilcrow">¶</a></p>
-</li>
-      </ul>
-</section>
-</div>
-<div id="formal-syntax">
-<section id="section-11">
-      <h2 id="name-formal-syntax">
-<a href="#section-11" class="section-number selfRef">11. </a><a href="#name-formal-syntax" class="section-name selfRef">Formal Syntax</a>
-      </h2>
-<p id="section-11-1">This section contains the XML Schema notation defined for RPP, based on the XML schema defined in <span>[<a href="#RFC5730" class="cite xref">RFC5730</a>]</span>.
-The XML schema defined in <span>[<a href="#RFC5730" class="cite xref">RFC5730</a>]</span> contains XML elements and attributes that are no longer required in a RPP context.<a href="#section-11-1" class="pilcrow">¶</a></p>
-<p id="section-11-2">The following changes have been made:<a href="#section-11-2" class="pilcrow">¶</a></p>
-<ul class="compact">
-<li class="compact" id="section-11-3.1">deleted hello from eppType<a href="#section-11-3.1" class="pilcrow">¶</a>
-</li>
-        <li class="compact" id="section-11-3.2">renamed command to request in eppType<a href="#section-11-3.2" class="pilcrow">¶</a>
-</li>
-        <li class="compact" id="section-11-3.3">deleted choice and all child elements from commandtype<a href="#section-11-3.3" class="pilcrow">¶</a>
-</li>
-        <li class="compact" id="section-11-3.4">renamed commandtype to requestType<a href="#section-11-3.4" class="pilcrow">¶</a>
-</li>
-        <li class="compact" id="section-11-3.5">renamed readWriteType to bodyType<a href="#section-11-3.5" class="pilcrow">¶</a>
-</li>
-        <li class="compact" id="section-11-3.6">created body element for requestType<a href="#section-11-3.6" class="pilcrow">¶</a>
-</li>
-        <li class="compact" id="section-11-3.7">deleted loginType<a href="#section-11-3.7" class="pilcrow">¶</a>
-</li>
-        <li class="compact" id="section-11-3.8">deleted credsOptionsType<a href="#section-11-3.8" class="pilcrow">¶</a>
-</li>
-        <li class="compact" id="section-11-3.9">deleted loginSvcType<a href="#section-11-3.9" class="pilcrow">¶</a>
-</li>
-        <li class="compact" id="section-11-3.10">deleted pwType<a href="#section-11-3.10" class="pilcrow">¶</a>
-</li>
-        <li class="compact" id="section-11-3.11">deleted pollType<a href="#section-11-3.11" class="pilcrow">¶</a>
-</li>
-        <li class="compact" id="section-11-3.12">deleted transferType<a href="#section-11-3.12" class="pilcrow">¶</a>
-</li>
-        <li class="compact" id="section-11-3.13">deleted transferOpType<a href="#section-11-3.13" class="pilcrow">¶</a>
-</li>
-      </ul>
-<p id="section-11-4">The formal syntax presented here is a complete schema representation of RPP suitable for automated validation of RPP XML instances.<a href="#section-11-4" class="pilcrow">¶</a></p>
-<div class="breakable lang-xml sourcecode" id="section-11-5">
-<pre>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-
-&lt;schema targetNamespace="urn:ietf:params:xml:ns:rpp-1.0"
-xmlns:rpp="urn:ietf:params:xml:ns:rpp-1.0"
-xmlns:eppcom="urn:ietf:params:xml:ns:eppcom-1.0"
-xmlns="http://www.w3.org/2001/XMLSchema"
-elementFormDefault="qualified"&gt;
-
-   &lt;!--
-   Import common element types.
-   --&gt;
-     &lt;import namespace="urn:ietf:params:xml:ns:eppcom-1.0"/&gt;
-
-     &lt;annotation&gt;
-       &lt;documentation&gt;
-         RESTful Extensible Provisioning Protocol v1.0 schema.
-       &lt;/documentation&gt;
-     &lt;/annotation&gt;
-
-   &lt;!--
-   Every EPP XML instance must begin with this element.
-   --&gt;
-
-   &lt;element name="rpp" type="rpp:eppType"/&gt;
-
-   &lt;!--
-   An EPP XML instance must contain a greeting, request, response, or extension.
-   --&gt;
-     &lt;complexType name="eppType"&gt;
-       &lt;choice&gt;
-         &lt;element name="greeting" type="rpp:greetingType"/&gt;
-         &lt;element name="request" type="rpp:requestType"/&gt;
-         &lt;element name="response" type="rpp:responseType"/&gt;
-         &lt;element name="extension" type="rpp:extAnyType"/&gt;
-       &lt;/choice&gt;
-     &lt;/complexType&gt;
-
-   &lt;!--
-   A greeting is sent by a server in response to a client connection
-   or &lt;hello&gt;.
-   --&gt;
-     &lt;complexType name="greetingType"&gt;
-       &lt;sequence&gt;
-         &lt;element name="svID" type="rpp:sIDType"/&gt;
-         &lt;element name="svDate" type="dateTime"/&gt;
-         &lt;element name="svcMenu" type="rpp:svcMenuType"/&gt;
-         &lt;element name="dcp" type="rpp:dcpType"/&gt;
-       &lt;/sequence&gt;
-     &lt;/complexType&gt;
-
-   &lt;!--
-   Server IDs are strings with minimum and maximum length restrictions.
-   --&gt;
-     &lt;simpleType name="sIDType"&gt;
-       &lt;restriction base="normalizedString"&gt;
-         &lt;minLength value="3"/&gt;
-         &lt;maxLength value="64"/&gt;
-       &lt;/restriction&gt;
-     &lt;/simpleType&gt;
-
-   &lt;!--
-   A server greeting identifies available object services.
-   --&gt;
-     &lt;complexType name="svcMenuType"&gt;
-       &lt;sequence&gt;
-         &lt;element name="version" type="rpp:versionType"
-          maxOccurs="unbounded"/&gt;
-         &lt;element name="lang" type="language"
-          maxOccurs="unbounded"/&gt;
-         &lt;element name="objURI" type="anyURI"
-          maxOccurs="unbounded"/&gt;
-         &lt;element name="svcExtension" type="rpp:extURIType"
-          minOccurs="0"/&gt;
-       &lt;/sequence&gt;
-     &lt;/complexType&gt;
-
-   &lt;!--
-   Data Collection Policy types.
-   --&gt;
-     &lt;complexType name="dcpType"&gt;
-       &lt;sequence&gt;
-         &lt;element name="access" type="rpp:dcpAccessType"/&gt;
-         &lt;element name="statement" type="rpp:dcpStatementType"
-          maxOccurs="unbounded"/&gt;
-         &lt;element name="expiry" type="rpp:dcpExpiryType"
-          minOccurs="0"/&gt;
-       &lt;/sequence&gt;
-     &lt;/complexType&gt;
-
-     &lt;complexType name="dcpAccessType"&gt;
-       &lt;choice&gt;
-         &lt;element name="all"/&gt;
-         &lt;element name="none"/&gt;
-         &lt;element name="null"/&gt;
-         &lt;element name="other"/&gt;
-         &lt;element name="personal"/&gt;
-         &lt;element name="personalAndOther"/&gt;
-       &lt;/choice&gt;
-     &lt;/complexType&gt;
-
-     &lt;complexType name="dcpStatementType"&gt;
-       &lt;sequence&gt;
-         &lt;element name="purpose" type="rpp:dcpPurposeType"/&gt;
-         &lt;element name="recipient" type="rpp:dcpRecipientType"/&gt;
-         &lt;element name="retention" type="rpp:dcpRetentionType"/&gt;
-       &lt;/sequence&gt;
-     &lt;/complexType&gt;
-
-     &lt;complexType name="dcpPurposeType"&gt;
-       &lt;sequence&gt;
-         &lt;element name="admin"
-          minOccurs="0"/&gt;
-         &lt;element name="contact"
-          minOccurs="0"/&gt;
-         &lt;element name="other"
-          minOccurs="0"/&gt;
-         &lt;element name="prov"
-          minOccurs="0"/&gt;
-       &lt;/sequence&gt;
-     &lt;/complexType&gt;
-
-     &lt;complexType name="dcpRecipientType"&gt;
-       &lt;sequence&gt;
-         &lt;element name="other"
-          minOccurs="0"/&gt;
-         &lt;element name="ours" type="rpp:dcpOursType"
-          minOccurs="0" maxOccurs="unbounded"/&gt;
-         &lt;element name="public"
-          minOccurs="0"/&gt;
-         &lt;element name="same"
-          minOccurs="0"/&gt;
-         &lt;element name="unrelated"
-          minOccurs="0"/&gt;
-       &lt;/sequence&gt;
-     &lt;/complexType&gt;
-
-     &lt;complexType name="dcpOursType"&gt;
-       &lt;sequence&gt;
-         &lt;element name="recDesc" type="rpp:dcpRecDescType"
-          minOccurs="0"/&gt;
-       &lt;/sequence&gt;
-     &lt;/complexType&gt;
-
-     &lt;simpleType name="dcpRecDescType"&gt;
-       &lt;restriction base="token"&gt;
-         &lt;minLength value="1"/&gt;
-         &lt;maxLength value="255"/&gt;
-       &lt;/restriction&gt;
-     &lt;/simpleType&gt;
-
-     &lt;complexType name="dcpRetentionType"&gt;
-       &lt;choice&gt;
-         &lt;element name="business"/&gt;
-         &lt;element name="indefinite"/&gt;
-         &lt;element name="legal"/&gt;
-         &lt;element name="none"/&gt;
-         &lt;element name="stated"/&gt;
-       &lt;/choice&gt;
-     &lt;/complexType&gt;
-
-     &lt;complexType name="dcpExpiryType"&gt;
-       &lt;choice&gt;
-         &lt;element name="absolute" type="dateTime"/&gt;
-         &lt;element name="relative" type="duration"/&gt;
-       &lt;/choice&gt;
-     &lt;/complexType&gt;
-
-   &lt;!--
-   Extension framework types.
-   --&gt;
-     &lt;complexType name="extAnyType"&gt;
-       &lt;sequence&gt;
-         &lt;any namespace="##other"
-          maxOccurs="unbounded"/&gt;
-       &lt;/sequence&gt;
-     &lt;/complexType&gt;
-
-     &lt;complexType name="extURIType"&gt;
-       &lt;sequence&gt;
-         &lt;element name="extURI" type="anyURI"
-          maxOccurs="unbounded"/&gt;
-       &lt;/sequence&gt;
-     &lt;/complexType&gt;
-
-   &lt;!--
-   An EPP version number is a dotted pair of decimal numbers.
-   --&gt;
-     &lt;simpleType name="versionType"&gt;
-       &lt;restriction base="token"&gt;
-         &lt;pattern value="[1-9]+\.[0-9]+"/&gt;
-         &lt;enumeration value="1.0"/&gt;
-       &lt;/restriction&gt;
-     &lt;/simpleType&gt;
-
-   &lt;!--
-   Request type, reduced to a single &lt;body&gt; element for object-data.
-   --&gt;
-
-&lt;complexType name="requestType"&gt;
-  &lt;sequence&gt;
-    &lt;element name="body" type="rpp:bodyType"/&gt;
-    &lt;element name="extension" type="rpp:extAnyType"
-     minOccurs="0"/&gt;
-    &lt;element name="clTRID" type="rpp:trIDStringType"
-     minOccurs="0"/&gt;
-  &lt;/sequence&gt;
-&lt;/complexType&gt;
-
-
-   &lt;!--
-     All other object-centric request bodies. EPP doesn't specify the syntax or
-     semantics of object-centric body elements.
-     The elements MUST be described in detail in another schema specific to the object.
-   --&gt;
-     &lt;complexType name="bodyType"&gt;
-       &lt;sequence&gt;
-         &lt;any namespace="##other"/&gt;
-       &lt;/sequence&gt;
-     &lt;/complexType&gt;
-
-     &lt;complexType name="trIDType"&gt;
-       &lt;sequence&gt;
-         &lt;element name="clTRID" type="rpp:trIDStringType"
-          minOccurs="0"/&gt;
-         &lt;element name="svTRID" type="rpp:trIDStringType"/&gt;
-       &lt;/sequence&gt;
-     &lt;/complexType&gt;
-
-     &lt;simpleType name="trIDStringType"&gt;
-       &lt;restriction base="token"&gt;
-         &lt;minLength value="3"/&gt;
-         &lt;maxLength value="64"/&gt;
-       &lt;/restriction&gt;
-     &lt;/simpleType&gt;
-
-   &lt;!--
-   Response types.
-   --&gt;
-     &lt;complexType name="responseType"&gt;
-       &lt;sequence&gt;
-         &lt;element name="result" type="rpp:resultType"
-          maxOccurs="unbounded"/&gt;
-         &lt;element name="msgQ" type="rpp:msgQType"
-          minOccurs="0"/&gt;
-
-         &lt;element name="resData" type="rpp:extAnyType"
-          minOccurs="0"/&gt;
-         &lt;element name="extension" type="rpp:extAnyType"
-          minOccurs="0"/&gt;
-         &lt;element name="trID" type="rpp:trIDType"/&gt;
-       &lt;/sequence&gt;
-     &lt;/complexType&gt;
-
-     &lt;complexType name="resultType"&gt;
-       &lt;sequence&gt;
-         &lt;element name="msg" type="rpp:msgType"/&gt;
-         &lt;choice minOccurs="0" maxOccurs="unbounded"&gt;
-           &lt;element name="value" type="rpp:errValueType"/&gt;
-           &lt;element name="extValue" type="rpp:extErrValueType"/&gt;
-         &lt;/choice&gt;
-       &lt;/sequence&gt;
-       &lt;attribute name="code" type="rpp:resultCodeType"
-        use="required"/&gt;
-     &lt;/complexType&gt;
-
-     &lt;complexType name="errValueType" mixed="true"&gt;
-       &lt;sequence&gt;
-         &lt;any namespace="##any" processContents="skip"/&gt;
-       &lt;/sequence&gt;
-       &lt;anyAttribute namespace="##any" processContents="skip"/&gt;
-     &lt;/complexType&gt;
-
-     &lt;complexType name="extErrValueType"&gt;
-       &lt;sequence&gt;
-         &lt;element name="value" type="rpp:errValueType"/&gt;
-         &lt;element name="reason" type="rpp:msgType"/&gt;
-       &lt;/sequence&gt;
-     &lt;/complexType&gt;
-
-     &lt;complexType name="msgQType"&gt;
-       &lt;sequence&gt;
-         &lt;element name="qDate" type="dateTime"
-          minOccurs="0"/&gt;
-         &lt;element name="msg" type="rpp:mixedMsgType"
-          minOccurs="0"/&gt;
-       &lt;/sequence&gt;
-       &lt;attribute name="count" type="unsignedLong"
-        use="required"/&gt;
-       &lt;attribute name="id" type="eppcom:minTokenType"
-        use="required"/&gt;
-     &lt;/complexType&gt;
-
-     &lt;complexType name="mixedMsgType" mixed="true"&gt;
-       &lt;sequence&gt;
-         &lt;any processContents="skip"
-          minOccurs="0" maxOccurs="unbounded"/&gt;
-       &lt;/sequence&gt;
-       &lt;attribute name="lang" type="language"
-        default="en"/&gt;
-     &lt;/complexType&gt;
-
-   &lt;!--
-   Human-readable text may be expressed in languages other than English.
-   --&gt;
-     &lt;complexType name="msgType"&gt;
-       &lt;simpleContent&gt;
-         &lt;extension base="normalizedString"&gt;
-           &lt;attribute name="lang" type="language"
-            default="en"/&gt;
-         &lt;/extension&gt;
-       &lt;/simpleContent&gt;
-     &lt;/complexType&gt;
-
-   &lt;!--
-   EPP result codes.
-   --&gt;
-     &lt;simpleType name="resultCodeType"&gt;
-       &lt;restriction base="unsignedShort"&gt;
-         &lt;enumeration value="1000"/&gt;
-         &lt;enumeration value="1001"/&gt;
-         &lt;enumeration value="1300"/&gt;
-         &lt;enumeration value="1301"/&gt;
-         &lt;enumeration value="1500"/&gt;
-         &lt;enumeration value="2000"/&gt;
-         &lt;enumeration value="2001"/&gt;
-         &lt;enumeration value="2002"/&gt;
-         &lt;enumeration value="2003"/&gt;
-         &lt;enumeration value="2004"/&gt;
-         &lt;enumeration value="2005"/&gt;
-         &lt;enumeration value="2100"/&gt;
-         &lt;enumeration value="2101"/&gt;
-         &lt;enumeration value="2102"/&gt;
-         &lt;enumeration value="2103"/&gt;
-         &lt;enumeration value="2104"/&gt;
-         &lt;enumeration value="2105"/&gt;
-         &lt;enumeration value="2106"/&gt;
-         &lt;enumeration value="2200"/&gt;
-         &lt;enumeration value="2201"/&gt;
-         &lt;enumeration value="2202"/&gt;
-         &lt;enumeration value="2300"/&gt;
-         &lt;enumeration value="2301"/&gt;
-         &lt;enumeration value="2302"/&gt;
-         &lt;enumeration value="2303"/&gt;
-         &lt;enumeration value="2304"/&gt;
-         &lt;enumeration value="2305"/&gt;
-         &lt;enumeration value="2306"/&gt;
-         &lt;enumeration value="2307"/&gt;
-         &lt;enumeration value="2308"/&gt;
-         &lt;enumeration value="2400"/&gt;
-         &lt;enumeration value="2500"/&gt;
-         &lt;enumeration value="2501"/&gt;
-         &lt;enumeration value="2502"/&gt;
-       &lt;/restriction&gt;
-     &lt;/simpleType&gt;
-
-   &lt;!--
-   End of schema.
-   --&gt;
-   &lt;/schema&gt;
-
-</pre><a href="#section-11-5" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
 <div id="iana-considerations">
-<section id="section-12">
+<section id="section-10">
       <h2 id="name-iana-considerations">
-<a href="#section-12" class="section-number selfRef">12. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
+<a href="#section-10" class="section-number selfRef">10. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
       </h2>
-<p id="section-12-1">The URNs used in this document for XML namespaces and XML schemas have been registered by the IANA as described by <span>[<a href="#RFC3688" class="cite xref">RFC3688</a>]</span>.<a href="#section-12-1" class="pilcrow">¶</a></p>
-<p id="section-12-2">Registration request for the RPP namespace:<a href="#section-12-2" class="pilcrow">¶</a></p>
-<ul class="compact">
-<li class="compact" id="section-12-3.1">URI: urn:ietf:params:xml:ns:rpp-1.0<a href="#section-12-3.1" class="pilcrow">¶</a>
-</li>
-        <li class="compact" id="section-12-3.2">Registrant Contact: See the "Author's Address" section of this document.<a href="#section-12-3.2" class="pilcrow">¶</a>
-</li>
-        <li class="compact" id="section-12-3.3">XML: None.  Namespace URIs do not represent an XML specification.<a href="#section-12-3.3" class="pilcrow">¶</a>
-</li>
-      </ul>
-<p id="section-12-4">Registration request for the EPP XML schema:<a href="#section-12-4" class="pilcrow">¶</a></p>
-<ul class="compact">
-<li class="compact" id="section-12-5.1">URI: urn:ietf:params:xml:schema:rpp-1.0<a href="#section-12-5.1" class="pilcrow">¶</a>
-</li>
-        <li class="compact" id="section-12-5.2">Registrant Contact: See the "Author's Address" section of this document.<a href="#section-12-5.2" class="pilcrow">¶</a>
-</li>
-        <li class="compact" id="section-12-5.3">XML: See the <a href="#formal-syntax" class="auto internal xref">Section 11</a> section of this document.<a href="#section-12-5.3" class="pilcrow">¶</a>
-</li>
-      </ul>
+<p id="section-10-1">TODO<a href="#section-10-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="internationalization-considerations">
-<section id="section-13">
+<section id="section-11">
       <h2 id="name-internationalization-consid">
-<a href="#section-13" class="section-number selfRef">13. </a><a href="#name-internationalization-consid" class="section-name selfRef">Internationalization Considerations</a>
+<a href="#section-11" class="section-number selfRef">11. </a><a href="#name-internationalization-consid" class="section-name selfRef">Internationalization Considerations</a>
       </h2>
-<p id="section-13-1">[TBD: any? Accept-Language in HTTP Header]<a href="#section-13-1" class="pilcrow">¶</a></p>
+<p id="section-11-1">TODO<a href="#section-11-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="security-considerations">
-<section id="section-14">
+<section id="section-12">
       <h2 id="name-security-considerations">
-<a href="#section-14" class="section-number selfRef">14. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+<a href="#section-12" class="section-number selfRef">12. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
       </h2>
-<p id="section-14-1">Running RPP relies on the security of the underlying HTTP <span>[<a href="#RFC9110" class="cite xref">RFC9110</a>]</span> transport, hence the best common practices for securing HTTP also apply to RPP. It is RECOMMENDED to follow them closely.<a href="#section-14-1" class="pilcrow">¶</a></p>
-<p id="section-14-2">Data confidentiality and integrity MUST be enforced, all data transport between a client and server MUST be encrypted using TLS <span>[<a href="#RFC5246" class="cite xref">RFC5246</a>]</span>. <a href="https://rfc-editor.org/rfc/rfc5734#appendix-Section%209" class="relref">Section 9</a> describes the level of security that is REQUIRED for all RPP endpoints.<a href="#section-14-2" class="pilcrow">¶</a></p>
-<p id="section-14-3">The EPP Login command, described by <span>[<a href="#RFC5730" class="cite xref">RFC5730</a>]</span>, for creating a client session MUST NOT be used anymore. Due to the stateless nature of RPP, the client MUST include the authentication credentials in each HTTP request. This MAY be done by using JSON Web Tokens (JWT) <span>[<a href="#RFC7519" class="cite xref">RFC7519</a>]</span> or Basic authentication <span>[<a href="#RFC7617" class="cite xref">RFC7617</a>]</span>.<a href="#section-14-3" class="pilcrow">¶</a></p>
-<p id="section-14-4">The management of authentication credentials, such as the "Change password" functionality of the EPP Login command, MUST be performed by an out-of-band process. RPP (HTTP) servers are vulnerable to common denial-of-service attacks. Therefore, the security considerations of <span>[<a href="#RFC5734" class="cite xref">RFC5734</a>]</span> also apply to RPP.<a href="#section-14-4" class="pilcrow">¶</a></p>
+<p id="section-12-1">Running RPP relies on the security of the underlying HTTP <span>[<a href="#RFC9110" class="cite xref">RFC9110</a>]</span> transport, hence the best common practices for securing HTTP also apply to RPP. It is RECOMMENDED to follow them closely.<a href="#section-12-1" class="pilcrow">¶</a></p>
+<p id="section-12-2">Data confidentiality and integrity MUST be enforced, all data transport between a client and server MUST be encrypted using TLS <span>[<a href="#RFC5246" class="cite xref">RFC5246</a>]</span>. <a href="https://rfc-editor.org/rfc/rfc5734#appendix-Section%209" class="relref">Section 9</a> describes the level of security that is REQUIRED for all RPP endpoints.<a href="#section-12-2" class="pilcrow">¶</a></p>
+<p id="section-12-3">Due to the stateless nature of RPP, the client MUST include the authentication credentials in each HTTP request. This MAY be done by using JSON Web Tokens (JWT) <span>[<a href="#RFC7519" class="cite xref">RFC7519</a>]</span> or Basic authentication <span>[<a href="#RFC7617" class="cite xref">RFC7617</a>]</span>.<a href="#section-12-3" class="pilcrow">¶</a></p>
+<p id="section-12-4"><strong>TODO:</strong> describe common modern authentication solutions such as  oath2.0<a href="#section-12-4" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="obsolete-epp-result-codes">
-<section id="section-15">
-      <h2 id="name-obsolete-epp-result-codes">
-<a href="#section-15" class="section-number selfRef">15. </a><a href="#name-obsolete-epp-result-codes" class="section-name selfRef">Obsolete EPP Result Codes</a>
+<section id="section-13">
+      <h2 id="name-normative-references">
+<a href="#section-13" class="section-number selfRef">13. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
       </h2>
-<p id="section-15-1">The following EPP result codes specified in <span>[<a href="#RFC5730" class="cite xref">RFC5730</a>]</span> are no longer
-meaningful in the context of RESTful Provisioning Protocol and MUST NOT be used.<a href="#section-15-1" class="pilcrow">¶</a></p>
-<span id="name-obsolete-epp-result-codes-2"></span><table class="center" id="table-2">
-        <caption>
-<a href="#table-2" class="selfRef">Table 2</a>:
-<a href="#name-obsolete-epp-result-codes-2" class="selfRef">Obsolete EPP result codes</a>
-        </caption>
-<thead>
-          <tr>
-            <th class="text-left" rowspan="1" colspan="1">Code</th>
-            <th class="text-left" rowspan="1" colspan="1">Reason</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="text-left" rowspan="1" colspan="1">1500</td>
-            <td class="text-left" rowspan="1" colspan="1">Authentication functionality is delegated to the HTTP protocol layer</td>
-          </tr>
-          <tr>
-            <td class="text-left" rowspan="1" colspan="1">2100</td>
-            <td class="text-left" rowspan="1" colspan="1">The RPP URL includes a path segment for the version</td>
-          </tr>
-          <tr>
-            <td class="text-left" rowspan="1" colspan="1">2200</td>
-            <td class="text-left" rowspan="1" colspan="1">Authentication functionality is delegated to the HTTP protocol layer</td>
-          </tr>
-          <tr>
-            <td class="text-left" rowspan="1" colspan="1">2501</td>
-            <td class="text-left" rowspan="1" colspan="1">Authentication functionality is delegated to the HTTP protocol layer</td>
-          </tr>
-          <tr>
-            <td class="text-left" rowspan="1" colspan="1">2502</td>
-            <td class="text-left" rowspan="1" colspan="1">Rate limiting functionality is delegated to the HTTP protocol layer</td>
-          </tr>
-        </tbody>
-      </table>
-</section>
-</div>
-<div id="overview-of-epp-modifications">
-<section id="section-16">
-      <h2 id="name-overview-of-epp-modificatio">
-<a href="#section-16" class="section-number selfRef">16. </a><a href="#name-overview-of-epp-modificatio" class="section-name selfRef">Overview of EPP modifications</a>
-      </h2>
-<p id="section-16-1">This section lists a non-exhaustive overview of the most important modifications made in RESTful Provisioning Protocol, compared to the EPP RFCs.<a href="#section-16-1" class="pilcrow">¶</a></p>
-<ul class="compact">
-<li class="compact" id="section-16-2.1">The use of HTTP as an additional application layer protocol.<a href="#section-16-2.1" class="pilcrow">¶</a>
-</li>
-        <li class="compact" id="section-16-2.2">HTTP adds additional status codes.<a href="#section-16-2.2" class="pilcrow">¶</a>
-</li>
-        <li class="compact" id="section-16-2.3">Some Commands are no longer used, such as the Login and Logout command.<a href="#section-16-2.3" class="pilcrow">¶</a>
-</li>
-        <li class="compact" id="section-16-2.4">No client sessions, every request needs to include authentication credentials.<a href="#section-16-2.4" class="pilcrow">¶</a>
-</li>
-        <li class="compact" id="section-16-2.5">A command MUST only contain a single object to operate on, the check command. For example, the Check command only supports 1 object per request.<a href="#section-16-2.5" class="pilcrow">¶</a>
-</li>
-        <li class="compact" id="section-16-2.6">Request messages may no longer be required for most commands<a href="#section-16-2.6" class="pilcrow">¶</a>
-</li>
-        <li class="compact" id="section-16-2.7">Authentication and authorizations have become an out-of-band process.<a href="#section-16-2.7" class="pilcrow">¶</a>
-</li>
-        <li class="compact" id="section-16-2.8">Support for additional data formats such as JSON.<a href="#section-16-2.8" class="pilcrow">¶</a>
-</li>
-      </ul>
-</section>
-</div>
-<div id="acknowledgments">
-<section id="section-17">
-      <h2 id="name-acknowledgments">
-<a href="#section-17" class="section-number selfRef">17. </a><a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
-      </h2>
-<p id="section-17-1">The authors would like to thank Miek Gieben who worked with us on an earlier, similar draft.<a href="#section-17-1" class="pilcrow">¶</a></p>
-</section>
-</div>
-<section id="section-18">
-      <h2 id="name-references">
-<a href="#section-18" class="section-number selfRef">18. </a><a href="#name-references" class="section-name selfRef">References</a>
-      </h2>
-<section id="section-18.1">
-        <h3 id="name-normative-references">
-<a href="#section-18.1" class="section-number selfRef">18.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
-        </h3>
 <dl class="references">
 <dt id="REST">[REST]</dt>
-        <dd>
+      <dd>
 <span class="refAuthor">Fielding, R.</span>, <span class="refTitle">"Architectural Styles and the Design of Network-based Software Architectures"</span>, <time datetime="2000" class="refDate">2000</time>, <span>&lt;<a href="http://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm">http://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC2119">[RFC2119]</dt>
-        <dd>
+      <dd>
 <span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc2119">https://www.rfc-editor.org/info/rfc2119</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="RFC2581">[RFC2581]</dt>
-        <dd>
-<span class="refAuthor">Allman, M.</span>, <span class="refAuthor">Paxson, V.</span>, and <span class="refAuthor">W. Stevens</span>, <span class="refTitle">"TCP Congestion Control"</span>, <span class="seriesInfo">RFC 2581</span>, <span class="seriesInfo">DOI 10.17487/RFC2581</span>, <time datetime="1999-04" class="refDate">April 1999</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc2581">https://www.rfc-editor.org/info/rfc2581</a>&gt;</span>. </dd>
-<dd class="break"></dd>
 <dt id="RFC2616">[RFC2616]</dt>
-        <dd>
+      <dd>
 <span class="refAuthor">Fielding, R.</span>, <span class="refAuthor">Gettys, J.</span>, <span class="refAuthor">Mogul, J.</span>, <span class="refAuthor">Frystyk, H.</span>, <span class="refAuthor">Masinter, L.</span>, <span class="refAuthor">Leach, P.</span>, and <span class="refAuthor">T. Berners-Lee</span>, <span class="refTitle">"Hypertext Transfer Protocol -- HTTP/1.1"</span>, <span class="seriesInfo">RFC 2616</span>, <span class="seriesInfo">DOI 10.17487/RFC2616</span>, <time datetime="1999-06" class="refDate">June 1999</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc2616">https://www.rfc-editor.org/info/rfc2616</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC2617">[RFC2617]</dt>
-        <dd>
+      <dd>
 <span class="refAuthor">Franks, J.</span>, <span class="refAuthor">Hallam-Baker, P.</span>, <span class="refAuthor">Hostetler, J.</span>, <span class="refAuthor">Lawrence, S.</span>, <span class="refAuthor">Leach, P.</span>, <span class="refAuthor">Luotonen, A.</span>, and <span class="refAuthor">L. Stewart</span>, <span class="refTitle">"HTTP Authentication: Basic and Digest Access Authentication"</span>, <span class="seriesInfo">RFC 2617</span>, <span class="seriesInfo">DOI 10.17487/RFC2617</span>, <time datetime="1999-06" class="refDate">June 1999</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc2617">https://www.rfc-editor.org/info/rfc2617</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="RFC2914">[RFC2914]</dt>
-        <dd>
-<span class="refAuthor">Floyd, S.</span>, <span class="refTitle">"Congestion Control Principles"</span>, <span class="seriesInfo">BCP 41</span>, <span class="seriesInfo">RFC 2914</span>, <span class="seriesInfo">DOI 10.17487/RFC2914</span>, <time datetime="2000-09" class="refDate">September 2000</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc2914">https://www.rfc-editor.org/info/rfc2914</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="RFC3688">[RFC3688]</dt>
-        <dd>
-<span class="refAuthor">Mealling, M.</span>, <span class="refTitle">"The IETF XML Registry"</span>, <span class="seriesInfo">BCP 81</span>, <span class="seriesInfo">RFC 3688</span>, <span class="seriesInfo">DOI 10.17487/RFC3688</span>, <time datetime="2004-01" class="refDate">January 2004</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc3688">https://www.rfc-editor.org/info/rfc3688</a>&gt;</span>. </dd>
-<dd class="break"></dd>
 <dt id="RFC3986">[RFC3986]</dt>
-        <dd>
+      <dd>
 <span class="refAuthor">Berners-Lee, T.</span>, <span class="refAuthor">Fielding, R.</span>, and <span class="refAuthor">L. Masinter</span>, <span class="refTitle">"Uniform Resource Identifier (URI): Generic Syntax"</span>, <span class="seriesInfo">STD 66</span>, <span class="seriesInfo">RFC 3986</span>, <span class="seriesInfo">DOI 10.17487/RFC3986</span>, <time datetime="2005-01" class="refDate">January 2005</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc3986">https://www.rfc-editor.org/info/rfc3986</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC5246">[RFC5246]</dt>
-        <dd>
+      <dd>
 <span class="refAuthor">Dierks, T.</span> and <span class="refAuthor">E. Rescorla</span>, <span class="refTitle">"The Transport Layer Security (TLS) Protocol Version 1.2"</span>, <span class="seriesInfo">RFC 5246</span>, <span class="seriesInfo">DOI 10.17487/RFC5246</span>, <time datetime="2008-08" class="refDate">August 2008</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc5246">https://www.rfc-editor.org/info/rfc5246</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC5730">[RFC5730]</dt>
-        <dd>
+      <dd>
 <span class="refAuthor">Hollenbeck, S.</span>, <span class="refTitle">"Extensible Provisioning Protocol (EPP)"</span>, <span class="seriesInfo">STD 69</span>, <span class="seriesInfo">RFC 5730</span>, <span class="seriesInfo">DOI 10.17487/RFC5730</span>, <time datetime="2009-08" class="refDate">August 2009</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc5730">https://www.rfc-editor.org/info/rfc5730</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC5731">[RFC5731]</dt>
-        <dd>
+      <dd>
 <span class="refAuthor">Hollenbeck, S.</span>, <span class="refTitle">"Extensible Provisioning Protocol (EPP) Domain Name Mapping"</span>, <span class="seriesInfo">STD 69</span>, <span class="seriesInfo">RFC 5731</span>, <span class="seriesInfo">DOI 10.17487/RFC5731</span>, <time datetime="2009-08" class="refDate">August 2009</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc5731">https://www.rfc-editor.org/info/rfc5731</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC5732">[RFC5732]</dt>
-        <dd>
+      <dd>
 <span class="refAuthor">Hollenbeck, S.</span>, <span class="refTitle">"Extensible Provisioning Protocol (EPP) Host Mapping"</span>, <span class="seriesInfo">STD 69</span>, <span class="seriesInfo">RFC 5732</span>, <span class="seriesInfo">DOI 10.17487/RFC5732</span>, <time datetime="2009-08" class="refDate">August 2009</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc5732">https://www.rfc-editor.org/info/rfc5732</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC5733">[RFC5733]</dt>
-        <dd>
+      <dd>
 <span class="refAuthor">Hollenbeck, S.</span>, <span class="refTitle">"Extensible Provisioning Protocol (EPP) Contact Mapping"</span>, <span class="seriesInfo">STD 69</span>, <span class="seriesInfo">RFC 5733</span>, <span class="seriesInfo">DOI 10.17487/RFC5733</span>, <time datetime="2009-08" class="refDate">August 2009</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc5733">https://www.rfc-editor.org/info/rfc5733</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC5734">[RFC5734]</dt>
-        <dd>
+      <dd>
 <span class="refAuthor">Hollenbeck, S.</span>, <span class="refTitle">"Extensible Provisioning Protocol (EPP) Transport over TCP"</span>, <span class="seriesInfo">STD 69</span>, <span class="seriesInfo">RFC 5734</span>, <span class="seriesInfo">DOI 10.17487/RFC5734</span>, <time datetime="2009-08" class="refDate">August 2009</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc5734">https://www.rfc-editor.org/info/rfc5734</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC6648">[RFC6648]</dt>
-        <dd>
+      <dd>
 <span class="refAuthor">Saint-Andre, P.</span>, <span class="refAuthor">Crocker, D.</span>, and <span class="refAuthor">M. Nottingham</span>, <span class="refTitle">"Deprecating the "X-" Prefix and Similar Constructs in Application Protocols"</span>, <span class="seriesInfo">BCP 178</span>, <span class="seriesInfo">RFC 6648</span>, <span class="seriesInfo">DOI 10.17487/RFC6648</span>, <time datetime="2012-06" class="refDate">June 2012</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc6648">https://www.rfc-editor.org/info/rfc6648</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC7234">[RFC7234]</dt>
-        <dd>
+      <dd>
 <span class="refAuthor">Fielding, R., Ed.</span>, <span class="refAuthor">Nottingham, M., Ed.</span>, and <span class="refAuthor">J. Reschke, Ed.</span>, <span class="refTitle">"Hypertext Transfer Protocol (HTTP/1.1): Caching"</span>, <span class="seriesInfo">RFC 7234</span>, <span class="seriesInfo">DOI 10.17487/RFC7234</span>, <time datetime="2014-06" class="refDate">June 2014</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc7234">https://www.rfc-editor.org/info/rfc7234</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC7519">[RFC7519]</dt>
-        <dd>
+      <dd>
 <span class="refAuthor">Jones, M.</span>, <span class="refAuthor">Bradley, J.</span>, and <span class="refAuthor">N. Sakimura</span>, <span class="refTitle">"JSON Web Token (JWT)"</span>, <span class="seriesInfo">RFC 7519</span>, <span class="seriesInfo">DOI 10.17487/RFC7519</span>, <time datetime="2015-05" class="refDate">May 2015</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc7519">https://www.rfc-editor.org/info/rfc7519</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC7540">[RFC7540]</dt>
-        <dd>
+      <dd>
 <span class="refAuthor">Belshe, M.</span>, <span class="refAuthor">Peon, R.</span>, and <span class="refAuthor">M. Thomson, Ed.</span>, <span class="refTitle">"Hypertext Transfer Protocol Version 2 (HTTP/2)"</span>, <span class="seriesInfo">RFC 7540</span>, <span class="seriesInfo">DOI 10.17487/RFC7540</span>, <time datetime="2015-05" class="refDate">May 2015</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc7540">https://www.rfc-editor.org/info/rfc7540</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC7617">[RFC7617]</dt>
-        <dd>
+      <dd>
 <span class="refAuthor">Reschke, J.</span>, <span class="refTitle">"The 'Basic' HTTP Authentication Scheme"</span>, <span class="seriesInfo">RFC 7617</span>, <span class="seriesInfo">DOI 10.17487/RFC7617</span>, <time datetime="2015-09" class="refDate">September 2015</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc7617">https://www.rfc-editor.org/info/rfc7617</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="RFC793">[RFC793]</dt>
-        <dd>
-<span class="refAuthor">Postel, J.</span>, <span class="refTitle">"Transmission Control Protocol"</span>, <span class="seriesInfo">RFC 793</span>, <span class="seriesInfo">DOI 10.17487/RFC0793</span>, <time datetime="1981-09" class="refDate">September 1981</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc793">https://www.rfc-editor.org/info/rfc793</a>&gt;</span>. </dd>
-<dd class="break"></dd>
 <dt id="RFC8259">[RFC8259]</dt>
-        <dd>
+      <dd>
 <span class="refAuthor">Bray, T., Ed.</span>, <span class="refTitle">"The JavaScript Object Notation (JSON) Data Interchange Format"</span>, <span class="seriesInfo">STD 90</span>, <span class="seriesInfo">RFC 8259</span>, <span class="seriesInfo">DOI 10.17487/RFC8259</span>, <time datetime="2017-12" class="refDate">December 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8259">https://www.rfc-editor.org/info/rfc8259</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC9110">[RFC9110]</dt>
-        <dd>
+      <dd>
 <span class="refAuthor">Fielding, R., Ed.</span>, <span class="refAuthor">Nottingham, M., Ed.</span>, and <span class="refAuthor">J. Reschke, Ed.</span>, <span class="refTitle">"HTTP Semantics"</span>, <span class="seriesInfo">STD 97</span>, <span class="seriesInfo">RFC 9110</span>, <span class="seriesInfo">DOI 10.17487/RFC9110</span>, <time datetime="2022-06" class="refDate">June 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc9110">https://www.rfc-editor.org/info/rfc9110</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC9113">[RFC9113]</dt>
-        <dd>
+      <dd>
 <span class="refAuthor">Thomson, M., Ed.</span> and <span class="refAuthor">C. Benfield, Ed.</span>, <span class="refTitle">"HTTP/2"</span>, <span class="seriesInfo">RFC 9113</span>, <span class="seriesInfo">DOI 10.17487/RFC9113</span>, <time datetime="2022-06" class="refDate">June 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc9113">https://www.rfc-editor.org/info/rfc9113</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC9114">[RFC9114]</dt>
-        <dd>
+      <dd>
 <span class="refAuthor">Bishop, M., Ed.</span>, <span class="refTitle">"HTTP/3"</span>, <span class="seriesInfo">RFC 9114</span>, <span class="seriesInfo">DOI 10.17487/RFC9114</span>, <time datetime="2022-06" class="refDate">June 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc9114">https://www.rfc-editor.org/info/rfc9114</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="YAML">[YAML]</dt>
-      <dd>
+    <dd>
 <span class="refAuthor">YAML Language Development Team</span>, <span class="refTitle">"YAML: YAML Ain't Markup Language"</span>, <time datetime="2000" class="refDate">2000</time>, <span>&lt;<a href="https://yaml.org/spec/1.2.2/">https://yaml.org/spec/1.2.2/</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
-</section>
-<section id="section-18.2">
-        <h3 id="name-informative-references">
-<a href="#section-18.2" class="section-number selfRef">18.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
-        </h3>
-<dl class="references">
-<dt id="SIDN-EXT">[SIDN-EXT]</dt>
-      <dd>
-<span class="refAuthor">SIDN</span>, <span class="refTitle">"Extensible Provisioning Protocol v1.0 schema .NL extensions"</span>, <time datetime="2019" class="refDate">2019</time>, <span>&lt;<a href="http://rxsd.domain-registry.nl/sidn-ext-epp-1.0.xsd">http://rxsd.domain-registry.nl/sidn-ext-epp-1.0.xsd</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-</dl>
-</section>
 </section>
 <div id="authors-addresses">
 <section id="appendix-A">
