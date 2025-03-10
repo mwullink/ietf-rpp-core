@@ -18,7 +18,7 @@
     ConfigArgParse 1.7
     google-i18n-address 3.1.0
     intervaltree 3.1.0
-    Jinja2 3.1.2
+    jinja2 3.1.6
     lxml 4.9.3
     platformdirs 4.0.0
     pycountry 22.3.5
@@ -1209,7 +1209,7 @@ li > p:last-of-type:only-child {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Wullink &amp; Kowalik</td>
-<td class="center">Expires 7 September 2025</td>
+<td class="center">Expires 11 September 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1222,12 +1222,12 @@ li > p:last-of-type:only-child {
 <dd class="internet-draft">draft-rpp-core-01</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-03-06" class="published">6 March 2025</time>
+<time datetime="2025-03-10" class="published">10 March 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-09-07">7 September 2025</time></dd>
+<dd class="expires"><time datetime="2025-09-11">11 September 2025</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1265,7 +1265,7 @@ li > p:last-of-type:only-child {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 7 September 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 11 September 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1840,26 +1840,26 @@ The client and server MUST support server-driven content negotiation and related
 <p id="section-9.1-3">The API version value used in the Hello response MUST match the version value used for the <code>{version}</code> path segment in the URL used for the Hello request.<a href="#section-9.1-3" class="pilcrow">¶</a></p>
 <p id="section-9.1-4">Example request:<a href="#section-9.1-4" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-9.1-5">
-<pre>C: OPTIONS /rpp/v1/ HTTP/2
-C: Host: rpp.example.nl
-C: Authorization: Bearer &lt;token&gt;
-C: Accept: application/rpp+json
-C: Accept-Language: en
-C: Connection: keep-alive
+<pre>OPTIONS /rpp/v1/ HTTP/2
+Host: rpp.example.nl
+Authorization: Bearer &lt;token&gt;
+Accept: application/rpp+json
+Accept-Language: en
+Connection: keep-alive
 
 
 </pre><a href="#section-9.1-5" class="pilcrow">¶</a>
 </div>
 <p id="section-9.1-6">Example response:<a href="#section-9.1-6" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-9.1-7">
-<pre>S: HTTP/2 200 OK
-S: Date: Wed, 24 Jan 2024 12:00:00 UTC
-S: Server: Example RPP server v1.0
-S: Content-Length: 799
-S: Content-Type: application/rpp+json
-S: Content-Language: en
-S:
-S: TODO
+<pre>HTTP/2 200 OK
+Date: Wed, 24 Jan 2024 12:00:00 UTC
+Server: Example RPP server v1.0
+Content-Length: 799
+Content-Type: application/rpp+json
+Content-Language: en
+
+TODO
 
 </pre><a href="#section-9.1-7" class="pilcrow">¶</a>
 </div>
@@ -1906,26 +1906,26 @@ S: TODO
 <p id="section-9.4.1-4">The Check endpoint MUST be limited to checking only a single object-id per request, to allow the server to effiently load balance requests.<a href="#section-9.4.1-4" class="pilcrow">¶</a></p>
 <p id="section-9.4.1-5">Example request for a domain name:<a href="#section-9.4.1-5" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-9.4.1-6">
-<pre>C: HEAD /rpp/v1/domains/example.nl HTTP/2
-C: Host: rpp.example.nl
-C: Authorization: Bearer &lt;token&gt;
-C: Accept-Language: en
-C: RPP-Cltrid: ABC-12345
+<pre>HEAD /rpp/v1/domains/example.nl HTTP/2
+Host: rpp.example.nl
+Authorization: Bearer &lt;token&gt;
+Accept-Language: en
+RPP-Cltrid: ABC-12345
 
 
 </pre><a href="#section-9.4.1-6" class="pilcrow">¶</a>
 </div>
 <p id="section-9.4.1-7">Example response:<a href="#section-9.4.1-7" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-9.4.1-8">
-<pre>S: HTTP/2 200 OK
-S: Date: Wed, 24 Jan 2024 12:00:00 UTC
-S: Server: Example RPP server v1.0
-S: RPP-Cltrid: ABC-12345
-S: RPP-Svtrid: XYZ-12345
-S: RPP-Check-Avail: 0
-S: RPP-Check-Reason: In use
-S: RPP-result-code: 1000
-s: Content-Length: 0
+<pre>HTTP/2 200 OK
+Date: Wed, 24 Jan 2024 12:00:00 UTC
+Server: Example RPP server v1.0
+RPP-Cltrid: ABC-12345
+RPP-Svtrid: XYZ-12345
+RPP-Check-Avail: 0
+RPP-Check-Reason: In use
+RPP-result-code: 1000
+Content-Length: 0
 
 
 </pre><a href="#section-9.4.1-8" class="pilcrow">¶</a>
@@ -1948,12 +1948,12 @@ s: Content-Length: 0
 </li>
           </ul>
 <div class="alignLeft art-text artwork" id="section-9.4.2-4">
-<pre>C: GET /rpp/v1/domains/example.nl HTTP/2
-C: Host: rpp.example.nl
-C: Authorization: Bearer &lt;token&gt;
-C: Accept: application/rpp+json
-C: Accept-Language: en
-C: RPP-Cltrid: ABC-12345
+<pre>GET /rpp/v1/domains/example.nl HTTP/2
+Host: rpp.example.nl
+Authorization: Bearer &lt;token&gt;
+Accept: application/rpp+json
+Accept-Language: en
+RPP-Cltrid: ABC-12345
 
 
 </pre><a href="#section-9.4.2-4" class="pilcrow">¶</a>
@@ -1968,29 +1968,29 @@ C: RPP-Cltrid: ABC-12345
 </li>
           </ul>
 <div class="alignLeft art-text artwork" id="section-9.4.2-7">
-<pre>C: GET /rpp/v1/domains/example.nl HTTP/2
-C: Host: rpp.example.nl
-C: Authorization: Bearer &lt;token&gt;
-C: Accept: application/rpp+json
-C: Accept-Language: en
-C: RPP-Cltrid: ABC-12345
-C: RPP-AuthInfo: secret-token
-C: RPP-Roid: REG-XYZ-12345
+<pre>GET /rpp/v1/domains/example.nl HTTP/2
+Host: rpp.example.nl
+Authorization: Bearer &lt;token&gt;
+Accept: application/rpp+json
+Accept-Language: en
+RPP-Cltrid: ABC-12345
+RPP-AuthInfo: secret-token
+RPP-Roid: REG-XYZ-12345
 
 
 </pre><a href="#section-9.4.2-7" class="pilcrow">¶</a>
 </div>
 <p id="section-9.4.2-8">Example Info response:<a href="#section-9.4.2-8" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-9.4.2-9">
-<pre>S: HTTP/2 200 OK
-S: Date: Wed, 24 Jan 2024 12:00:00 UTC
-S: Server: Example RPP server v1.0
-S: Content-Length: 424
-S: Content-Type: application/rpp+json
-S: Content-Language: en
-S: RPP-code: 1000
-S:
-S: TODO
+<pre>HTTP/2 200 OK
+Date: Wed, 24 Jan 2024 12:00:00 UTC
+Server: Example RPP server v1.0
+Content-Length: 424
+Content-Type: application/rpp+json
+Content-Language: en
+RPP-code: 1000
+
+TODO
 
 </pre><a href="#section-9.4.2-9" class="pilcrow">¶</a>
 </div>
@@ -2025,12 +2025,12 @@ The server MUST support the use of the <code>filter</code> and <code>val</code> 
             </ul>
 <p id="section-9.4.2.1-6">Example Domain Info request, the response should only include delegated hosts:<a href="#section-9.4.2.1-6" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-9.4.2.1-7">
-<pre>C: GET /rpp/v1/domains/example.nl?filter=hosts&amp;val=del HTTP/2
-C: Host: rpp.example.nl
-C: Authorization: Bearer &lt;token&gt;
-C: Accept: application/rpp+json
-C: Accept-Language: en
-C: RPP-Cltrid: ABC-12345
+<pre>GET /rpp/v1/domains/example.nl?filter=hosts&amp;val=del HTTP/2
+Host: rpp.example.nl
+Authorization: Bearer &lt;token&gt;
+Accept: application/rpp+json
+Accept-Language: en
+RPP-Cltrid: ABC-12345
 
 
 </pre><a href="#section-9.4.2.1-7" class="pilcrow">¶</a>
@@ -2060,27 +2060,27 @@ C: RPP-Cltrid: ABC-12345
 <p id="section-9.4.3.1-2">The client MUST use the HTTP GET method on the messages resource collection to request the message at the head of the queue.<a href="#section-9.4.3.1-2" class="pilcrow">¶</a></p>
 <p id="section-9.4.3.1-3">Example request:<a href="#section-9.4.3.1-3" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-9.4.3.1-4">
-<pre>C: GET /rpp/v1/messages HTTP/2
-C: Host: rpp.example.nl
-C: Authorization: Bearer &lt;token&gt;
-C: Accept: application/rpp+json
-C: Accept-Language: en
-C: RPP-Cltrid: ABC-12345
+<pre>GET /rpp/v1/messages HTTP/2
+Host: rpp.example.nl
+Authorization: Bearer &lt;token&gt;
+Accept: application/rpp+json
+Accept-Language: en
+RPP-Cltrid: ABC-12345
 
 
 </pre><a href="#section-9.4.3.1-4" class="pilcrow">¶</a>
 </div>
 <p id="section-9.4.3.1-5">Example response:<a href="#section-9.4.3.1-5" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-9.4.3.1-6">
-<pre>S: HTTP/2 200 OK
-S: Date: Wed, 24 Jan 2024 12:00:00 UTC
-S: Server: Example RPP server v1.0
-S: Content-Length: 312
-S: Content-Type: application/rpp+json
-S: Content-Language: en
-S: RPP-code: 1301
-S:
-S: TODO
+<pre>HTTP/2 200 OK
+Date: Wed, 24 Jan 2024 12:00:00 UTC
+Server: Example RPP server v1.0
+Content-Length: 312
+Content-Type: application/rpp+json
+Content-Language: en
+RPP-code: 1301
+
+TODO
 
 </pre><a href="#section-9.4.3.1-6" class="pilcrow">¶</a>
 </div>
@@ -2102,29 +2102,29 @@ S: TODO
 <p id="section-9.4.3.2-2">The client MUST use the HTTP DELETE method to acknowledge receipt of a message from the queue. The "msgID" attribute of a received RPP Poll message MUST be included in the message resource URL, using the {id} path element. The server MUST use RPP headers to return the RPP result code and the number of messages left in the queue. The server MUST NOT add content to the HTTP message body of a successful response, the server may add content to the message body of an error response.<a href="#section-9.4.3.2-2" class="pilcrow">¶</a></p>
 <p id="section-9.4.3.2-3">Example request:<a href="#section-9.4.3.2-3" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-9.4.3.2-4">
-<pre>C: DELETE /rpp/v1/messages/12345 HTTP/2
-C: Host: rpp.example.nl
-C: Authorization: Bearer &lt;token&gt;
-C: Accept: application/rpp+json
-C: Accept-Language: en
-C: RPP-Cltrid: ABC-12345
+<pre>DELETE /rpp/v1/messages/12345 HTTP/2
+Host: rpp.example.nl
+Authorization: Bearer &lt;token&gt;
+Accept: application/rpp+json
+Accept-Language: en
+RPP-Cltrid: ABC-12345
 
 
 </pre><a href="#section-9.4.3.2-4" class="pilcrow">¶</a>
 </div>
 <p id="section-9.4.3.2-5">Example response:<a href="#section-9.4.3.2-5" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-9.4.3.2-6">
-<pre>S: HTTP/2 200 OK
-S: Date: Wed, 24 Jan 2024 12:00:00 UTC
-S: Server: Example RPP server v1.0
-S: Content-Language: en
-S: RPP-code: 1000
-S: RPP-Queue-Size: 0
-S: RPP-Svtrid: XYZ-12345
-S: RPP-Cltrid: ABC-12345
-S: Content-Length: 145
-S:
-S: TODO
+<pre>HTTP/2 200 OK
+Date: Wed, 24 Jan 2024 12:00:00 UTC
+Server: Example RPP server v1.0
+Content-Language: en
+RPP-code: 1000
+RPP-Queue-Size: 0
+RPP-Svtrid: XYZ-12345
+RPP-Cltrid: ABC-12345
+Content-Length: 145
+
+TODO
 
 </pre><a href="#section-9.4.3.2-6" class="pilcrow">¶</a>
 </div>
@@ -2149,12 +2149,12 @@ The client MUST use the HTTP GET method and MUST NOT add content to the HTTP mes
           </ul>
 <p id="section-9.4.4-3">Example domain name Transfer Query request without authorization information required:<a href="#section-9.4.4-3" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-9.4.4-4">
-<pre>C: GET /rpp/v1/domains/example.nl/transfer HTTP/2
-C: Host: rpp.example.nl
-C: Authorization: Bearer &lt;token&gt;
-C: Accept: application/rpp+json
-C: Accept-Language: en
-C: RPP-Cltrid: ABC-12345
+<pre>GET /rpp/v1/domains/example.nl/transfer HTTP/2
+Host: rpp.example.nl
+Authorization: Bearer &lt;token&gt;
+Accept: application/rpp+json
+Accept-Language: en
+RPP-Cltrid: ABC-12345
 
 
 </pre><a href="#section-9.4.4-4" class="pilcrow">¶</a>
@@ -2162,13 +2162,13 @@ C: RPP-Cltrid: ABC-12345
 <p id="section-9.4.4-5">If the requested object has associated authorization information that is not linked to another database object, then the HTTP GET method MUST be used and the authorization information MUST be included using the RPP-AuthInfo header.<a href="#section-9.4.4-5" class="pilcrow">¶</a></p>
 <p id="section-9.4.4-6">Example domain name Transfer Query request using RPP-AuthInfo header:<a href="#section-9.4.4-6" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-9.4.4-7">
-<pre>C: GET /rpp/v1/domains/example.nl/transfer HTTP/2
-C: Host: rpp.example.nl
-C: Authorization: Bearer &lt;token&gt;
-C: Accept: application/rpp+json
-C: Accept-Language: en
-C: RPP-Cltrid: ABC-12345
-C: RPP-AuthInfo: secret-token
+<pre>GET /rpp/v1/domains/example.nl/transfer HTTP/2
+Host: rpp.example.nl
+Authorization: Bearer &lt;token&gt;
+Accept: application/rpp+json
+Accept-Language: en
+RPP-Cltrid: ABC-12345
+RPP-AuthInfo: secret-token
 
 
 </pre><a href="#section-9.4.4-7" class="pilcrow">¶</a>
@@ -2176,30 +2176,29 @@ C: RPP-AuthInfo: secret-token
 <p id="section-9.4.4-8">If the requested object has associated authorization information linked to another database object, then the HTTP GET method MUST be used and both the RPP-AuthInfo and the RPP-Roid header MUST be included.<a href="#section-9.4.4-8" class="pilcrow">¶</a></p>
 <p id="section-9.4.4-9">Example domain name Transfer Query request and authorization using RPP-AuthInfo and the RPP-Roid header:<a href="#section-9.4.4-9" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-9.4.4-10">
-<pre>C: GET /rpp/v1/domains/example.nl/transfer HTTP/2
-C: Host: rpp.example.nl
-C: Authorization: Bearer &lt;token&gt;
-C: Accept: application/rpp+json
-C: Accept-Language: en
-C: RPP-AuthInfo: secret-token
-C: RPP-Roid: REG-XYZ-12345
-C: Content-Length: 0
-C:
+<pre>GET /rpp/v1/domains/example.nl/transfer HTTP/2
+Host: rpp.example.nl
+Authorization: Bearer &lt;token&gt;
+Accept: application/rpp+json
+Accept-Language: en
+RPP-AuthInfo: secret-token
+RPP-Roid: REG-XYZ-12345
+Content-Length: 0
 
 
 </pre><a href="#section-9.4.4-10" class="pilcrow">¶</a>
 </div>
 <p id="section-9.4.4-11">Example Transfer Query response:<a href="#section-9.4.4-11" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-9.4.4-12">
-<pre>S: HTTP/2 200 OK
-S: Date: Wed, 24 Jan 2024 12:00:00 UTC
-S: Server: Example RPP server v1.0
-S: Content-Length: 230
-S: Content-Type: application/rpp+json
-S: Content-Language: en
-S: RPP-code: 1000
-S:
-S: TODO
+<pre>HTTP/2 200 OK
+Date: Wed, 24 Jan 2024 12:00:00 UTC
+Server: Example RPP server v1.0
+Content-Length: 230
+Content-Type: application/rpp+json
+Content-Language: en
+RPP-code: 1000
+
+TODO
 
 </pre><a href="#section-9.4.4-12" class="pilcrow">¶</a>
 </div>
@@ -2228,30 +2227,30 @@ S: TODO
 <p id="section-9.5.1-2">The client MUST use the HTTP POST method to create a new object resource. If the RPP request results in a newly created object, then the server MUST return HTTP status code 200 (OK). The server MUST add the "Location" header to the response, the value of this header MUST be the URL for the newly created resource.<a href="#section-9.5.1-2" class="pilcrow">¶</a></p>
 <p id="section-9.5.1-3">Example Domain Create request:<a href="#section-9.5.1-3" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-9.5.1-4">
-<pre>C: POST /rpp/v1/domains HTTP/2
-C: Host: rpp.example.nl
-C: Authorization: Bearer &lt;token&gt;
-C: Accept: application/rpp+json
-C: Content-Type: application/rpp+json
-C: Accept-Language: en
-C: Content-Length: 220
-C:
-S: TODO
+<pre>POST /rpp/v1/domains HTTP/2
+Host: rpp.example.nl
+Authorization: Bearer &lt;token&gt;
+Accept: application/rpp+json
+Content-Type: application/rpp+json
+Accept-Language: en
+Content-Length: 220
+
+TODO
 
 </pre><a href="#section-9.5.1-4" class="pilcrow">¶</a>
 </div>
 <p id="section-9.5.1-5">Example Domain Create response:<a href="#section-9.5.1-5" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-9.5.1-6">
-<pre>S: HTTP/2 200
-S: Date: Wed, 24 Jan 2024 12:00:00 UTC
-S: Server: Example RPP server v1.0
-S: Content-Language: en
-S: Content-Length: 642
-S: Content-Type: application/rpp+json
-S: Location: https://rpp.example.nl/rpp/v1/domains/example.nl
-S: RPP-code: 1000
-S:
-S: TODO
+<pre>HTTP/2 200
+Date: Wed, 24 Jan 2024 12:00:00 UTC
+Server: Example RPP server v1.0
+Content-Language: en
+Content-Length: 642
+Content-Type: application/rpp+json
+Location: https://rpp.example.nl/rpp/v1/domains/example.nl
+RPP-code: 1000
+
+TODO
 
 </pre><a href="#section-9.5.1-6" class="pilcrow">¶</a>
 </div>
@@ -2273,27 +2272,27 @@ S: TODO
 <p id="section-9.5.2-2">The client MUST the HTTP DELETE method and a resource identifying a unique object instance. The server MUST return HTTP status code 200 (OK) if the resource was deleted successfully.<a href="#section-9.5.2-2" class="pilcrow">¶</a></p>
 <p id="section-9.5.2-3">Example Domain Delete request:<a href="#section-9.5.2-3" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-9.5.2-4">
-<pre>C: DELETE /rpp/v1/domains/example.nl HTTP/2
-C: Host: rpp.example.nl
-C: Authorization: Bearer &lt;token&gt;
-C: Accept: application/rpp+json
-C: Accept-Language: en
-C: RPP-Cltrid: ABC-12345
+<pre>DELETE /rpp/v1/domains/example.nl HTTP/2
+Host: rpp.example.nl
+Authorization: Bearer &lt;token&gt;
+Accept: application/rpp+json
+Accept-Language: en
+RPP-Cltrid: ABC-12345
 
 
 </pre><a href="#section-9.5.2-4" class="pilcrow">¶</a>
 </div>
 <p id="section-9.5.2-5">Example Domain Delete response:<a href="#section-9.5.2-5" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-9.5.2-6">
-<pre>S: HTTP/2 200 OK
-S: Date: Wed, 24 Jan 2024 12:00:00 UTC
-S: Server: Example RPP server v1.0
-S: Content-Length: 80
-S: RPP-Svtrid: XYZ-12345
-S: RPP-Cltrid: ABC-12345
-S: RPP-code: 1000
-S:
-S: TODO
+<pre>HTTP/2 200 OK
+Date: Wed, 24 Jan 2024 12:00:00 UTC
+Server: Example RPP server v1.0
+Content-Length: 80
+RPP-Svtrid: XYZ-12345
+RPP-Cltrid: ABC-12345
+RPP-code: 1000
+
+TODO
 
 </pre><a href="#section-9.5.2-6" class="pilcrow">¶</a>
 </div>
@@ -2315,42 +2314,42 @@ S: TODO
 <p id="section-9.5.3-2">Not all EPP object types include support for the renew command. The current-date query parameter MAY be used for date on which the current validity period ends, as described in <span><a href="https://rfc-editor.org/rfc/rfc5731#section-3.2.3" class="relref">Section 3.2.3</a> of [<a href="#RFC5731" class="cite xref">RFC5731</a>]</span>. The new period MAY be added to the request using the unit and value request parameters. The response MUST include the Location header for the renewed object.<a href="#section-9.5.3-2" class="pilcrow">¶</a></p>
 <p id="section-9.5.3-3">Example Domain Renew request:<a href="#section-9.5.3-3" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-9.5.3-4">
-<pre>C: POST /rpp/v1/domains/example.nl/renewal?current-date=2024-01-01 HTTP/2
-C: Host: rpp.example.nl
-C: Authorization: Bearer &lt;token&gt;
-C: Accept: application/rpp+json
-C: Content-Type: application/rpp+json
-C: Accept-Language: en
-C: Content-Length: 0
-C:
+<pre>POST /rpp/v1/domains/example.nl/renewal?current-date=2024-01-01 HTTP/2
+Host: rpp.example.nl
+Authorization: Bearer &lt;token&gt;
+Accept: application/rpp+json
+Content-Type: application/rpp+json
+Accept-Language: en
+Content-Length: 0
+
 
 </pre><a href="#section-9.5.3-4" class="pilcrow">¶</a>
 </div>
 <p id="section-9.5.3-5">Example Domain Renew request, using 1 year period:<a href="#section-9.5.3-5" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-9.5.3-6">
-<pre>C: POST /rpp/v1/domains/example.nl/renewal?current-date=2024-01-01?unit=y&amp;value=1 HTTP/2
-C: Host: rpp.example.nl
-C: Authorization: Bearer &lt;token&gt;
-C: Accept: application/rpp+json
-C: Content-Type: application/rpp+json
-C: Accept-Language: en
-C: Content-Length: 0
-C:
+<pre>POST /rpp/v1/domains/example.nl/renewal?current-date=2024-01-01?unit=y&amp;value=1 HTTP/2
+Host: rpp.example.nl
+Authorization: Bearer &lt;token&gt;
+Accept: application/rpp+json
+Content-Type: application/rpp+json
+Accept-Language: en
+Content-Length: 0
+
 
 </pre><a href="#section-9.5.3-6" class="pilcrow">¶</a>
 </div>
 <p id="section-9.5.3-7">Example Renew response:<a href="#section-9.5.3-7" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-9.5.3-8">
-<pre>S: HTTP/2 200 OK
-S: Date: Wed, 24 Jan 2024 12:00:00 UTC
-S: Server: Example RPP server v1.0
-S: Content-Language: en
-S: Content-Length: 205
-S: Location: https://rpp.example.nl/rpp/v1/domains/example.nl
-S: Content-Type: application/rpp+json
-S: RPP-code: 1000
-S:
-S: TODO
+<pre>HTTP/2 200 OK
+Date: Wed, 24 Jan 2024 12:00:00 UTC
+Server: Example RPP server v1.0
+Content-Language: en
+Content-Length: 205
+Location: https://rpp.example.nl/rpp/v1/domains/example.nl
+Content-Type: application/rpp+json
+RPP-code: 1000
+
+TODO
 
 </pre><a href="#section-9.5.3-8" class="pilcrow">¶</a>
 </div>
@@ -2380,56 +2379,56 @@ S: TODO
 <p id="section-9.5.4.1-3">If the transfer request is successful, then the response MUST include the Location header for the object being transferred.<a href="#section-9.5.4.1-3" class="pilcrow">¶</a></p>
 <p id="section-9.5.4.1-4">Example request not using object authorization:<a href="#section-9.5.4.1-4" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-9.5.4.1-5">
-<pre>C: POST /rpp/v1/domains/example.nl/transfer HTTP/2
-C: Host: rpp.example.nl
-C: Authorization: Bearer &lt;token&gt;
-C: Accept: application/rpp+json
-C: Accept-Language: en
-C: RPP-Cltrid: ABC-12345
-C: Content-Length: 0
+<pre>POST /rpp/v1/domains/example.nl/transfer HTTP/2
+Host: rpp.example.nl
+Authorization: Bearer &lt;token&gt;
+Accept: application/rpp+json
+Accept-Language: en
+RPP-Cltrid: ABC-12345
+Content-Length: 0
 
 
 </pre><a href="#section-9.5.4.1-5" class="pilcrow">¶</a>
 </div>
 <p id="section-9.5.4.1-6">Example request using object authorization:<a href="#section-9.5.4.1-6" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-9.5.4.1-7">
-<pre>C: POST /rpp/v1/domains/example.nl/transfer HTTP/2
-C: Host: rpp.example.nl
-C: Authorization: Bearer &lt;token&gt;
-C: Accept: application/rpp+json
-C: RPP-Cltrid: ABC-12345
-C: RPP-AuthInfo: secret-token
-C: Accept-Language: en
-C: Content-Length: 0
+<pre>POST /rpp/v1/domains/example.nl/transfer HTTP/2
+Host: rpp.example.nl
+Authorization: Bearer &lt;token&gt;
+Accept: application/rpp+json
+RPP-Cltrid: ABC-12345
+RPP-AuthInfo: secret-token
+Accept-Language: en
+Content-Length: 0
 
 
 </pre><a href="#section-9.5.4.1-7" class="pilcrow">¶</a>
 </div>
 <p id="section-9.5.4.1-8">Example request using 1 year renewal period, using the <code>unit</code> and <code>value</code> query parameters:<a href="#section-9.5.4.1-8" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-9.5.4.1-9">
-<pre>C: POST /rpp/v1/domains/example.nl/transfer?unit=y&amp;value=1 HTTP/2
-C: Host: rpp.example.nl
-C: Authorization: Bearer &lt;token&gt;
-C: Accept: application/rpp+json
-C: Accept-Language: en
-C: RPP-Cltrid: ABC-12345
-C: Content-Length: 0
+<pre>POST /rpp/v1/domains/example.nl/transfer?unit=y&amp;value=1 HTTP/2
+Host: rpp.example.nl
+Authorization: Bearer &lt;token&gt;
+Accept: application/rpp+json
+Accept-Language: en
+RPP-Cltrid: ABC-12345
+Content-Length: 0
 
 
 </pre><a href="#section-9.5.4.1-9" class="pilcrow">¶</a>
 </div>
 <p id="section-9.5.4.1-10">Example Transfer response:<a href="#section-9.5.4.1-10" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-9.5.4.1-11">
-<pre>S: HTTP/2 200 OK
-S: Date: Wed, 24 Jan 2024 12:00:00 UTC
-S: Server: Example RPP server v1.0
-S: Content-Language: en
-S: Content-Length: 328
-S: Content-Type: application/rpp+json
-S: Location: https://rpp.example.nl/rpp/v1/domains/example.nl/transfer
-S: RPP-code: 1001
-S:
-S: TODO
+<pre>HTTP/2 200 OK
+Date: Wed, 24 Jan 2024 12:00:00 UTC
+Server: Example RPP server v1.0
+Content-Language: en
+Content-Length: 328
+Content-Type: application/rpp+json
+Location: https://rpp.example.nl/rpp/v1/domains/example.nl/transfer
+RPP-code: 1001
+
+TODO
 
 </pre><a href="#section-9.5.4.1-11" class="pilcrow">¶</a>
 </div>
@@ -2451,27 +2450,27 @@ S: TODO
 <p id="section-9.5.4.2-2">The new sponsoring client MUST use the HTTP DELETE method to cancel a requested transfer.<a href="#section-9.5.4.2-2" class="pilcrow">¶</a></p>
 <p id="section-9.5.4.2-3">Example request:<a href="#section-9.5.4.2-3" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-9.5.4.2-4">
-<pre>C: DELETE /rpp/v1/domains/example.nl/transfer HTTP/2
-C: Host: rpp.example.nl
-C: Authorization: Bearer &lt;token&gt;
-C: Accept: application/rpp+json
-C: Accept-Language: en
-C: RPP-Cltrid: ABC-12345
+<pre>DELETE /rpp/v1/domains/example.nl/transfer HTTP/2
+Host: rpp.example.nl
+Authorization: Bearer &lt;token&gt;
+Accept: application/rpp+json
+Accept-Language: en
+RPP-Cltrid: ABC-12345
 
 
 </pre><a href="#section-9.5.4.2-4" class="pilcrow">¶</a>
 </div>
 <p id="section-9.5.4.2-5">Example response:<a href="#section-9.5.4.2-5" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-9.5.4.2-6">
-<pre>S: HTTP/2 200 OK
-S: Date: Wed, 24 Jan 2024 12:00:00 UTC
-S: Server: Example RPP server v1.0
-S: Content-Length: 80
-S: RPP-Svtrid: XYZ-12345
-S: RPP-Cltrid: ABC-12345
-S: RPP-code: 1000
-S:
-S: TODO
+<pre>HTTP/2 200 OK
+Date: Wed, 24 Jan 2024 12:00:00 UTC
+Server: Example RPP server v1.0
+Content-Length: 80
+RPP-Svtrid: XYZ-12345
+RPP-Cltrid: ABC-12345
+RPP-code: 1000
+
+TODO
 
 </pre><a href="#section-9.5.4.2-6" class="pilcrow">¶</a>
 </div>
@@ -2493,27 +2492,27 @@ S: TODO
 <p id="section-9.5.4.3-2">The currently sponsoring client of the object MUST use the HTTP DELETE method to reject a started transfer process.<a href="#section-9.5.4.3-2" class="pilcrow">¶</a></p>
 <p id="section-9.5.4.3-3">Example request:<a href="#section-9.5.4.3-3" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-9.5.4.3-4">
-<pre>C: DELETE /rpp/v1/domains/example.nl/transfers/latest HTTP/2
-C: Host: rpp.example.nl
-C: Authorization: Bearer &lt;token&gt;
-C: Accept: application/rpp+json
-C: Accept-Language: en
-C: RPP-Cltrid: ABC-12345
+<pre>DELETE /rpp/v1/domains/example.nl/transfers/latest HTTP/2
+Host: rpp.example.nl
+Authorization: Bearer &lt;token&gt;
+Accept: application/rpp+json
+Accept-Language: en
+RPP-Cltrid: ABC-12345
 
 
 </pre><a href="#section-9.5.4.3-4" class="pilcrow">¶</a>
 </div>
 <p id="section-9.5.4.3-5">Example Reject response:<a href="#section-9.5.4.3-5" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-9.5.4.3-6">
-<pre>S: HTTP/2 200 OK
-S: Date: Wed, 24 Jan 2024 12:00:00 UTC
-S: Server: Example RPP server v1.0
-S: Content-Length: 80
-S: RPP-Svtrid: XYZ-12345
-S: RPP-Cltrid: ABC-12345
-S: RPP-code: 1000
-S:
-S: TODO
+<pre>HTTP/2 200 OK
+Date: Wed, 24 Jan 2024 12:00:00 UTC
+Server: Example RPP server v1.0
+Content-Length: 80
+RPP-Svtrid: XYZ-12345
+RPP-Cltrid: ABC-12345
+RPP-code: 1000
+
+TODO
 
 
 </pre><a href="#section-9.5.4.3-6" class="pilcrow">¶</a>
@@ -2536,28 +2535,28 @@ S: TODO
 <p id="section-9.5.4.4-2">The currently sponsoring client MUST use the HTTP PUT method to approve a transfer requested by the new sponsoring client.<a href="#section-9.5.4.4-2" class="pilcrow">¶</a></p>
 <p id="section-9.5.4.4-3">Example Approve request:<a href="#section-9.5.4.4-3" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-9.5.4.4-4">
-<pre>C: PUT /rpp/v1/domains/example.nl/transfer HTTP/2
-C: Host: rpp.example.nl
-C: Authorization: Bearer &lt;token&gt;
-C: Accept: application/rpp+json
-C: Accept-Language: en
-C: RPP-Cltrid: ABC-12345
-C: Content-Length: 0
+<pre>PUT /rpp/v1/domains/example.nl/transfer HTTP/2
+Host: rpp.example.nl
+Authorization: Bearer &lt;token&gt;
+Accept: application/rpp+json
+Accept-Language: en
+RPP-Cltrid: ABC-12345
+Content-Length: 0
 
 
 </pre><a href="#section-9.5.4.4-4" class="pilcrow">¶</a>
 </div>
 <p id="section-9.5.4.4-5">Example Approve response:<a href="#section-9.5.4.4-5" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-9.5.4.4-6">
-<pre>S: HTTP/2 200 OK
-S: Date: Wed, 24 Jan 2024 12:00:00 UTC
-S: Server: Example RPP server v1.0
-S: Content-Length: 80
-S: RPP-Svtrid: XYZ-12345
-S: RPP-Cltrid: ABC-12345
-S: RPP-code: 1000
-S:
-S: TODO
+<pre>HTTP/2 200 OK
+Date: Wed, 24 Jan 2024 12:00:00 UTC
+Server: Example RPP server v1.0
+Content-Length: 80
+RPP-Svtrid: XYZ-12345
+RPP-Cltrid: ABC-12345
+RPP-code: 1000
+
+TODO
 
 </pre><a href="#section-9.5.4.4-6" class="pilcrow">¶</a>
 </div>
@@ -2582,29 +2581,29 @@ S: TODO
 <p id="section-9.5.5-3"><strong>TODO:</strong> when using JSON, also allow for JSON patch so client can send partial update data only?<a href="#section-9.5.5-3" class="pilcrow">¶</a></p>
 <p id="section-9.5.5-4">Example request:<a href="#section-9.5.5-4" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-9.5.5-5">
-<pre>C: PATCH /rpp/v1/domains/example.nl HTTP/2
-C: Host: rpp.example.nl
-C: Authorization: Bearer &lt;token&gt;
-C: Accept: application/rpp+json
-C: Content-Type: application/rpp+json
-C: Accept-Language: en
-C: Content-Length: 252
-C:
-S: TODO
+<pre>PATCH /rpp/v1/domains/example.nl HTTP/2
+Host: rpp.example.nl
+Authorization: Bearer &lt;token&gt;
+Accept: application/rpp+json
+Content-Type: application/rpp+json
+Accept-Language: en
+Content-Length: 252
+
+TODO
 
 </pre><a href="#section-9.5.5-5" class="pilcrow">¶</a>
 </div>
 <p id="section-9.5.5-6">Example response:<a href="#section-9.5.5-6" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-9.5.5-7">
-<pre>S: HTTP/2 200 OK
-S: Date: Wed, 24 Jan 2024 12:00:00 UTC
-S: Server: Example RPP server v1.0
-S: Content-Length: 80
-S: RPP-Svtrid: XYZ-12345
-S: RPP-Cltrid: ABC-12345
-S: RPP-code: 1000
-S:
-S: TODO
+<pre>HTTP/2 200 OK
+Date: Wed, 24 Jan 2024 12:00:00 UTC
+Server: Example RPP server v1.0
+Content-Length: 80
+RPP-Svtrid: XYZ-12345
+RPP-Cltrid: ABC-12345
+RPP-code: 1000
+
+TODO
 
 </pre><a href="#section-9.5.5-7" class="pilcrow">¶</a>
 </div>
@@ -2644,28 +2643,28 @@ The HTTP method used for a new Protocol extension is not defined but must follow
 </li>
           </ul>
 <div class="alignLeft art-text artwork" id="section-9.6.1-6">
-<pre>C: DELETE /rpp/v1/extensions/domains/example.nl/deletion HTTP/2
-C: Host: rpp.example.nl
-C: Authorization: Bearer &lt;token&gt;
-C: Accept: application/rpp+json
-C: Accept-Language: en
-C: RPP-Cltrid: ABC-12345
+<pre>DELETE /rpp/v1/extensions/domains/example.nl/deletion HTTP/2
+Host: rpp.example.nl
+Authorization: Bearer &lt;token&gt;
+Accept: application/rpp+json
+Accept-Language: en
+RPP-Cltrid: ABC-12345
 
 
 </pre><a href="#section-9.6.1-6" class="pilcrow">¶</a>
 </div>
 <p id="section-9.6.1-7">Example response:<a href="#section-9.6.1-7" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-9.6.1-8">
-<pre>S: HTTP/2 200 OK
-S: Date: Wed, 24 Jan 2024 12:00:00 UTC
-S: Server: Example RPP server v1.0
-S: Content-Language: en
-S: Content-Length: 0
-S: RPP-Svtrid: XYZ-12345
-S: RPP-Cltrid: ABC-12345
-S: RPP-code: 1000
-S:
-S: TODO
+<pre>HTTP/2 200 OK
+Date: Wed, 24 Jan 2024 12:00:00 UTC
+Server: Example RPP server v1.0
+Content-Language: en
+Content-Length: 0
+RPP-Svtrid: XYZ-12345
+RPP-Cltrid: ABC-12345
+RPP-code: 1000
+
+TODO
 
 </pre><a href="#section-9.6.1-8" class="pilcrow">¶</a>
 </div>
@@ -2688,32 +2687,32 @@ S: TODO
           </ul>
 <p id="section-9.6.2-4">Example request:<a href="#section-9.6.2-4" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-9.6.2-5">
-<pre>C: POST /rpp/v1/ips HTTP/2
-C: Host: rpp.example.nl
-C: Authorization: Bearer &lt;token&gt;
-C: Accept: application/rpp+json
-C: Accept-Language: en
-C: RPP-Cltrid: ABC-12345
-C: Content-Type: application/rpp+json
-C: Content-Length: 220
-C:
-S: TODO
+<pre>POST /rpp/v1/ips HTTP/2
+Host: rpp.example.nl
+Authorization: Bearer &lt;token&gt;
+Accept: application/rpp+json
+Accept-Language: en
+RPP-Cltrid: ABC-12345
+Content-Type: application/rpp+json
+Content-Length: 220
+
+TODO
 
 
 </pre><a href="#section-9.6.2-5" class="pilcrow">¶</a>
 </div>
 <p id="section-9.6.2-6">Example response:<a href="#section-9.6.2-6" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-9.6.2-7">
-<pre>S: HTTP/2 200 OK
-S: Date: Wed, 24 Jan 2024 12:00:00 UTC
-S: Server: Example RPP server v1.0
-S: Content-Language: en
-S: Content-Length: 642
-S: Content-Type: application/rpp+json
-S: Location: https://rpp.example.nl/rpp/v1/ips/192.0.2.1
-S: RPP-code: 1000
-S:
-S: TODO
+<pre>HTTP/2 200 OK
+Date: Wed, 24 Jan 2024 12:00:00 UTC
+Server: Example RPP server v1.0
+Content-Language: en
+Content-Length: 642
+Content-Type: application/rpp+json
+Location: https://rpp.example.nl/rpp/v1/ips/192.0.2.1
+RPP-code: 1000
+
+TODO
 
 
 </pre><a href="#section-9.6.2-7" class="pilcrow">¶</a>

@@ -258,26 +258,26 @@ The API version value used in the Hello response MUST match the version value us
 Example request:
 
 ```
-C: OPTIONS /rpp/v1/ HTTP/2
-C: Host: rpp.example.nl
-C: Authorization: Bearer <token>
-C: Accept: application/rpp+json
-C: Accept-Language: en
-C: Connection: keep-alive
+OPTIONS /rpp/v1/ HTTP/2
+Host: rpp.example.nl
+Authorization: Bearer <token>
+Accept: application/rpp+json
+Accept-Language: en
+Connection: keep-alive
 
 ```
 
 Example response:
 
 ```
-S: HTTP/2 200 OK
-S: Date: Wed, 24 Jan 2024 12:00:00 UTC
-S: Server: Example RPP server v1.0
-S: Content-Length: 799
-S: Content-Type: application/rpp+json
-S: Content-Language: en
-S:
-S: TODO
+HTTP/2 200 OK
+Date: Wed, 24 Jan 2024 12:00:00 UTC
+Server: Example RPP server v1.0
+Content-Length: 799
+Content-Type: application/rpp+json
+Content-Language: en
+
+TODO
 ```
 
 ##  Login
@@ -309,25 +309,25 @@ The Check endpoint MUST be limited to checking only a single object-id per reque
 Example request for a domain name:
 
 ```
-C: HEAD /rpp/v1/domains/example.nl HTTP/2
-C: Host: rpp.example.nl
-C: Authorization: Bearer <token>
-C: Accept-Language: en
-C: RPP-Cltrid: ABC-12345
+HEAD /rpp/v1/domains/example.nl HTTP/2
+Host: rpp.example.nl
+Authorization: Bearer <token>
+Accept-Language: en
+RPP-Cltrid: ABC-12345
 
 ```
 Example response:
 
 ```
-S: HTTP/2 200 OK
-S: Date: Wed, 24 Jan 2024 12:00:00 UTC
-S: Server: Example RPP server v1.0
-S: RPP-Cltrid: ABC-12345
-S: RPP-Svtrid: XYZ-12345
-S: RPP-Check-Avail: 0
-S: RPP-Check-Reason: In use
-S: RPP-result-code: 1000
-s: Content-Length: 0
+HTTP/2 200 OK
+Date: Wed, 24 Jan 2024 12:00:00 UTC
+Server: Example RPP server v1.0
+RPP-Cltrid: ABC-12345
+RPP-Svtrid: XYZ-12345
+RPP-Check-Avail: 0
+RPP-Check-Reason: In use
+RPP-result-code: 1000
+Content-Length: 0
 
 ```
 
@@ -342,12 +342,12 @@ Example request for an object not using authorization information.
 - Response message: Info response
 
 ```
-C: GET /rpp/v1/domains/example.nl HTTP/2
-C: Host: rpp.example.nl
-C: Authorization: Bearer <token>
-C: Accept: application/rpp+json
-C: Accept-Language: en
-C: RPP-Cltrid: ABC-12345
+GET /rpp/v1/domains/example.nl HTTP/2
+Host: rpp.example.nl
+Authorization: Bearer <token>
+Accept: application/rpp+json
+Accept-Language: en
+RPP-Cltrid: ABC-12345
 
 ```
 
@@ -358,29 +358,29 @@ Example request using RPP-AuthInfo header for an object that has attached author
 - Response message: Info response
 
 ```
-C: GET /rpp/v1/domains/example.nl HTTP/2
-C: Host: rpp.example.nl
-C: Authorization: Bearer <token>
-C: Accept: application/rpp+json
-C: Accept-Language: en
-C: RPP-Cltrid: ABC-12345
-C: RPP-AuthInfo: secret-token
-C: RPP-Roid: REG-XYZ-12345
+GET /rpp/v1/domains/example.nl HTTP/2
+Host: rpp.example.nl
+Authorization: Bearer <token>
+Accept: application/rpp+json
+Accept-Language: en
+RPP-Cltrid: ABC-12345
+RPP-AuthInfo: secret-token
+RPP-Roid: REG-XYZ-12345
 
 ```
 
 Example Info response:
 
 ```
-S: HTTP/2 200 OK
-S: Date: Wed, 24 Jan 2024 12:00:00 UTC
-S: Server: Example RPP server v1.0
-S: Content-Length: 424
-S: Content-Type: application/rpp+json
-S: Content-Language: en
-S: RPP-code: 1000
-S:
-S: TODO
+HTTP/2 200 OK
+Date: Wed, 24 Jan 2024 12:00:00 UTC
+Server: Example RPP server v1.0
+Content-Length: 424
+Content-Type: application/rpp+json
+Content-Language: en
+RPP-code: 1000
+
+TODO
 ```
 
 
@@ -405,12 +405,12 @@ URLs used for filtering based on `hosts` attribute for Domain Info request:
 Example Domain Info request, the response should only include delegated hosts:
 
 ```
-C: GET /rpp/v1/domains/example.nl?filter=hosts&val=del HTTP/2
-C: Host: rpp.example.nl
-C: Authorization: Bearer <token>
-C: Accept: application/rpp+json
-C: Accept-Language: en
-C: RPP-Cltrid: ABC-12345
+GET /rpp/v1/domains/example.nl?filter=hosts&val=del HTTP/2
+Host: rpp.example.nl
+Authorization: Bearer <token>
+Accept: application/rpp+json
+Accept-Language: en
+RPP-Cltrid: ABC-12345
 
 ```
 
@@ -427,26 +427,26 @@ The client MUST use the HTTP GET method on the messages resource collection to r
 Example request:
 
 ```
-C: GET /rpp/v1/messages HTTP/2
-C: Host: rpp.example.nl
-C: Authorization: Bearer <token>
-C: Accept: application/rpp+json
-C: Accept-Language: en
-C: RPP-Cltrid: ABC-12345
+GET /rpp/v1/messages HTTP/2
+Host: rpp.example.nl
+Authorization: Bearer <token>
+Accept: application/rpp+json
+Accept-Language: en
+RPP-Cltrid: ABC-12345
 
 ```
 Example response:
 
 ```
-S: HTTP/2 200 OK
-S: Date: Wed, 24 Jan 2024 12:00:00 UTC
-S: Server: Example RPP server v1.0
-S: Content-Length: 312
-S: Content-Type: application/rpp+json
-S: Content-Language: en
-S: RPP-code: 1301
-S:
-S: TODO
+HTTP/2 200 OK
+Date: Wed, 24 Jan 2024 12:00:00 UTC
+Server: Example RPP server v1.0
+Content-Length: 312
+Content-Type: application/rpp+json
+Content-Language: en
+RPP-code: 1301
+
+TODO
 ```
 
 #### Poll Ack
@@ -460,28 +460,28 @@ The client MUST use the HTTP DELETE method to acknowledge receipt of a message f
 Example request:
 
 ```
-C: DELETE /rpp/v1/messages/12345 HTTP/2
-C: Host: rpp.example.nl
-C: Authorization: Bearer <token>
-C: Accept: application/rpp+json
-C: Accept-Language: en
-C: RPP-Cltrid: ABC-12345
+DELETE /rpp/v1/messages/12345 HTTP/2
+Host: rpp.example.nl
+Authorization: Bearer <token>
+Accept: application/rpp+json
+Accept-Language: en
+RPP-Cltrid: ABC-12345
 
 ```
 Example response:
 
 ```
-S: HTTP/2 200 OK
-S: Date: Wed, 24 Jan 2024 12:00:00 UTC
-S: Server: Example RPP server v1.0
-S: Content-Language: en
-S: RPP-code: 1000
-S: RPP-Queue-Size: 0
-S: RPP-Svtrid: XYZ-12345
-S: RPP-Cltrid: ABC-12345
-S: Content-Length: 145
-S:
-S: TODO
+HTTP/2 200 OK
+Date: Wed, 24 Jan 2024 12:00:00 UTC
+Server: Example RPP server v1.0
+Content-Language: en
+RPP-code: 1000
+RPP-Queue-Size: 0
+RPP-Svtrid: XYZ-12345
+RPP-Cltrid: ABC-12345
+Content-Length: 145
+
+TODO
 ```
 
 ### Transfer Query
@@ -496,12 +496,12 @@ The client MUST use the HTTP GET method and MUST NOT add content to the HTTP mes
 Example domain name Transfer Query request without authorization information required:
 
 ```
-C: GET /rpp/v1/domains/example.nl/transfer HTTP/2
-C: Host: rpp.example.nl
-C: Authorization: Bearer <token>
-C: Accept: application/rpp+json
-C: Accept-Language: en
-C: RPP-Cltrid: ABC-12345
+GET /rpp/v1/domains/example.nl/transfer HTTP/2
+Host: rpp.example.nl
+Authorization: Bearer <token>
+Accept: application/rpp+json
+Accept-Language: en
+RPP-Cltrid: ABC-12345
 
 ```
 
@@ -510,13 +510,13 @@ If the requested object has associated authorization information that is not lin
 Example domain name Transfer Query request using RPP-AuthInfo header:
 
 ```
-C: GET /rpp/v1/domains/example.nl/transfer HTTP/2
-C: Host: rpp.example.nl
-C: Authorization: Bearer <token>
-C: Accept: application/rpp+json
-C: Accept-Language: en
-C: RPP-Cltrid: ABC-12345
-C: RPP-AuthInfo: secret-token
+GET /rpp/v1/domains/example.nl/transfer HTTP/2
+Host: rpp.example.nl
+Authorization: Bearer <token>
+Accept: application/rpp+json
+Accept-Language: en
+RPP-Cltrid: ABC-12345
+RPP-AuthInfo: secret-token
 
 ```
 
@@ -525,30 +525,29 @@ If the requested object has associated authorization information linked to anoth
 Example domain name Transfer Query request and authorization using RPP-AuthInfo and the RPP-Roid header:
 
 ```
-C: GET /rpp/v1/domains/example.nl/transfer HTTP/2
-C: Host: rpp.example.nl
-C: Authorization: Bearer <token>
-C: Accept: application/rpp+json
-C: Accept-Language: en
-C: RPP-AuthInfo: secret-token
-C: RPP-Roid: REG-XYZ-12345
-C: Content-Length: 0
-C:
+GET /rpp/v1/domains/example.nl/transfer HTTP/2
+Host: rpp.example.nl
+Authorization: Bearer <token>
+Accept: application/rpp+json
+Accept-Language: en
+RPP-AuthInfo: secret-token
+RPP-Roid: REG-XYZ-12345
+Content-Length: 0
 
 ```
 
 Example Transfer Query response:
 
 ```
-S: HTTP/2 200 OK
-S: Date: Wed, 24 Jan 2024 12:00:00 UTC
-S: Server: Example RPP server v1.0
-S: Content-Length: 230
-S: Content-Type: application/rpp+json
-S: Content-Language: en
-S: RPP-code: 1000
-S:
-S: TODO
+HTTP/2 200 OK
+Date: Wed, 24 Jan 2024 12:00:00 UTC
+Server: Example RPP server v1.0
+Content-Length: 230
+Content-Type: application/rpp+json
+Content-Language: en
+RPP-code: 1000
+
+TODO
 ```
 
 ## Transform Resources
@@ -564,30 +563,30 @@ The client MUST use the HTTP POST method to create a new object resource. If the
 Example Domain Create request:
 
 ```
-C: POST /rpp/v1/domains HTTP/2
-C: Host: rpp.example.nl
-C: Authorization: Bearer <token>
-C: Accept: application/rpp+json
-C: Content-Type: application/rpp+json
-C: Accept-Language: en
-C: Content-Length: 220
-C:
-S: TODO
+POST /rpp/v1/domains HTTP/2
+Host: rpp.example.nl
+Authorization: Bearer <token>
+Accept: application/rpp+json
+Content-Type: application/rpp+json
+Accept-Language: en
+Content-Length: 220
+
+TODO
 ```
 
 Example Domain Create response:
 
 ```
-S: HTTP/2 200
-S: Date: Wed, 24 Jan 2024 12:00:00 UTC
-S: Server: Example RPP server v1.0
-S: Content-Language: en
-S: Content-Length: 642
-S: Content-Type: application/rpp+json
-S: Location: https://rpp.example.nl/rpp/v1/domains/example.nl
-S: RPP-code: 1000
-S:
-S: TODO
+HTTP/2 200
+Date: Wed, 24 Jan 2024 12:00:00 UTC
+Server: Example RPP server v1.0
+Content-Language: en
+Content-Length: 642
+Content-Type: application/rpp+json
+Location: https://rpp.example.nl/rpp/v1/domains/example.nl
+RPP-code: 1000
+
+TODO
 ```
 
 ### Delete
@@ -601,27 +600,27 @@ The client MUST the HTTP DELETE method and a resource identifying a unique objec
 Example Domain Delete request:
 
 ```
-C: DELETE /rpp/v1/domains/example.nl HTTP/2
-C: Host: rpp.example.nl
-C: Authorization: Bearer <token>
-C: Accept: application/rpp+json
-C: Accept-Language: en
-C: RPP-Cltrid: ABC-12345
+DELETE /rpp/v1/domains/example.nl HTTP/2
+Host: rpp.example.nl
+Authorization: Bearer <token>
+Accept: application/rpp+json
+Accept-Language: en
+RPP-Cltrid: ABC-12345
 
 ```
 
 Example Domain Delete response:
 
 ```
-S: HTTP/2 200 OK
-S: Date: Wed, 24 Jan 2024 12:00:00 UTC
-S: Server: Example RPP server v1.0
-S: Content-Length: 80
-S: RPP-Svtrid: XYZ-12345
-S: RPP-Cltrid: ABC-12345
-S: RPP-code: 1000
-S:
-S: TODO
+HTTP/2 200 OK
+Date: Wed, 24 Jan 2024 12:00:00 UTC
+Server: Example RPP server v1.0
+Content-Length: 80
+RPP-Svtrid: XYZ-12345
+RPP-Cltrid: ABC-12345
+RPP-code: 1000
+
+TODO
 ```
 
 ### Renew
@@ -635,42 +634,42 @@ Not all EPP object types include support for the renew command. The current-date
 Example Domain Renew request:
 
 ```
-C: POST /rpp/v1/domains/example.nl/renewal?current-date=2024-01-01 HTTP/2
-C: Host: rpp.example.nl
-C: Authorization: Bearer <token>
-C: Accept: application/rpp+json
-C: Content-Type: application/rpp+json
-C: Accept-Language: en
-C: Content-Length: 0
-C: 
+POST /rpp/v1/domains/example.nl/renewal?current-date=2024-01-01 HTTP/2
+Host: rpp.example.nl
+Authorization: Bearer <token>
+Accept: application/rpp+json
+Content-Type: application/rpp+json
+Accept-Language: en
+Content-Length: 0
+
 ```
 
 Example Domain Renew request, using 1 year period:
 
 ```
-C: POST /rpp/v1/domains/example.nl/renewal?current-date=2024-01-01?unit=y&value=1 HTTP/2
-C: Host: rpp.example.nl
-C: Authorization: Bearer <token>
-C: Accept: application/rpp+json
-C: Content-Type: application/rpp+json
-C: Accept-Language: en
-C: Content-Length: 0
-C: 
+POST /rpp/v1/domains/example.nl/renewal?current-date=2024-01-01?unit=y&value=1 HTTP/2
+Host: rpp.example.nl
+Authorization: Bearer <token>
+Accept: application/rpp+json
+Content-Type: application/rpp+json
+Accept-Language: en
+Content-Length: 0
+
 ```
 
 Example Renew response:
 
 ```
-S: HTTP/2 200 OK
-S: Date: Wed, 24 Jan 2024 12:00:00 UTC
-S: Server: Example RPP server v1.0
-S: Content-Language: en
-S: Content-Length: 205
-S: Location: https://rpp.example.nl/rpp/v1/domains/example.nl
-S: Content-Type: application/rpp+json
-S: RPP-code: 1000
-S:
-S: TODO
+HTTP/2 200 OK
+Date: Wed, 24 Jan 2024 12:00:00 UTC
+Server: Example RPP server v1.0
+Content-Language: en
+Content-Length: 205
+Location: https://rpp.example.nl/rpp/v1/domains/example.nl
+Content-Type: application/rpp+json
+RPP-code: 1000
+
+TODO
 ```
 
 ### Transfer
@@ -692,56 +691,56 @@ If the transfer request is successful, then the response MUST include the Locati
 Example request not using object authorization:
 
 ```
-C: POST /rpp/v1/domains/example.nl/transfer HTTP/2
-C: Host: rpp.example.nl
-C: Authorization: Bearer <token>
-C: Accept: application/rpp+json
-C: Accept-Language: en
-C: RPP-Cltrid: ABC-12345
-C: Content-Length: 0
+POST /rpp/v1/domains/example.nl/transfer HTTP/2
+Host: rpp.example.nl
+Authorization: Bearer <token>
+Accept: application/rpp+json
+Accept-Language: en
+RPP-Cltrid: ABC-12345
+Content-Length: 0
 
 ```
 
 Example request using object authorization:
 
 ```
-C: POST /rpp/v1/domains/example.nl/transfer HTTP/2
-C: Host: rpp.example.nl
-C: Authorization: Bearer <token>
-C: Accept: application/rpp+json
-C: RPP-Cltrid: ABC-12345
-C: RPP-AuthInfo: secret-token
-C: Accept-Language: en
-C: Content-Length: 0
+POST /rpp/v1/domains/example.nl/transfer HTTP/2
+Host: rpp.example.nl
+Authorization: Bearer <token>
+Accept: application/rpp+json
+RPP-Cltrid: ABC-12345
+RPP-AuthInfo: secret-token
+Accept-Language: en
+Content-Length: 0
 
 ```
 
 Example request using 1 year renewal period, using the `unit` and `value` query parameters:
 
 ```
-C: POST /rpp/v1/domains/example.nl/transfer?unit=y&value=1 HTTP/2
-C: Host: rpp.example.nl
-C: Authorization: Bearer <token>
-C: Accept: application/rpp+json
-C: Accept-Language: en
-C: RPP-Cltrid: ABC-12345
-C: Content-Length: 0
+POST /rpp/v1/domains/example.nl/transfer?unit=y&value=1 HTTP/2
+Host: rpp.example.nl
+Authorization: Bearer <token>
+Accept: application/rpp+json
+Accept-Language: en
+RPP-Cltrid: ABC-12345
+Content-Length: 0
 
 ```
 
 Example Transfer response:
 
 ```
-S: HTTP/2 200 OK
-S: Date: Wed, 24 Jan 2024 12:00:00 UTC
-S: Server: Example RPP server v1.0
-S: Content-Language: en
-S: Content-Length: 328
-S: Content-Type: application/rpp+json
-S: Location: https://rpp.example.nl/rpp/v1/domains/example.nl/transfer
-S: RPP-code: 1001
-S:
-S: TODO
+HTTP/2 200 OK
+Date: Wed, 24 Jan 2024 12:00:00 UTC
+Server: Example RPP server v1.0
+Content-Language: en
+Content-Length: 328
+Content-Type: application/rpp+json
+Location: https://rpp.example.nl/rpp/v1/domains/example.nl/transfer
+RPP-code: 1001
+
+TODO
 ```
 
 
@@ -756,27 +755,27 @@ The new sponsoring client MUST use the HTTP DELETE method to cancel a requested 
 Example request:
 
 ```
-C: DELETE /rpp/v1/domains/example.nl/transfer HTTP/2
-C: Host: rpp.example.nl
-C: Authorization: Bearer <token>
-C: Accept: application/rpp+json
-C: Accept-Language: en
-C: RPP-Cltrid: ABC-12345
+DELETE /rpp/v1/domains/example.nl/transfer HTTP/2
+Host: rpp.example.nl
+Authorization: Bearer <token>
+Accept: application/rpp+json
+Accept-Language: en
+RPP-Cltrid: ABC-12345
 
 ```
 
 Example response:
 
 ```
-S: HTTP/2 200 OK
-S: Date: Wed, 24 Jan 2024 12:00:00 UTC
-S: Server: Example RPP server v1.0
-S: Content-Length: 80
-S: RPP-Svtrid: XYZ-12345
-S: RPP-Cltrid: ABC-12345
-S: RPP-code: 1000
-S:
-S: TODO
+HTTP/2 200 OK
+Date: Wed, 24 Jan 2024 12:00:00 UTC
+Server: Example RPP server v1.0
+Content-Length: 80
+RPP-Svtrid: XYZ-12345
+RPP-Cltrid: ABC-12345
+RPP-code: 1000
+
+TODO
 ```
 
 #### Reject
@@ -790,27 +789,27 @@ The currently sponsoring client of the object MUST use the HTTP DELETE method to
 Example request:
 
 ```
-C: DELETE /rpp/v1/domains/example.nl/transfers/latest HTTP/2
-C: Host: rpp.example.nl
-C: Authorization: Bearer <token>
-C: Accept: application/rpp+json
-C: Accept-Language: en
-C: RPP-Cltrid: ABC-12345
+DELETE /rpp/v1/domains/example.nl/transfers/latest HTTP/2
+Host: rpp.example.nl
+Authorization: Bearer <token>
+Accept: application/rpp+json
+Accept-Language: en
+RPP-Cltrid: ABC-12345
 
 ```
 
 Example Reject response:
 
 ```
-S: HTTP/2 200 OK
-S: Date: Wed, 24 Jan 2024 12:00:00 UTC
-S: Server: Example RPP server v1.0
-S: Content-Length: 80
-S: RPP-Svtrid: XYZ-12345
-S: RPP-Cltrid: ABC-12345
-S: RPP-code: 1000
-S:
-S: TODO
+HTTP/2 200 OK
+Date: Wed, 24 Jan 2024 12:00:00 UTC
+Server: Example RPP server v1.0
+Content-Length: 80
+RPP-Svtrid: XYZ-12345
+RPP-Cltrid: ABC-12345
+RPP-code: 1000
+
+TODO
 
 ```
 
@@ -825,28 +824,28 @@ The currently sponsoring client MUST use the HTTP PUT method to approve a transf
 Example Approve request:
 
 ```
-C: PUT /rpp/v1/domains/example.nl/transfer HTTP/2
-C: Host: rpp.example.nl
-C: Authorization: Bearer <token>
-C: Accept: application/rpp+json
-C: Accept-Language: en
-C: RPP-Cltrid: ABC-12345
-C: Content-Length: 0
+PUT /rpp/v1/domains/example.nl/transfer HTTP/2
+Host: rpp.example.nl
+Authorization: Bearer <token>
+Accept: application/rpp+json
+Accept-Language: en
+RPP-Cltrid: ABC-12345
+Content-Length: 0
 
 ```
 
 Example Approve response:
 
 ```
-S: HTTP/2 200 OK
-S: Date: Wed, 24 Jan 2024 12:00:00 UTC
-S: Server: Example RPP server v1.0
-S: Content-Length: 80
-S: RPP-Svtrid: XYZ-12345
-S: RPP-Cltrid: ABC-12345
-S: RPP-code: 1000
-S:
-S: TODO
+HTTP/2 200 OK
+Date: Wed, 24 Jan 2024 12:00:00 UTC
+Server: Example RPP server v1.0
+Content-Length: 80
+RPP-Svtrid: XYZ-12345
+RPP-Cltrid: ABC-12345
+RPP-code: 1000
+
+TODO
 ```
 
 ### Update
@@ -862,29 +861,29 @@ An object Update request MUST be performed using the HTTP PATCH method. The requ
 Example request:
 
 ```
-C: PATCH /rpp/v1/domains/example.nl HTTP/2
-C: Host: rpp.example.nl
-C: Authorization: Bearer <token>
-C: Accept: application/rpp+json
-C: Content-Type: application/rpp+json
-C: Accept-Language: en
-C: Content-Length: 252
-C:
-S: TODO
+PATCH /rpp/v1/domains/example.nl HTTP/2
+Host: rpp.example.nl
+Authorization: Bearer <token>
+Accept: application/rpp+json
+Content-Type: application/rpp+json
+Accept-Language: en
+Content-Length: 252
+
+TODO
 ```
 
 Example response:
 
 ```
-S: HTTP/2 200 OK
-S: Date: Wed, 24 Jan 2024 12:00:00 UTC
-S: Server: Example RPP server v1.0
-S: Content-Length: 80
-S: RPP-Svtrid: XYZ-12345
-S: RPP-Cltrid: ABC-12345
-S: RPP-code: 1000
-S:
-S: TODO
+HTTP/2 200 OK
+Date: Wed, 24 Jan 2024 12:00:00 UTC
+Server: Example RPP server v1.0
+Content-Length: 80
+RPP-Svtrid: XYZ-12345
+RPP-Cltrid: ABC-12345
+RPP-code: 1000
+
+TODO
 ```
 
 ## Extension Framework
@@ -909,28 +908,28 @@ Example Protocol Extension request:
 - Response message: Optional error response
 
 ```
-C: DELETE /rpp/v1/extensions/domains/example.nl/deletion HTTP/2
-C: Host: rpp.example.nl
-C: Authorization: Bearer <token>
-C: Accept: application/rpp+json
-C: Accept-Language: en
-C: RPP-Cltrid: ABC-12345
+DELETE /rpp/v1/extensions/domains/example.nl/deletion HTTP/2
+Host: rpp.example.nl
+Authorization: Bearer <token>
+Accept: application/rpp+json
+Accept-Language: en
+RPP-Cltrid: ABC-12345
 
 ```
 
 Example response:
 
 ```
-S: HTTP/2 200 OK
-S: Date: Wed, 24 Jan 2024 12:00:00 UTC
-S: Server: Example RPP server v1.0
-S: Content-Language: en
-S: Content-Length: 0
-S: RPP-Svtrid: XYZ-12345
-S: RPP-Cltrid: ABC-12345
-S: RPP-code: 1000
-S:
-S: TODO
+HTTP/2 200 OK
+Date: Wed, 24 Jan 2024 12:00:00 UTC
+Server: Example RPP server v1.0
+Content-Language: en
+Content-Length: 0
+RPP-Svtrid: XYZ-12345
+RPP-Cltrid: ABC-12345
+RPP-code: 1000
+
+TODO
 ```
 
 ### Object Extension
@@ -946,32 +945,32 @@ A hypothetical new Object mapping for IP addresses, may result in a new resource
 Example request:
 
 ```
-C: POST /rpp/v1/ips HTTP/2
-C: Host: rpp.example.nl
-C: Authorization: Bearer <token>
-C: Accept: application/rpp+json
-C: Accept-Language: en
-C: RPP-Cltrid: ABC-12345
-C: Content-Type: application/rpp+json
-C: Content-Length: 220
-C:
-S: TODO
+POST /rpp/v1/ips HTTP/2
+Host: rpp.example.nl
+Authorization: Bearer <token>
+Accept: application/rpp+json
+Accept-Language: en
+RPP-Cltrid: ABC-12345
+Content-Type: application/rpp+json
+Content-Length: 220
+
+TODO
 
 ```
 
 Example response:
 
 ```
-S: HTTP/2 200 OK
-S: Date: Wed, 24 Jan 2024 12:00:00 UTC
-S: Server: Example RPP server v1.0
-S: Content-Language: en
-S: Content-Length: 642
-S: Content-Type: application/rpp+json
-S: Location: https://rpp.example.nl/rpp/v1/ips/192.0.2.1
-S: RPP-code: 1000
-S:
-S: TODO
+HTTP/2 200 OK
+Date: Wed, 24 Jan 2024 12:00:00 UTC
+Server: Example RPP server v1.0
+Content-Language: en
+Content-Length: 642
+Content-Type: application/rpp+json
+Location: https://rpp.example.nl/rpp/v1/ips/192.0.2.1
+RPP-code: 1000
+
+TODO
 
 ```
  

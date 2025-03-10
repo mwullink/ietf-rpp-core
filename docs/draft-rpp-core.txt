@@ -5,8 +5,8 @@
 Network Working Group                                         M. Wullink
 Internet-Draft                                                 SIDN Labs
 Intended status: Standards Track                              P. Kowalik
-Expires: 7 September 2025                                          DENIC
-                                                            6 March 2025
+Expires: 11 September 2025                                         DENIC
+                                                           10 March 2025
 
 
                   RESTful Provisioning Protocol (RPP)
@@ -32,7 +32,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 7 September 2025.
+   This Internet-Draft will expire on 11 September 2025.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Wullink & Kowalik       Expires 7 September 2025                [Page 1]
+Wullink & Kowalik       Expires 11 September 2025               [Page 1]
 
 Internet-Draft        RESTful Provisioning Protocol           March 2025
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Wullink & Kowalik       Expires 7 September 2025                [Page 2]
+Wullink & Kowalik       Expires 11 September 2025               [Page 2]
 
 Internet-Draft        RESTful Provisioning Protocol           March 2025
 
@@ -165,7 +165,7 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
 
 
-Wullink & Kowalik       Expires 7 September 2025                [Page 3]
+Wullink & Kowalik       Expires 11 September 2025               [Page 3]
 
 Internet-Draft        RESTful Provisioning Protocol           March 2025
 
@@ -221,7 +221,7 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
 
 
-Wullink & Kowalik       Expires 7 September 2025                [Page 4]
+Wullink & Kowalik       Expires 11 September 2025               [Page 4]
 
 Internet-Draft        RESTful Provisioning Protocol           March 2025
 
@@ -277,7 +277,7 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
 
 
-Wullink & Kowalik       Expires 7 September 2025                [Page 5]
+Wullink & Kowalik       Expires 11 September 2025               [Page 5]
 
 Internet-Draft        RESTful Provisioning Protocol           March 2025
 
@@ -333,7 +333,7 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
 
 
-Wullink & Kowalik       Expires 7 September 2025                [Page 6]
+Wullink & Kowalik       Expires 11 September 2025               [Page 6]
 
 Internet-Draft        RESTful Provisioning Protocol           March 2025
 
@@ -389,7 +389,7 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
 
 
-Wullink & Kowalik       Expires 7 September 2025                [Page 7]
+Wullink & Kowalik       Expires 11 September 2025               [Page 7]
 
 Internet-Draft        RESTful Provisioning Protocol           March 2025
 
@@ -445,7 +445,7 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
 
 
-Wullink & Kowalik       Expires 7 September 2025                [Page 8]
+Wullink & Kowalik       Expires 11 September 2025               [Page 8]
 
 Internet-Draft        RESTful Provisioning Protocol           March 2025
 
@@ -501,7 +501,7 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
 
 
-Wullink & Kowalik       Expires 7 September 2025                [Page 9]
+Wullink & Kowalik       Expires 11 September 2025               [Page 9]
 
 Internet-Draft        RESTful Provisioning Protocol           March 2025
 
@@ -557,7 +557,7 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
 
 
-Wullink & Kowalik       Expires 7 September 2025               [Page 10]
+Wullink & Kowalik       Expires 11 September 2025              [Page 10]
 
 Internet-Draft        RESTful Provisioning Protocol           March 2025
 
@@ -613,7 +613,7 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
 
 
-Wullink & Kowalik       Expires 7 September 2025               [Page 11]
+Wullink & Kowalik       Expires 11 September 2025              [Page 11]
 
 Internet-Draft        RESTful Provisioning Protocol           March 2025
 
@@ -633,23 +633,23 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
    Example request:
 
-   C: OPTIONS /rpp/v1/ HTTP/2
-   C: Host: rpp.example.nl
-   C: Authorization: Bearer <token>
-   C: Accept: application/rpp+json
-   C: Accept-Language: en
-   C: Connection: keep-alive
+   OPTIONS /rpp/v1/ HTTP/2
+   Host: rpp.example.nl
+   Authorization: Bearer <token>
+   Accept: application/rpp+json
+   Accept-Language: en
+   Connection: keep-alive
 
    Example response:
 
-   S: HTTP/2 200 OK
-   S: Date: Wed, 24 Jan 2024 12:00:00 UTC
-   S: Server: Example RPP server v1.0
-   S: Content-Length: 799
-   S: Content-Type: application/rpp+json
-   S: Content-Language: en
-   S:
-   S: TODO
+   HTTP/2 200 OK
+   Date: Wed, 24 Jan 2024 12:00:00 UTC
+   Server: Example RPP server v1.0
+   Content-Length: 799
+   Content-Type: application/rpp+json
+   Content-Language: en
+
+   TODO
 
 9.2.  Login
 
@@ -669,7 +669,7 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
 
 
-Wullink & Kowalik       Expires 7 September 2025               [Page 12]
+Wullink & Kowalik       Expires 11 September 2025              [Page 12]
 
 Internet-Draft        RESTful Provisioning Protocol           March 2025
 
@@ -705,27 +705,27 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
    Example request for a domain name:
 
-   C: HEAD /rpp/v1/domains/example.nl HTTP/2
-   C: Host: rpp.example.nl
-   C: Authorization: Bearer <token>
-   C: Accept-Language: en
-   C: RPP-Cltrid: ABC-12345
+   HEAD /rpp/v1/domains/example.nl HTTP/2
+   Host: rpp.example.nl
+   Authorization: Bearer <token>
+   Accept-Language: en
+   RPP-Cltrid: ABC-12345
 
    Example response:
 
-   S: HTTP/2 200 OK
-   S: Date: Wed, 24 Jan 2024 12:00:00 UTC
-   S: Server: Example RPP server v1.0
-   S: RPP-Cltrid: ABC-12345
-   S: RPP-Svtrid: XYZ-12345
-   S: RPP-Check-Avail: 0
-   S: RPP-Check-Reason: In use
-   S: RPP-result-code: 1000
-   s: Content-Length: 0
+   HTTP/2 200 OK
+   Date: Wed, 24 Jan 2024 12:00:00 UTC
+   Server: Example RPP server v1.0
+   RPP-Cltrid: ABC-12345
+   RPP-Svtrid: XYZ-12345
+   RPP-Check-Avail: 0
+   RPP-Check-Reason: In use
+   RPP-result-code: 1000
+   Content-Length: 0
 
 
 
-Wullink & Kowalik       Expires 7 September 2025               [Page 13]
+Wullink & Kowalik       Expires 11 September 2025              [Page 13]
 
 Internet-Draft        RESTful Provisioning Protocol           March 2025
 
@@ -745,12 +745,12 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
    -  Request message: Optional
    -  Response message: Info response
 
-   C: GET /rpp/v1/domains/example.nl HTTP/2
-   C: Host: rpp.example.nl
-   C: Authorization: Bearer <token>
-   C: Accept: application/rpp+json
-   C: Accept-Language: en
-   C: RPP-Cltrid: ABC-12345
+   GET /rpp/v1/domains/example.nl HTTP/2
+   Host: rpp.example.nl
+   Authorization: Bearer <token>
+   Accept: application/rpp+json
+   Accept-Language: en
+   RPP-Cltrid: ABC-12345
 
    Example request using RPP-AuthInfo header for an object that has
    attached authorization information.
@@ -759,14 +759,14 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
    -  Request message: Optional
    -  Response message: Info response
 
-   C: GET /rpp/v1/domains/example.nl HTTP/2
-   C: Host: rpp.example.nl
-   C: Authorization: Bearer <token>
-   C: Accept: application/rpp+json
-   C: Accept-Language: en
-   C: RPP-Cltrid: ABC-12345
-   C: RPP-AuthInfo: secret-token
-   C: RPP-Roid: REG-XYZ-12345
+   GET /rpp/v1/domains/example.nl HTTP/2
+   Host: rpp.example.nl
+   Authorization: Bearer <token>
+   Accept: application/rpp+json
+   Accept-Language: en
+   RPP-Cltrid: ABC-12345
+   RPP-AuthInfo: secret-token
+   RPP-Roid: REG-XYZ-12345
 
    Example Info response:
 
@@ -781,20 +781,20 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
 
 
-Wullink & Kowalik       Expires 7 September 2025               [Page 14]
+Wullink & Kowalik       Expires 11 September 2025              [Page 14]
 
 Internet-Draft        RESTful Provisioning Protocol           March 2025
 
 
-   S: HTTP/2 200 OK
-   S: Date: Wed, 24 Jan 2024 12:00:00 UTC
-   S: Server: Example RPP server v1.0
-   S: Content-Length: 424
-   S: Content-Type: application/rpp+json
-   S: Content-Language: en
-   S: RPP-code: 1000
-   S:
-   S: TODO
+   HTTP/2 200 OK
+   Date: Wed, 24 Jan 2024 12:00:00 UTC
+   Server: Example RPP server v1.0
+   Content-Length: 424
+   Content-Type: application/rpp+json
+   Content-Language: en
+   RPP-code: 1000
+
+   TODO
 
 9.4.2.1.  Object Filtering
 
@@ -824,12 +824,12 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
    Example Domain Info request, the response should only include
    delegated hosts:
 
-   C: GET /rpp/v1/domains/example.nl?filter=hosts&val=del HTTP/2
-   C: Host: rpp.example.nl
-   C: Authorization: Bearer <token>
-   C: Accept: application/rpp+json
-   C: Accept-Language: en
-   C: RPP-Cltrid: ABC-12345
+   GET /rpp/v1/domains/example.nl?filter=hosts&val=del HTTP/2
+   Host: rpp.example.nl
+   Authorization: Bearer <token>
+   Accept: application/rpp+json
+   Accept-Language: en
+   RPP-Cltrid: ABC-12345
 
 
 
@@ -837,7 +837,7 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
 
 
-Wullink & Kowalik       Expires 7 September 2025               [Page 15]
+Wullink & Kowalik       Expires 11 September 2025              [Page 15]
 
 Internet-Draft        RESTful Provisioning Protocol           March 2025
 
@@ -855,24 +855,24 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
    Example request:
 
-   C: GET /rpp/v1/messages HTTP/2
-   C: Host: rpp.example.nl
-   C: Authorization: Bearer <token>
-   C: Accept: application/rpp+json
-   C: Accept-Language: en
-   C: RPP-Cltrid: ABC-12345
+   GET /rpp/v1/messages HTTP/2
+   Host: rpp.example.nl
+   Authorization: Bearer <token>
+   Accept: application/rpp+json
+   Accept-Language: en
+   RPP-Cltrid: ABC-12345
 
    Example response:
 
-   S: HTTP/2 200 OK
-   S: Date: Wed, 24 Jan 2024 12:00:00 UTC
-   S: Server: Example RPP server v1.0
-   S: Content-Length: 312
-   S: Content-Type: application/rpp+json
-   S: Content-Language: en
-   S: RPP-code: 1301
-   S:
-   S: TODO
+   HTTP/2 200 OK
+   Date: Wed, 24 Jan 2024 12:00:00 UTC
+   Server: Example RPP server v1.0
+   Content-Length: 312
+   Content-Type: application/rpp+json
+   Content-Language: en
+   RPP-code: 1301
+
+   TODO
 
 9.4.3.2.  Poll Ack
 
@@ -893,31 +893,31 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
 
 
-Wullink & Kowalik       Expires 7 September 2025               [Page 16]
+Wullink & Kowalik       Expires 11 September 2025              [Page 16]
 
 Internet-Draft        RESTful Provisioning Protocol           March 2025
 
 
-   C: DELETE /rpp/v1/messages/12345 HTTP/2
-   C: Host: rpp.example.nl
-   C: Authorization: Bearer <token>
-   C: Accept: application/rpp+json
-   C: Accept-Language: en
-   C: RPP-Cltrid: ABC-12345
+   DELETE /rpp/v1/messages/12345 HTTP/2
+   Host: rpp.example.nl
+   Authorization: Bearer <token>
+   Accept: application/rpp+json
+   Accept-Language: en
+   RPP-Cltrid: ABC-12345
 
    Example response:
 
-   S: HTTP/2 200 OK
-   S: Date: Wed, 24 Jan 2024 12:00:00 UTC
-   S: Server: Example RPP server v1.0
-   S: Content-Language: en
-   S: RPP-code: 1000
-   S: RPP-Queue-Size: 0
-   S: RPP-Svtrid: XYZ-12345
-   S: RPP-Cltrid: ABC-12345
-   S: Content-Length: 145
-   S:
-   S: TODO
+   HTTP/2 200 OK
+   Date: Wed, 24 Jan 2024 12:00:00 UTC
+   Server: Example RPP server v1.0
+   Content-Language: en
+   RPP-code: 1000
+   RPP-Queue-Size: 0
+   RPP-Svtrid: XYZ-12345
+   RPP-Cltrid: ABC-12345
+   Content-Length: 145
+
+   TODO
 
 9.4.4.  Transfer Query
 
@@ -932,12 +932,12 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
    Example domain name Transfer Query request without authorization
    information required:
 
-   C: GET /rpp/v1/domains/example.nl/transfer HTTP/2
-   C: Host: rpp.example.nl
-   C: Authorization: Bearer <token>
-   C: Accept: application/rpp+json
-   C: Accept-Language: en
-   C: RPP-Cltrid: ABC-12345
+   GET /rpp/v1/domains/example.nl/transfer HTTP/2
+   Host: rpp.example.nl
+   Authorization: Bearer <token>
+   Accept: application/rpp+json
+   Accept-Language: en
+   RPP-Cltrid: ABC-12345
 
    If the requested object has associated authorization information that
    is not linked to another database object, then the HTTP GET method
@@ -949,18 +949,18 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
 
 
-Wullink & Kowalik       Expires 7 September 2025               [Page 17]
+Wullink & Kowalik       Expires 11 September 2025              [Page 17]
 
 Internet-Draft        RESTful Provisioning Protocol           March 2025
 
 
-   C: GET /rpp/v1/domains/example.nl/transfer HTTP/2
-   C: Host: rpp.example.nl
-   C: Authorization: Bearer <token>
-   C: Accept: application/rpp+json
-   C: Accept-Language: en
-   C: RPP-Cltrid: ABC-12345
-   C: RPP-AuthInfo: secret-token
+   GET /rpp/v1/domains/example.nl/transfer HTTP/2
+   Host: rpp.example.nl
+   Authorization: Bearer <token>
+   Accept: application/rpp+json
+   Accept-Language: en
+   RPP-Cltrid: ABC-12345
+   RPP-AuthInfo: secret-token
 
    If the requested object has associated authorization information
    linked to another database object, then the HTTP GET method MUST be
@@ -970,27 +970,26 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
    Example domain name Transfer Query request and authorization using
    RPP-AuthInfo and the RPP-Roid header:
 
-   C: GET /rpp/v1/domains/example.nl/transfer HTTP/2
-   C: Host: rpp.example.nl
-   C: Authorization: Bearer <token>
-   C: Accept: application/rpp+json
-   C: Accept-Language: en
-   C: RPP-AuthInfo: secret-token
-   C: RPP-Roid: REG-XYZ-12345
-   C: Content-Length: 0
-   C:
+   GET /rpp/v1/domains/example.nl/transfer HTTP/2
+   Host: rpp.example.nl
+   Authorization: Bearer <token>
+   Accept: application/rpp+json
+   Accept-Language: en
+   RPP-AuthInfo: secret-token
+   RPP-Roid: REG-XYZ-12345
+   Content-Length: 0
 
    Example Transfer Query response:
 
-   S: HTTP/2 200 OK
-   S: Date: Wed, 24 Jan 2024 12:00:00 UTC
-   S: Server: Example RPP server v1.0
-   S: Content-Length: 230
-   S: Content-Type: application/rpp+json
-   S: Content-Language: en
-   S: RPP-code: 1000
-   S:
-   S: TODO
+   HTTP/2 200 OK
+   Date: Wed, 24 Jan 2024 12:00:00 UTC
+   Server: Example RPP server v1.0
+   Content-Length: 230
+   Content-Type: application/rpp+json
+   Content-Language: en
+   RPP-code: 1000
+
+   TODO
 
 9.5.  Transform Resources
 
@@ -1005,7 +1004,8 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
 
 
-Wullink & Kowalik       Expires 7 September 2025               [Page 18]
+
+Wullink & Kowalik       Expires 11 September 2025              [Page 18]
 
 Internet-Draft        RESTful Provisioning Protocol           March 2025
 
@@ -1018,28 +1018,28 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
    Example Domain Create request:
 
-   C: POST /rpp/v1/domains HTTP/2
-   C: Host: rpp.example.nl
-   C: Authorization: Bearer <token>
-   C: Accept: application/rpp+json
-   C: Content-Type: application/rpp+json
-   C: Accept-Language: en
-   C: Content-Length: 220
-   C:
-   S: TODO
+   POST /rpp/v1/domains HTTP/2
+   Host: rpp.example.nl
+   Authorization: Bearer <token>
+   Accept: application/rpp+json
+   Content-Type: application/rpp+json
+   Accept-Language: en
+   Content-Length: 220
+
+   TODO
 
    Example Domain Create response:
 
-   S: HTTP/2 200
-   S: Date: Wed, 24 Jan 2024 12:00:00 UTC
-   S: Server: Example RPP server v1.0
-   S: Content-Language: en
-   S: Content-Length: 642
-   S: Content-Type: application/rpp+json
-   S: Location: https://rpp.example.nl/rpp/v1/domains/example.nl
-   S: RPP-code: 1000
-   S:
-   S: TODO
+   HTTP/2 200
+   Date: Wed, 24 Jan 2024 12:00:00 UTC
+   Server: Example RPP server v1.0
+   Content-Language: en
+   Content-Length: 642
+   Content-Type: application/rpp+json
+   Location: https://rpp.example.nl/rpp/v1/domains/example.nl
+   RPP-code: 1000
+
+   TODO
 
 9.5.2.  Delete
 
@@ -1061,29 +1061,29 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
 
 
-Wullink & Kowalik       Expires 7 September 2025               [Page 19]
+Wullink & Kowalik       Expires 11 September 2025              [Page 19]
 
 Internet-Draft        RESTful Provisioning Protocol           March 2025
 
 
-   C: DELETE /rpp/v1/domains/example.nl HTTP/2
-   C: Host: rpp.example.nl
-   C: Authorization: Bearer <token>
-   C: Accept: application/rpp+json
-   C: Accept-Language: en
-   C: RPP-Cltrid: ABC-12345
+   DELETE /rpp/v1/domains/example.nl HTTP/2
+   Host: rpp.example.nl
+   Authorization: Bearer <token>
+   Accept: application/rpp+json
+   Accept-Language: en
+   RPP-Cltrid: ABC-12345
 
    Example Domain Delete response:
 
-   S: HTTP/2 200 OK
-   S: Date: Wed, 24 Jan 2024 12:00:00 UTC
-   S: Server: Example RPP server v1.0
-   S: Content-Length: 80
-   S: RPP-Svtrid: XYZ-12345
-   S: RPP-Cltrid: ABC-12345
-   S: RPP-code: 1000
-   S:
-   S: TODO
+   HTTP/2 200 OK
+   Date: Wed, 24 Jan 2024 12:00:00 UTC
+   Server: Example RPP server v1.0
+   Content-Length: 80
+   RPP-Svtrid: XYZ-12345
+   RPP-Cltrid: ABC-12345
+   RPP-code: 1000
+
+   TODO
 
 9.5.3.  Renew
 
@@ -1100,14 +1100,13 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
    Example Domain Renew request:
 
-C: POST /rpp/v1/domains/example.nl/renewal?current-date=2024-01-01 HTTP/2
-C: Host: rpp.example.nl
-C: Authorization: Bearer <token>
-C: Accept: application/rpp+json
-C: Content-Type: application/rpp+json
-C: Accept-Language: en
-C: Content-Length: 0
-C:
+  POST /rpp/v1/domains/example.nl/renewal?current-date=2024-01-01 HTTP/2
+  Host: rpp.example.nl
+  Authorization: Bearer <token>
+  Accept: application/rpp+json
+  Content-Type: application/rpp+json
+  Accept-Language: en
+  Content-Length: 0
 
    Example Domain Renew request, using 1 year period:
 
@@ -1117,32 +1116,32 @@ C:
 
 
 
-Wullink & Kowalik       Expires 7 September 2025               [Page 20]
+
+Wullink & Kowalik       Expires 11 September 2025              [Page 20]
 
 Internet-Draft        RESTful Provisioning Protocol           March 2025
 
 
-C: POST /rpp/v1/domains/example.nl/renewal?current-date=2024-01-01?unit=y&value=1 HTTP/2
-C: Host: rpp.example.nl
-C: Authorization: Bearer <token>
-C: Accept: application/rpp+json
-C: Content-Type: application/rpp+json
-C: Accept-Language: en
-C: Content-Length: 0
-C:
+POST /rpp/v1/domains/example.nl/renewal?current-date=2024-01-01?unit=y&value=1 HTTP/2
+Host: rpp.example.nl
+Authorization: Bearer <token>
+Accept: application/rpp+json
+Content-Type: application/rpp+json
+Accept-Language: en
+Content-Length: 0
 
    Example Renew response:
 
-   S: HTTP/2 200 OK
-   S: Date: Wed, 24 Jan 2024 12:00:00 UTC
-   S: Server: Example RPP server v1.0
-   S: Content-Language: en
-   S: Content-Length: 205
-   S: Location: https://rpp.example.nl/rpp/v1/domains/example.nl
-   S: Content-Type: application/rpp+json
-   S: RPP-code: 1000
-   S:
-   S: TODO
+   HTTP/2 200 OK
+   Date: Wed, 24 Jan 2024 12:00:00 UTC
+   Server: Example RPP server v1.0
+   Content-Language: en
+   Content-Length: 205
+   Location: https://rpp.example.nl/rpp/v1/domains/example.nl
+   Content-Type: application/rpp+json
+   RPP-code: 1000
+
+   TODO
 
 9.5.4.  Transfer
 
@@ -1170,96 +1169,94 @@ C:
    If the transfer request is successful, then the response MUST include
    the Location header for the object being transferred.
 
+   Example request not using object authorization:
 
 
 
-Wullink & Kowalik       Expires 7 September 2025               [Page 21]
+Wullink & Kowalik       Expires 11 September 2025              [Page 21]
 
 Internet-Draft        RESTful Provisioning Protocol           March 2025
 
 
-   Example request not using object authorization:
-
-   C: POST /rpp/v1/domains/example.nl/transfer HTTP/2
-   C: Host: rpp.example.nl
-   C: Authorization: Bearer <token>
-   C: Accept: application/rpp+json
-   C: Accept-Language: en
-   C: RPP-Cltrid: ABC-12345
-   C: Content-Length: 0
+   POST /rpp/v1/domains/example.nl/transfer HTTP/2
+   Host: rpp.example.nl
+   Authorization: Bearer <token>
+   Accept: application/rpp+json
+   Accept-Language: en
+   RPP-Cltrid: ABC-12345
+   Content-Length: 0
 
    Example request using object authorization:
 
-   C: POST /rpp/v1/domains/example.nl/transfer HTTP/2
-   C: Host: rpp.example.nl
-   C: Authorization: Bearer <token>
-   C: Accept: application/rpp+json
-   C: RPP-Cltrid: ABC-12345
-   C: RPP-AuthInfo: secret-token
-   C: Accept-Language: en
-   C: Content-Length: 0
+   POST /rpp/v1/domains/example.nl/transfer HTTP/2
+   Host: rpp.example.nl
+   Authorization: Bearer <token>
+   Accept: application/rpp+json
+   RPP-Cltrid: ABC-12345
+   RPP-AuthInfo: secret-token
+   Accept-Language: en
+   Content-Length: 0
 
    Example request using 1 year renewal period, using the unit and value
    query parameters:
 
-   C: POST /rpp/v1/domains/example.nl/transfer?unit=y&value=1 HTTP/2
-   C: Host: rpp.example.nl
-   C: Authorization: Bearer <token>
-   C: Accept: application/rpp+json
-   C: Accept-Language: en
-   C: RPP-Cltrid: ABC-12345
-   C: Content-Length: 0
+   POST /rpp/v1/domains/example.nl/transfer?unit=y&value=1 HTTP/2
+   Host: rpp.example.nl
+   Authorization: Bearer <token>
+   Accept: application/rpp+json
+   Accept-Language: en
+   RPP-Cltrid: ABC-12345
+   Content-Length: 0
 
    Example Transfer response:
 
-  S: HTTP/2 200 OK
-  S: Date: Wed, 24 Jan 2024 12:00:00 UTC
-  S: Server: Example RPP server v1.0
-  S: Content-Language: en
-  S: Content-Length: 328
-  S: Content-Type: application/rpp+json
-  S: Location: https://rpp.example.nl/rpp/v1/domains/example.nl/transfer
-  S: RPP-code: 1001
-  S:
-  S: TODO
+   HTTP/2 200 OK
+   Date: Wed, 24 Jan 2024 12:00:00 UTC
+   Server: Example RPP server v1.0
+   Content-Language: en
+   Content-Length: 328
+   Content-Type: application/rpp+json
+   Location: https://rpp.example.nl/rpp/v1/domains/example.nl/transfer
+   RPP-code: 1001
+
+   TODO
 
 9.5.4.2.  Cancel
 
    -  Request: DELETE /{collection}/{id}/transfer
+   -  Request message: Optional
+   -  Response message: Status
 
 
 
-Wullink & Kowalik       Expires 7 September 2025               [Page 22]
+Wullink & Kowalik       Expires 11 September 2025              [Page 22]
 
 Internet-Draft        RESTful Provisioning Protocol           March 2025
 
-
-   -  Request message: Optional
-   -  Response message: Status
 
    The new sponsoring client MUST use the HTTP DELETE method to cancel a
    requested transfer.
 
    Example request:
 
-   C: DELETE /rpp/v1/domains/example.nl/transfer HTTP/2
-   C: Host: rpp.example.nl
-   C: Authorization: Bearer <token>
-   C: Accept: application/rpp+json
-   C: Accept-Language: en
-   C: RPP-Cltrid: ABC-12345
+   DELETE /rpp/v1/domains/example.nl/transfer HTTP/2
+   Host: rpp.example.nl
+   Authorization: Bearer <token>
+   Accept: application/rpp+json
+   Accept-Language: en
+   RPP-Cltrid: ABC-12345
 
    Example response:
 
-   S: HTTP/2 200 OK
-   S: Date: Wed, 24 Jan 2024 12:00:00 UTC
-   S: Server: Example RPP server v1.0
-   S: Content-Length: 80
-   S: RPP-Svtrid: XYZ-12345
-   S: RPP-Cltrid: ABC-12345
-   S: RPP-code: 1000
-   S:
-   S: TODO
+   HTTP/2 200 OK
+   Date: Wed, 24 Jan 2024 12:00:00 UTC
+   Server: Example RPP server v1.0
+   Content-Length: 80
+   RPP-Svtrid: XYZ-12345
+   RPP-Cltrid: ABC-12345
+   RPP-code: 1000
+
+   TODO
 
 9.5.4.3.  Reject
 
@@ -1272,12 +1269,12 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
    Example request:
 
-   C: DELETE /rpp/v1/domains/example.nl/transfers/latest HTTP/2
-   C: Host: rpp.example.nl
-   C: Authorization: Bearer <token>
-   C: Accept: application/rpp+json
-   C: Accept-Language: en
-   C: RPP-Cltrid: ABC-12345
+   DELETE /rpp/v1/domains/example.nl/transfers/latest HTTP/2
+   Host: rpp.example.nl
+   Authorization: Bearer <token>
+   Accept: application/rpp+json
+   Accept-Language: en
+   RPP-Cltrid: ABC-12345
 
    Example Reject response:
 
@@ -1285,20 +1282,23 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
 
 
-Wullink & Kowalik       Expires 7 September 2025               [Page 23]
+
+
+
+Wullink & Kowalik       Expires 11 September 2025              [Page 23]
 
 Internet-Draft        RESTful Provisioning Protocol           March 2025
 
 
-   S: HTTP/2 200 OK
-   S: Date: Wed, 24 Jan 2024 12:00:00 UTC
-   S: Server: Example RPP server v1.0
-   S: Content-Length: 80
-   S: RPP-Svtrid: XYZ-12345
-   S: RPP-Cltrid: ABC-12345
-   S: RPP-code: 1000
-   S:
-   S: TODO
+   HTTP/2 200 OK
+   Date: Wed, 24 Jan 2024 12:00:00 UTC
+   Server: Example RPP server v1.0
+   Content-Length: 80
+   RPP-Svtrid: XYZ-12345
+   RPP-Cltrid: ABC-12345
+   RPP-code: 1000
+
+   TODO
 
 9.5.4.4.  Approve
 
@@ -1311,25 +1311,25 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
    Example Approve request:
 
-   C: PUT /rpp/v1/domains/example.nl/transfer HTTP/2
-   C: Host: rpp.example.nl
-   C: Authorization: Bearer <token>
-   C: Accept: application/rpp+json
-   C: Accept-Language: en
-   C: RPP-Cltrid: ABC-12345
-   C: Content-Length: 0
+   PUT /rpp/v1/domains/example.nl/transfer HTTP/2
+   Host: rpp.example.nl
+   Authorization: Bearer <token>
+   Accept: application/rpp+json
+   Accept-Language: en
+   RPP-Cltrid: ABC-12345
+   Content-Length: 0
 
    Example Approve response:
 
-   S: HTTP/2 200 OK
-   S: Date: Wed, 24 Jan 2024 12:00:00 UTC
-   S: Server: Example RPP server v1.0
-   S: Content-Length: 80
-   S: RPP-Svtrid: XYZ-12345
-   S: RPP-Cltrid: ABC-12345
-   S: RPP-code: 1000
-   S:
-   S: TODO
+   HTTP/2 200 OK
+   Date: Wed, 24 Jan 2024 12:00:00 UTC
+   Server: Example RPP server v1.0
+   Content-Length: 80
+   RPP-Svtrid: XYZ-12345
+   RPP-Cltrid: ABC-12345
+   RPP-code: 1000
+
+   TODO
 
 9.5.5.  Update
 
@@ -1341,7 +1341,7 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
 
 
-Wullink & Kowalik       Expires 7 September 2025               [Page 24]
+Wullink & Kowalik       Expires 11 September 2025              [Page 24]
 
 Internet-Draft        RESTful Provisioning Protocol           March 2025
 
@@ -1356,27 +1356,27 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
    Example request:
 
-   C: PATCH /rpp/v1/domains/example.nl HTTP/2
-   C: Host: rpp.example.nl
-   C: Authorization: Bearer <token>
-   C: Accept: application/rpp+json
-   C: Content-Type: application/rpp+json
-   C: Accept-Language: en
-   C: Content-Length: 252
-   C:
-   S: TODO
+   PATCH /rpp/v1/domains/example.nl HTTP/2
+   Host: rpp.example.nl
+   Authorization: Bearer <token>
+   Accept: application/rpp+json
+   Content-Type: application/rpp+json
+   Accept-Language: en
+   Content-Length: 252
+
+   TODO
 
    Example response:
 
-   S: HTTP/2 200 OK
-   S: Date: Wed, 24 Jan 2024 12:00:00 UTC
-   S: Server: Example RPP server v1.0
-   S: Content-Length: 80
-   S: RPP-Svtrid: XYZ-12345
-   S: RPP-Cltrid: ABC-12345
-   S: RPP-code: 1000
-   S:
-   S: TODO
+   HTTP/2 200 OK
+   Date: Wed, 24 Jan 2024 12:00:00 UTC
+   Server: Example RPP server v1.0
+   Content-Length: 80
+   RPP-Svtrid: XYZ-12345
+   RPP-Cltrid: ABC-12345
+   RPP-code: 1000
+
+   TODO
 
 9.6.  Extension Framework
 
@@ -1397,7 +1397,7 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
 
 
-Wullink & Kowalik       Expires 7 September 2025               [Page 25]
+Wullink & Kowalik       Expires 11 September 2025              [Page 25]
 
 Internet-Draft        RESTful Provisioning Protocol           March 2025
 
@@ -1416,25 +1416,25 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
    -  Request message: Optional
    -  Response message: Optional error response
 
-   C: DELETE /rpp/v1/extensions/domains/example.nl/deletion HTTP/2
-   C: Host: rpp.example.nl
-   C: Authorization: Bearer <token>
-   C: Accept: application/rpp+json
-   C: Accept-Language: en
-   C: RPP-Cltrid: ABC-12345
+   DELETE /rpp/v1/extensions/domains/example.nl/deletion HTTP/2
+   Host: rpp.example.nl
+   Authorization: Bearer <token>
+   Accept: application/rpp+json
+   Accept-Language: en
+   RPP-Cltrid: ABC-12345
 
    Example response:
 
-   S: HTTP/2 200 OK
-   S: Date: Wed, 24 Jan 2024 12:00:00 UTC
-   S: Server: Example RPP server v1.0
-   S: Content-Language: en
-   S: Content-Length: 0
-   S: RPP-Svtrid: XYZ-12345
-   S: RPP-Cltrid: ABC-12345
-   S: RPP-code: 1000
-   S:
-   S: TODO
+   HTTP/2 200 OK
+   Date: Wed, 24 Jan 2024 12:00:00 UTC
+   Server: Example RPP server v1.0
+   Content-Language: en
+   Content-Length: 0
+   RPP-Svtrid: XYZ-12345
+   RPP-Cltrid: ABC-12345
+   RPP-code: 1000
+
+   TODO
 
 9.6.2.  Object Extension
 
@@ -1453,7 +1453,7 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
 
 
-Wullink & Kowalik       Expires 7 September 2025               [Page 26]
+Wullink & Kowalik       Expires 11 September 2025              [Page 26]
 
 Internet-Draft        RESTful Provisioning Protocol           March 2025
 
@@ -1464,29 +1464,29 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
    Example request:
 
-   C: POST /rpp/v1/ips HTTP/2
-   C: Host: rpp.example.nl
-   C: Authorization: Bearer <token>
-   C: Accept: application/rpp+json
-   C: Accept-Language: en
-   C: RPP-Cltrid: ABC-12345
-   C: Content-Type: application/rpp+json
-   C: Content-Length: 220
-   C:
-   S: TODO
+   POST /rpp/v1/ips HTTP/2
+   Host: rpp.example.nl
+   Authorization: Bearer <token>
+   Accept: application/rpp+json
+   Accept-Language: en
+   RPP-Cltrid: ABC-12345
+   Content-Type: application/rpp+json
+   Content-Length: 220
+
+   TODO
 
    Example response:
 
-   S: HTTP/2 200 OK
-   S: Date: Wed, 24 Jan 2024 12:00:00 UTC
-   S: Server: Example RPP server v1.0
-   S: Content-Language: en
-   S: Content-Length: 642
-   S: Content-Type: application/rpp+json
-   S: Location: https://rpp.example.nl/rpp/v1/ips/192.0.2.1
-   S: RPP-code: 1000
-   S:
-   S: TODO
+   HTTP/2 200 OK
+   Date: Wed, 24 Jan 2024 12:00:00 UTC
+   Server: Example RPP server v1.0
+   Content-Language: en
+   Content-Length: 642
+   Content-Type: application/rpp+json
+   Location: https://rpp.example.nl/rpp/v1/ips/192.0.2.1
+   RPP-code: 1000
+
+   TODO
 
 9.6.3.  Command-Response Extension
 
@@ -1509,7 +1509,7 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
 
 
-Wullink & Kowalik       Expires 7 September 2025               [Page 27]
+Wullink & Kowalik       Expires 11 September 2025              [Page 27]
 
 Internet-Draft        RESTful Provisioning Protocol           March 2025
 
@@ -1565,7 +1565,7 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
 
 
-Wullink & Kowalik       Expires 7 September 2025               [Page 28]
+Wullink & Kowalik       Expires 11 September 2025              [Page 28]
 
 Internet-Draft        RESTful Provisioning Protocol           March 2025
 
@@ -1621,7 +1621,7 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
 
 
-Wullink & Kowalik       Expires 7 September 2025               [Page 29]
+Wullink & Kowalik       Expires 11 September 2025              [Page 29]
 
 Internet-Draft        RESTful Provisioning Protocol           March 2025
 
@@ -1677,4 +1677,4 @@ Authors' Addresses
 
 
 
-Wullink & Kowalik       Expires 7 September 2025               [Page 30]
+Wullink & Kowalik       Expires 11 September 2025              [Page 30]
