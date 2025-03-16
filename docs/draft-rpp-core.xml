@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- name="GENERATOR" content="github.com/mmarkdown/mmark Mmark Markdown Processor - mmark.miek.nl" -->
-<rfc version="3" ipr="trust200902" docName="draft-rpp-core-01" submissionType="IETF" category="std" xml:lang="en" xmlns:xi="http://www.w3.org/2001/XInclude" indexInclude="true" tocDepth="4">
+<rfc version="3" ipr="trust200902" docName="draft-rpp-core-00" submissionType="IETF" category="std" xml:lang="en" xmlns:xi="http://www.w3.org/2001/XInclude" indexInclude="true" tocDepth="4">
 
 <front>
-<title abbrev="RESTful Provisioning Protocol">RESTful Provisioning Protocol (RPP)</title><seriesInfo value="draft-rpp-core-01" stream="IETF" status="standard" name="Internet-Draft"></seriesInfo>
+<title abbrev="RESTful Provisioning Protocol">RESTful Provisioning Protocol (RPP)</title><seriesInfo value="draft-rpp-core-00" stream="IETF" status="standard" name="Internet-Draft"></seriesInfo>
 <author initials="M." surname="Wullink" fullname="Maarten Wullink"><organization>SIDN Labs</organization><address><postal><street></street>
 </postal><email>maarten.wullink@sidn.nl</email>
 <uri>https://sidn.nl/</uri>
@@ -194,30 +194,6 @@ The client and server MUST support server-driven content negotiation and related
 </name>
 <tbody>
 <tr>
-<td>Hello</td>
-<td>OPTIONS</td>
-<td>/</td>
-<td>No</td>
-<td>Yes</td>
-</tr>
-
-<tr>
-<td>Login</td>
-<td>N/A</td>
-<td>N/A</td>
-<td>N/A</td>
-<td>N/A</td>
-</tr>
-
-<tr>
-<td>Logout</td>
-<td>N/A</td>
-<td>N/A</td>
-<td>N/A</td>
-<td>N/A</td>
-</tr>
-
-<tr>
 <td>Check</td>
 <td>HEAD</td>
 <td>/{c}/{i}</td>
@@ -330,49 +306,6 @@ The client and server MUST support server-driven content negotiation and related
 </tr>
 </tbody>
 </table><t>[1] This mapping is used as a placeholder for future extensions</t>
-
-<section anchor="hello"><name>Hello</name>
-<t><strong>TODO:</strong> rename &quot;Hello&quot; and make it a new command for retrieving server details, such as supported extensions?</t>
-
-<ul spacing="compact">
-<li>Request: OPTIONS /</li>
-<li>Request message: None</li>
-<li>Response message: Greeting response</li>
-</ul>
-<t>The API version value used in the Hello response MUST match the version value used for the <tt>{version}</tt> path segment in the URL used for the Hello request.</t>
-<t>Example request:</t>
-
-<artwork><![CDATA[OPTIONS /rpp/v1/ HTTP/2
-Host: rpp.example.nl
-Authorization: Bearer <token>
-Accept: application/rpp+json
-Accept-Language: en
-Connection: keep-alive
-
-]]>
-</artwork>
-<t>Example response:</t>
-
-<artwork><![CDATA[HTTP/2 200 OK
-Date: Wed, 24 Jan 2024 12:00:00 UTC
-Server: Example RPP server v1.0
-Content-Length: 799
-Content-Type: application/rpp+json
-Content-Language: en
-
-TODO
-]]>
-</artwork>
-</section>
-
-<section anchor="login"><name>Login</name>
-<t>RPP is stateless and MUST NOT maintain any client state and does not include a Login command. The client MUST include all information in a RPP request, required for the server to be able to properly process the request.</t>
-<t>TODO</t>
-</section>
-
-<section anchor="logout"><name>Logout</name>
-<t>TODO</t>
-</section>
 
 <section anchor="query-resources"><name>Query Resources</name>
 <t>A RPP client MAY use the HTTP GET method for executing a query command only when no request data has to be added to the HTTP message body. Sending content using an HTTP GET request is discouraged in <xref target="RFC9110"></xref>, there exists no generally defined semantics for content received in a GET request. When an RPP object requires additional information, the client MUST use the HTTP POST method and add the query command content to the HTTP message body.</t>

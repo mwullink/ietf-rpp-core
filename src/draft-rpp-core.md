@@ -9,7 +9,7 @@ TocDepth = 4
 
 [seriesInfo]
 name = "Internet-Draft"
-value = "draft-rpp-core-01"
+value = "draft-rpp-core-00"
 stream = "IETF"
 status = "standard"
 
@@ -224,9 +224,6 @@ A RPP command contains 4 distinct elements.
 Command            | Method   | Resource                  | Request     | Response
 
 -------------------|----------|---------------------------|-------------|-----------------
-Hello              | OPTIONS  | /                         | No          | Yes
-Login              | N/A      | N/A                       | N/A         | N/A
-Logout             | N/A      | N/A                       | N/A         | N/A
 Check              | HEAD     | /{c}/{i}                  | No          | No
 Info               | GET      | /{c}/{i}                  | Optional    | Yes
 Poll Request       | GET      | /messages                 | No          | Yes
@@ -244,51 +241,6 @@ Extension [1]      | *        | /{c}/{i}/extension/*      | *           | *
 Table: RPP Commands
 
 [1] This mapping is used as a placeholder for future extensions 
-
-## Hello
-
-**TODO:** rename "Hello" and make it a new command for retrieving server details, such as supported extensions? 
-
-- Request: OPTIONS /
-- Request message: None
-- Response message: Greeting response
-
-The API version value used in the Hello response MUST match the version value used for the `{version}` path segment in the URL used for the Hello request.
-
-Example request:
-
-```
-OPTIONS /rpp/v1/ HTTP/2
-Host: rpp.example.nl
-Authorization: Bearer <token>
-Accept: application/rpp+json
-Accept-Language: en
-Connection: keep-alive
-
-```
-
-Example response:
-
-```
-HTTP/2 200 OK
-Date: Wed, 24 Jan 2024 12:00:00 UTC
-Server: Example RPP server v1.0
-Content-Length: 799
-Content-Type: application/rpp+json
-Content-Language: en
-
-TODO
-```
-
-##  Login
-
-RPP is stateless and MUST NOT maintain any client state and does not include a Login command. The client MUST include all information in a RPP request, required for the server to be able to properly process the request.
-
-TODO
-
-##  Logout
-
-TODO
 
 ## Query Resources
 

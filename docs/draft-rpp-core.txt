@@ -5,12 +5,12 @@
 Network Working Group                                         M. Wullink
 Internet-Draft                                                 SIDN Labs
 Intended status: Standards Track                              P. Kowalik
-Expires: 11 September 2025                                         DENIC
-                                                           10 March 2025
+Expires: 17 September 2025                                         DENIC
+                                                           16 March 2025
 
 
                   RESTful Provisioning Protocol (RPP)
-                           draft-rpp-core-01
+                           draft-rpp-core-00
 
 Abstract
 
@@ -32,7 +32,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 11 September 2025.
+   This Internet-Draft will expire on 17 September 2025.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Wullink & Kowalik       Expires 11 September 2025               [Page 1]
+Wullink & Kowalik       Expires 17 September 2025               [Page 1]
 
 Internet-Draft        RESTful Provisioning Protocol           March 2025
 
@@ -73,43 +73,43 @@ Table of Contents
      8.3.  Response  . . . . . . . . . . . . . . . . . . . . . . . .   8
      8.4.  Error Handling  . . . . . . . . . . . . . . . . . . . . .   9
    9.  Commands  . . . . . . . . . . . . . . . . . . . . . . . . . .   9
-     9.1.  Hello . . . . . . . . . . . . . . . . . . . . . . . . . .  12
-     9.2.  Login . . . . . . . . . . . . . . . . . . . . . . . . . .  12
-     9.3.  Logout  . . . . . . . . . . . . . . . . . . . . . . . . .  12
-     9.4.  Query Resources . . . . . . . . . . . . . . . . . . . . .  13
-       9.4.1.  Check . . . . . . . . . . . . . . . . . . . . . . . .  13
-       9.4.2.  Info  . . . . . . . . . . . . . . . . . . . . . . . .  14
-         9.4.2.1.  Object Filtering  . . . . . . . . . . . . . . . .  15
-       9.4.3.  Poll  . . . . . . . . . . . . . . . . . . . . . . . .  16
-         9.4.3.1.  Poll Request  . . . . . . . . . . . . . . . . . .  16
-         9.4.3.2.  Poll Ack  . . . . . . . . . . . . . . . . . . . .  16
-       9.4.4.  Transfer Query  . . . . . . . . . . . . . . . . . . .  17
-     9.5.  Transform Resources . . . . . . . . . . . . . . . . . . .  18
-       9.5.1.  Create  . . . . . . . . . . . . . . . . . . . . . . .  18
-       9.5.2.  Delete  . . . . . . . . . . . . . . . . . . . . . . .  19
-       9.5.3.  Renew . . . . . . . . . . . . . . . . . . . . . . . .  20
-       9.5.4.  Transfer  . . . . . . . . . . . . . . . . . . . . . .  21
-         9.5.4.1.  Request . . . . . . . . . . . . . . . . . . . . .  21
-         9.5.4.2.  Cancel  . . . . . . . . . . . . . . . . . . . . .  22
-         9.5.4.3.  Reject  . . . . . . . . . . . . . . . . . . . . .  23
-         9.5.4.4.  Approve . . . . . . . . . . . . . . . . . . . . .  24
-       9.5.5.  Update  . . . . . . . . . . . . . . . . . . . . . . .  24
-     9.6.  Extension Framework . . . . . . . . . . . . . . . . . . .  25
-       9.6.1.  Protocol Extension  . . . . . . . . . . . . . . . . .  25
-       9.6.2.  Object Extension  . . . . . . . . . . . . . . . . . .  26
-       9.6.3.  Command-Response Extension  . . . . . . . . . . . . .  27
-   10. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  27
-   11. Internationalization Considerations . . . . . . . . . . . . .  27
-   12. Security Considerations . . . . . . . . . . . . . . . . . . .  27
-   13. Normative References  . . . . . . . . . . . . . . . . . . . .  28
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  30
+     9.1.  Query Resources . . . . . . . . . . . . . . . . . . . . .  11
+       9.1.1.  Check . . . . . . . . . . . . . . . . . . . . . . . .  12
+       9.1.2.  Info  . . . . . . . . . . . . . . . . . . . . . . . .  13
+         9.1.2.1.  Object Filtering  . . . . . . . . . . . . . . . .  14
+       9.1.3.  Poll  . . . . . . . . . . . . . . . . . . . . . . . .  15
+         9.1.3.1.  Poll Request  . . . . . . . . . . . . . . . . . .  15
+         9.1.3.2.  Poll Ack  . . . . . . . . . . . . . . . . . . . .  15
+       9.1.4.  Transfer Query  . . . . . . . . . . . . . . . . . . .  16
+     9.2.  Transform Resources . . . . . . . . . . . . . . . . . . .  17
+       9.2.1.  Create  . . . . . . . . . . . . . . . . . . . . . . .  17
+       9.2.2.  Delete  . . . . . . . . . . . . . . . . . . . . . . .  18
+       9.2.3.  Renew . . . . . . . . . . . . . . . . . . . . . . . .  19
+       9.2.4.  Transfer  . . . . . . . . . . . . . . . . . . . . . .  20
+         9.2.4.1.  Request . . . . . . . . . . . . . . . . . . . . .  20
+         9.2.4.2.  Cancel  . . . . . . . . . . . . . . . . . . . . .  21
+         9.2.4.3.  Reject  . . . . . . . . . . . . . . . . . . . . .  22
+         9.2.4.4.  Approve . . . . . . . . . . . . . . . . . . . . .  23
+       9.2.5.  Update  . . . . . . . . . . . . . . . . . . . . . . .  23
+     9.3.  Extension Framework . . . . . . . . . . . . . . . . . . .  24
+       9.3.1.  Protocol Extension  . . . . . . . . . . . . . . . . .  24
+       9.3.2.  Object Extension  . . . . . . . . . . . . . . . . . .  25
+       9.3.3.  Command-Response Extension  . . . . . . . . . . . . .  26
+   10. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  26
+   11. Internationalization Considerations . . . . . . . . . . . . .  26
+   12. Security Considerations . . . . . . . . . . . . . . . . . . .  26
+   13. Normative References  . . . . . . . . . . . . . . . . . . . .  27
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  29
 
 
 
 
 
 
-Wullink & Kowalik       Expires 11 September 2025               [Page 2]
+
+
+
+Wullink & Kowalik       Expires 17 September 2025               [Page 2]
 
 Internet-Draft        RESTful Provisioning Protocol           March 2025
 
@@ -165,7 +165,7 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
 
 
-Wullink & Kowalik       Expires 11 September 2025               [Page 3]
+Wullink & Kowalik       Expires 17 September 2025               [Page 3]
 
 Internet-Draft        RESTful Provisioning Protocol           March 2025
 
@@ -221,7 +221,7 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
 
 
-Wullink & Kowalik       Expires 11 September 2025               [Page 4]
+Wullink & Kowalik       Expires 17 September 2025               [Page 4]
 
 Internet-Draft        RESTful Provisioning Protocol           March 2025
 
@@ -277,7 +277,7 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
 
 
-Wullink & Kowalik       Expires 11 September 2025               [Page 5]
+Wullink & Kowalik       Expires 17 September 2025               [Page 5]
 
 Internet-Draft        RESTful Provisioning Protocol           March 2025
 
@@ -333,7 +333,7 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
 
 
-Wullink & Kowalik       Expires 11 September 2025               [Page 6]
+Wullink & Kowalik       Expires 17 September 2025               [Page 6]
 
 Internet-Draft        RESTful Provisioning Protocol           March 2025
 
@@ -389,7 +389,7 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
 
 
-Wullink & Kowalik       Expires 11 September 2025               [Page 7]
+Wullink & Kowalik       Expires 17 September 2025               [Page 7]
 
 Internet-Draft        RESTful Provisioning Protocol           March 2025
 
@@ -445,7 +445,7 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
 
 
-Wullink & Kowalik       Expires 11 September 2025               [Page 8]
+Wullink & Kowalik       Expires 17 September 2025               [Page 8]
 
 Internet-Draft        RESTful Provisioning Protocol           March 2025
 
@@ -501,7 +501,7 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
 
 
-Wullink & Kowalik       Expires 11 September 2025               [Page 9]
+Wullink & Kowalik       Expires 17 September 2025               [Page 9]
 
 Internet-Draft        RESTful Provisioning Protocol           March 2025
 
@@ -557,124 +557,52 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
 
 
-Wullink & Kowalik       Expires 11 September 2025              [Page 10]
+Wullink & Kowalik       Expires 17 September 2025              [Page 10]
 
 Internet-Draft        RESTful Provisioning Protocol           March 2025
 
 
-    +--------------+---------+----------------------+----------+-----+
-    | Hello        | OPTIONS | /                    | No       | Yes |
-    +--------------+---------+----------------------+----------+-----+
-    | Login        | N/A     | N/A                  | N/A      | N/A |
-    +--------------+---------+----------------------+----------+-----+
-    | Logout       | N/A     | N/A                  | N/A      | N/A |
-    +--------------+---------+----------------------+----------+-----+
-    | Check        | HEAD    | /{c}/{i}             | No       | No  |
-    +--------------+---------+----------------------+----------+-----+
-    | Info         | GET     | /{c}/{i}             | Optional | Yes |
-    +--------------+---------+----------------------+----------+-----+
-    | Poll Request | GET     | /messages            | No       | Yes |
-    +--------------+---------+----------------------+----------+-----+
-    | Poll Ack     | DELETE  | /messages/{i}        | No       | Yes |
-    +--------------+---------+----------------------+----------+-----+
-    | Create       | POST    | /{c}                 | Yes      | Yes |
-    +--------------+---------+----------------------+----------+-----+
-    | Delete       | DELETE  | /{c}/{i}             | Optional | Yes |
-    +--------------+---------+----------------------+----------+-----+
-    | Renew        | POST    | /{c}/{i}/renewal     | Optional | Yes |
-    +--------------+---------+----------------------+----------+-----+
-    | Transfer     | POST    | /{c}/{i}/transfer    | Optional | Yes |
-    | Request      |         |                      |          |     |
-    +--------------+---------+----------------------+----------+-----+
-    | Transfer     | GET     | /{c}/{i}/transfer    | Optional | Yes |
-    | Query        |         |                      |          |     |
-    +--------------+---------+----------------------+----------+-----+
-    | Transfer     | DELETE  | /{c}/{i}/transfer    | Optional | Yes |
-    | Cancel       |         |                      |          |     |
-    +--------------+---------+----------------------+----------+-----+
-    | Transfer     | PUT     | /{c}/{i}/transfer    | Optional | Yes |
-    | Approve      |         |                      |          |     |
-    +--------------+---------+----------------------+----------+-----+
-    | Transfer     | DELETE  | /{c}/{i}/transfer    | Optional | Yes |
-    | Reject       |         |                      |          |     |
-    +--------------+---------+----------------------+----------+-----+
-    | Update       | PATCH   | /{c}/{i}             | Yes      | Yes |
-    +--------------+---------+----------------------+----------+-----+
-    | Extension    | *       | /{c}/{i}/extension/* | *        | *   |
-    | [1]          |         |                      |          |     |
-    +--------------+---------+----------------------+----------+-----+
+   +------------------+--------+----------------------+----------+-----+
+   | Check            | HEAD   | /{c}/{i}             | No       | No  |
+   +------------------+--------+----------------------+----------+-----+
+   | Info             | GET    | /{c}/{i}             | Optional | Yes |
+   +------------------+--------+----------------------+----------+-----+
+   | Poll Request     | GET    | /messages            | No       | Yes |
+   +------------------+--------+----------------------+----------+-----+
+   | Poll Ack         | DELETE | /messages/{i}        | No       | Yes |
+   +------------------+--------+----------------------+----------+-----+
+   | Create           | POST   | /{c}                 | Yes      | Yes |
+   +------------------+--------+----------------------+----------+-----+
+   | Delete           | DELETE | /{c}/{i}             | Optional | Yes |
+   +------------------+--------+----------------------+----------+-----+
+   | Renew            | POST   | /{c}/{i}/renewal     | Optional | Yes |
+   +------------------+--------+----------------------+----------+-----+
+   | Transfer         | POST   | /{c}/{i}/transfer    | Optional | Yes |
+   | Request          |        |                      |          |     |
+   +------------------+--------+----------------------+----------+-----+
+   | Transfer         | GET    | /{c}/{i}/transfer    | Optional | Yes |
+   | Query            |        |                      |          |     |
+   +------------------+--------+----------------------+----------+-----+
+   | Transfer         | DELETE | /{c}/{i}/transfer    | Optional | Yes |
+   | Cancel           |        |                      |          |     |
+   +------------------+--------+----------------------+----------+-----+
+   | Transfer         | PUT    | /{c}/{i}/transfer    | Optional | Yes |
+   | Approve          |        |                      |          |     |
+   +------------------+--------+----------------------+----------+-----+
+   | Transfer         | DELETE | /{c}/{i}/transfer    | Optional | Yes |
+   | Reject           |        |                      |          |     |
+   +------------------+--------+----------------------+----------+-----+
+   | Update           | PATCH  | /{c}/{i}             | Yes      | Yes |
+   +------------------+--------+----------------------+----------+-----+
+   | Extension        | *      | /{c}/{i}/extension/* | *        | *   |
+   | [1]              |        |                      |          |     |
+   +------------------+--------+----------------------+----------+-----+
 
-                          Table 1: RPP Commands
+                           Table 1: RPP Commands
 
    [1] This mapping is used as a placeholder for future extensions
 
-
-
-
-
-
-Wullink & Kowalik       Expires 11 September 2025              [Page 11]
-
-Internet-Draft        RESTful Provisioning Protocol           March 2025
-
-
-9.1.  Hello
-
-   *TODO:* rename "Hello" and make it a new command for retrieving
-   server details, such as supported extensions?
-
-   -  Request: OPTIONS /
-   -  Request message: None
-   -  Response message: Greeting response
-
-   The API version value used in the Hello response MUST match the
-   version value used for the {version} path segment in the URL used for
-   the Hello request.
-
-   Example request:
-
-   OPTIONS /rpp/v1/ HTTP/2
-   Host: rpp.example.nl
-   Authorization: Bearer <token>
-   Accept: application/rpp+json
-   Accept-Language: en
-   Connection: keep-alive
-
-   Example response:
-
-   HTTP/2 200 OK
-   Date: Wed, 24 Jan 2024 12:00:00 UTC
-   Server: Example RPP server v1.0
-   Content-Length: 799
-   Content-Type: application/rpp+json
-   Content-Language: en
-
-   TODO
-
-9.2.  Login
-
-   RPP is stateless and MUST NOT maintain any client state and does not
-   include a Login command.  The client MUST include all information in
-   a RPP request, required for the server to be able to properly process
-   the request.
-
-   TODO
-
-9.3.  Logout
-
-   TODO
-
-
-
-
-
-
-Wullink & Kowalik       Expires 11 September 2025              [Page 12]
-
-Internet-Draft        RESTful Provisioning Protocol           March 2025
-
-
-9.4.  Query Resources
+9.1.  Query Resources
 
    A RPP client MAY use the HTTP GET method for executing a query
    command only when no request data has to be added to the HTTP message
@@ -682,9 +610,17 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
    [RFC9110], there exists no generally defined semantics for content
    received in a GET request.  When an RPP object requires additional
    information, the client MUST use the HTTP POST method and add the
+
+
+
+Wullink & Kowalik       Expires 17 September 2025              [Page 11]
+
+Internet-Draft        RESTful Provisioning Protocol           March 2025
+
+
    query command content to the HTTP message body.
 
-9.4.1.  Check
+9.1.1.  Check
 
    -  Request: HEAD /{collection}/{id}
    -  Request message: None
@@ -725,12 +661,20 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
 
 
-Wullink & Kowalik       Expires 11 September 2025              [Page 13]
+
+
+
+
+
+
+
+
+Wullink & Kowalik       Expires 17 September 2025              [Page 12]
 
 Internet-Draft        RESTful Provisioning Protocol           March 2025
 
 
-9.4.2.  Info
+9.1.2.  Info
 
    The Object Info request MUST use the HTTP GET method on a resource
    identifying an object instance, using an empty message body.  If the
@@ -781,7 +725,7 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
 
 
-Wullink & Kowalik       Expires 11 September 2025              [Page 14]
+Wullink & Kowalik       Expires 17 September 2025              [Page 13]
 
 Internet-Draft        RESTful Provisioning Protocol           March 2025
 
@@ -796,7 +740,7 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
    TODO
 
-9.4.2.1.  Object Filtering
+9.1.2.1.  Object Filtering
 
    The server MUST support the use of the filter and val query
    parameters for the purpose of limiting the number of objects in a
@@ -837,14 +781,14 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
 
 
-Wullink & Kowalik       Expires 11 September 2025              [Page 15]
+Wullink & Kowalik       Expires 17 September 2025              [Page 14]
 
 Internet-Draft        RESTful Provisioning Protocol           March 2025
 
 
-9.4.3.  Poll
+9.1.3.  Poll
 
-9.4.3.1.  Poll Request
+9.1.3.1.  Poll Request
 
    -  Request: GET /messages
    -  Request message: None
@@ -874,7 +818,7 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
    TODO
 
-9.4.3.2.  Poll Ack
+9.1.3.2.  Poll Ack
 
    -  Request: DELETE /messages/{id}
    -  Request message: None
@@ -893,7 +837,7 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
 
 
-Wullink & Kowalik       Expires 11 September 2025              [Page 16]
+Wullink & Kowalik       Expires 17 September 2025              [Page 15]
 
 Internet-Draft        RESTful Provisioning Protocol           March 2025
 
@@ -919,7 +863,7 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
    TODO
 
-9.4.4.  Transfer Query
+9.1.4.  Transfer Query
 
    A transfer object may not exist, when no transfer has been initiated
    for the specified object.  The client MUST use the HTTP GET method
@@ -949,7 +893,7 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
 
 
-Wullink & Kowalik       Expires 11 September 2025              [Page 17]
+Wullink & Kowalik       Expires 17 September 2025              [Page 16]
 
 Internet-Draft        RESTful Provisioning Protocol           March 2025
 
@@ -991,9 +935,9 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
    TODO
 
-9.5.  Transform Resources
+9.2.  Transform Resources
 
-9.5.1.  Create
+9.2.1.  Create
 
    -  Request: POST /{collection}
    -  Request message: Object Create request
@@ -1005,7 +949,7 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
 
 
-Wullink & Kowalik       Expires 11 September 2025              [Page 18]
+Wullink & Kowalik       Expires 17 September 2025              [Page 17]
 
 Internet-Draft        RESTful Provisioning Protocol           March 2025
 
@@ -1041,7 +985,7 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
    TODO
 
-9.5.2.  Delete
+9.2.2.  Delete
 
    -  Request: DELETE /{collection}/{id}
    -  Request message: Optional
@@ -1061,7 +1005,7 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
 
 
-Wullink & Kowalik       Expires 11 September 2025              [Page 19]
+Wullink & Kowalik       Expires 17 September 2025              [Page 18]
 
 Internet-Draft        RESTful Provisioning Protocol           March 2025
 
@@ -1085,7 +1029,7 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
    TODO
 
-9.5.3.  Renew
+9.2.3.  Renew
 
    -  Request: POST /{collection}/{id}/renewal
    -  Request message: Optional
@@ -1117,7 +1061,7 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
 
 
-Wullink & Kowalik       Expires 11 September 2025              [Page 20]
+Wullink & Kowalik       Expires 17 September 2025              [Page 19]
 
 Internet-Draft        RESTful Provisioning Protocol           March 2025
 
@@ -1143,7 +1087,7 @@ Content-Length: 0
 
    TODO
 
-9.5.4.  Transfer
+9.2.4.  Transfer
 
    The Transfer command is mapped to a nested resource, named
    "transfer".  The semantics of the HTTP DELETE method are determined
@@ -1155,7 +1099,7 @@ Content-Length: 0
    *TODO:* allow for alternative more client friendly methods for
    transferring objects, maybe use interactive oauth2.0 flows?
 
-9.5.4.1.  Request
+9.2.4.1.  Request
 
    -  Request: POST /{collection}/{id}/transfer
    -  Request message: Optional
@@ -1173,7 +1117,7 @@ Content-Length: 0
 
 
 
-Wullink & Kowalik       Expires 11 September 2025              [Page 21]
+Wullink & Kowalik       Expires 17 September 2025              [Page 20]
 
 Internet-Draft        RESTful Provisioning Protocol           March 2025
 
@@ -1221,7 +1165,7 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
    TODO
 
-9.5.4.2.  Cancel
+9.2.4.2.  Cancel
 
    -  Request: DELETE /{collection}/{id}/transfer
    -  Request message: Optional
@@ -1229,7 +1173,7 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
 
 
-Wullink & Kowalik       Expires 11 September 2025              [Page 22]
+Wullink & Kowalik       Expires 17 September 2025              [Page 21]
 
 Internet-Draft        RESTful Provisioning Protocol           March 2025
 
@@ -1258,7 +1202,7 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
    TODO
 
-9.5.4.3.  Reject
+9.2.4.3.  Reject
 
    -  Request: DELETE /{collection}/{id}/transfer
    -  Request message: None
@@ -1285,7 +1229,7 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
 
 
-Wullink & Kowalik       Expires 11 September 2025              [Page 23]
+Wullink & Kowalik       Expires 17 September 2025              [Page 22]
 
 Internet-Draft        RESTful Provisioning Protocol           March 2025
 
@@ -1300,7 +1244,7 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
    TODO
 
-9.5.4.4.  Approve
+9.2.4.4.  Approve
 
    -  Request: PUT /{collection}/{id}/transfers/latest
    -  Request message: Optional
@@ -1331,7 +1275,7 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
    TODO
 
-9.5.5.  Update
+9.2.5.  Update
 
    -  Request: PATCH /{collection}/{id}
    -  Request message: Object Update message
@@ -1341,7 +1285,7 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
 
 
-Wullink & Kowalik       Expires 11 September 2025              [Page 24]
+Wullink & Kowalik       Expires 17 September 2025              [Page 23]
 
 Internet-Draft        RESTful Provisioning Protocol           March 2025
 
@@ -1378,11 +1322,11 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
    TODO
 
-9.6.  Extension Framework
+9.3.  Extension Framework
 
    TODO
 
-9.6.1.  Protocol Extension
+9.3.1.  Protocol Extension
 
    -  Request: * /extensions/*
    -  Request message: *
@@ -1397,7 +1341,7 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
 
 
-Wullink & Kowalik       Expires 11 September 2025              [Page 25]
+Wullink & Kowalik       Expires 17 September 2025              [Page 24]
 
 Internet-Draft        RESTful Provisioning Protocol           March 2025
 
@@ -1436,7 +1380,7 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
    TODO
 
-9.6.2.  Object Extension
+9.3.2.  Object Extension
 
    An Object extension is differs from the other 2 extension types in
    the way that an Object extension is implemented using a new Object
@@ -1453,7 +1397,7 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
 
 
-Wullink & Kowalik       Expires 11 September 2025              [Page 26]
+Wullink & Kowalik       Expires 17 September 2025              [Page 25]
 
 Internet-Draft        RESTful Provisioning Protocol           March 2025
 
@@ -1488,7 +1432,7 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
    TODO
 
-9.6.3.  Command-Response Extension
+9.3.3.  Command-Response Extension
 
    TODO
 
@@ -1509,7 +1453,7 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
 
 
-Wullink & Kowalik       Expires 11 September 2025              [Page 27]
+Wullink & Kowalik       Expires 17 September 2025              [Page 26]
 
 Internet-Draft        RESTful Provisioning Protocol           March 2025
 
@@ -1565,7 +1509,7 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
 
 
-Wullink & Kowalik       Expires 11 September 2025              [Page 28]
+Wullink & Kowalik       Expires 17 September 2025              [Page 27]
 
 Internet-Draft        RESTful Provisioning Protocol           March 2025
 
@@ -1621,7 +1565,7 @@ Internet-Draft        RESTful Provisioning Protocol           March 2025
 
 
 
-Wullink & Kowalik       Expires 11 September 2025              [Page 29]
+Wullink & Kowalik       Expires 17 September 2025              [Page 28]
 
 Internet-Draft        RESTful Provisioning Protocol           March 2025
 
@@ -1677,4 +1621,4 @@ Authors' Addresses
 
 
 
-Wullink & Kowalik       Expires 11 September 2025              [Page 30]
+Wullink & Kowalik       Expires 17 September 2025              [Page 29]
