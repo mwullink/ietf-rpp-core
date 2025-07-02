@@ -2,15 +2,15 @@
 
 This repository contains the IETF draft for the RESTful Provisioning Protocol.
 
-The [draft](https://github.com/SIDN/ietf-rpp-core/blob/main/src/draft-rpp-core.md) is authored using [mmark](https://mmark.miek.nl/) Markdown.
+The [draft](https://github.com/SIDN/ietf-rpp-core/blob/main/src/draft-wullink-rpp-core.md) is authored using [mmark](https://mmark.miek.nl/) Markdown.
 
 Contributions in the form of a Pull Request are welcome.
 
 For generated output see:   
-[Plaintext](https://sidn.github.io/ietf-rpp-core/draft-rpp-core.txt)  
-[HTML](https://sidn.github.io/ietf-rpp-core/draft-rpp-core.html)  
-[PDF](https://sidn.github.io/ietf-rpp-core/draft-rpp-core.pdf)  
-[XML](https://sidn.github.io/ietf-rpp-core/draft-rpp-core.xml)  
+[Plaintext](https://sidn.github.io/ietf-rpp-core/draft-wullink-rpp-core.txt)  
+[HTML](https://sidn.github.io/ietf-rpp-core/draft-wullink-rpp-core.html)  
+[PDF](https://sidn.github.io/ietf-rpp-core/draft-wullink-rpp-core.pdf)  
+[XML](https://sidn.github.io/ietf-rpp-core/draft-wullink-rpp-core.xml)  
 
 
 ## REST
