@@ -47,8 +47,7 @@ the client uses server-driven content negotiation. Allowing the client to select
 </section>
 
 <section anchor="request-headers"><name>Request Headers</name>
-<t>In contrast to EPP over TCP <xref target="RFC5734"></xref>, a RPP request does not always require a request message body. The information conveyed by the HTTP method, URL, and request headers may be sufficient for the server to be able to successfully processes a request for most commands. However, the client MUST include the request message in the HTTP request body when the server requires additional attributes to be present in the request message. The RPP HTTP headers listed below use the &quot;RPP-&quot; prefix, following the recommendations in <xref target="RFC6648"></xref>.</t>
-<t><strong>TODO:</strong> the non standard headers mentioned below are linked to EPP and may need to be removed or modified.</t>
+<t>A RPP request does not always require a request message body. The information conveyed by the HTTP method, URL, and request headers may be sufficient for the server to be able to successfully processes a request. However, the client MUST include a request message body when the server requires additional attributes to be present in the request message. The RPP HTTP headers listed below use the &quot;RPP-&quot; prefix, following the recommendations in <xref target="RFC6648"></xref>.</t>
 
 <ul>
 <li><t><tt>RPP-Cltrid</tt>:  The client transaction identifier is the equivalent of the <tt>clTRID</tt> element defined in <xref target="RFC5730"></xref> and MUST be used accordingly, when the HTTP message body does not contain an EPP request that includes a cltrid.</t>
@@ -57,36 +56,26 @@ the client uses server-driven content negotiation. Allowing the client to select
 </li>
 <li><t><tt>RPP-Roid</tt>: If the authorization info, is linked to a database object, the client MAY use this header for the Repository Object IDentifier (ROID), as described in <xref target="RFC5730" sectionFormat="of" section="4.2"></xref>.</t>
 </li>
-<li><t><tt>Accept-Language</tt>: The server MUST support the use of HTTP Accept-Language header by clients. The client MAY issue a Hello request to discover the languages supported by the server. Multiple servers in a load-balanced environment SHOULD reply with consistent &quot;lang&quot; elements in the Greeting response. The value of the Accept-Language header MUST match 1 of the languages from the Greeting. When the server receives a request using an unsupported language, the server MUST respond using the default language configured for the server.</t>
-</li>
 </ul>
 </section>
 
 <section anchor="response-headers"><name>Response Headers</name>
 <t>The server HTTP response contains a status code, headers, and MAY contain an RPP response message in the message body. HTTP headers are used to transmit additional data to the client and MAY be used to send RPP process related data to the client. HTTP headers used by RPP MUST use the &quot;RPP-&quot; prefix, the following response headers have been defined for RPP.</t>
-<t><strong>TODO:</strong> the non standard headers mentioned below are linked to EPP and may need to be removed.</t>
 
 <ul>
 <li><t><tt>RPP-Svtrid</tt>:  This header is the equivalent of the &quot;svTRID&quot; element defined in <xref target="RFC5730"></xref> and MUST be used accordingly when the RPP response does not contain an EPP response in the HTTP message body. If an HTTP message body with the EPP XML equivalent &quot;svTRID&quot; exists, both values MUST be consistent.</t>
 </li>
 <li><t><tt>RPP-Cltrid</tt>: This header is the equivalent of the &quot;clTRID&quot; element defined in <xref target="RFC5730"></xref> and MUST be used accordingly when the RPP response does not contain an EPP response in the HTTP message body. If the contents of the HTTP message body contains a &quot;clTRID&quot; value, then both values MUST be consistent.</t>
 </li>
-<li><t><tt>RPP-code</tt>: This header is the equivalent of the EPP result code defined in <xref target="RFC5730"></xref> and MUST be used accordingly. This header MUST be added to all responses, except for the Greeting, and MAY be used by the client for easy access to the EPP result code, without having to parse the content of the HTTP response message body.</t>
+<li><t><tt>RPP-Code</tt>: This header is the equivalent of the EPP result code defined in <xref target="RFC5730"></xref> and MUST be used accordingly. This header MUST be added to all responses, except for the Greeting, and MAY be used by the client for easy access to the EPP result code, without having to parse the HTTP response message body.</t>
 </li>
-<li><t><tt>RPP-Check-Avail</tt>: An alternative for the &quot;avail&quot; attribute of the object:name element in an Object Check response and MUST be used accordingly. The server does not return a HTTP message body in response to a RPP Object Check request.</t>
+<li><t><tt>RPP-EPP-Code</tt>: An optional that MAY be used when RPP is used as a frontend service for an EPP service. The header can be used by the client for easy access to the EPP result code, without having to parse the HTTP response message body.</t>
 </li>
-<li><t><tt>RPP-Queue-Size</tt>: Return the number of unacknowledged messages in the client message queue. The server MAY include this header in all RPP responses.
-</t>
+<li><t><tt>RPP-Check-Avail</tt>: An alternative for the &quot;avail&quot; attribute of the object:name element in an Object Check response and MUST be used accordingly. The server does not return a HTTP message body in response to a RPP Object Check (HEAD) request.</t>
 </li>
-<li><t><tt>Cache-Control</tt>:  The client MUST never cache results, the server MUST always return the value &quot;No-Store&quot; for this header, as described in <xref target="RFC7234" sectionFormat="of" section="5.2.1.5"></xref>.
-</t>
-</li>
-<li><t><tt>Content-Language</tt>: The server MUST include this header in every response that contains an EPP message in the message body.</t>
-</li>
-<li><t><tt>Content-Encoding</tt>: The server MAY choose to compress the responses message body, using an   algorithm selected from the list of algorithms provided by the client using the Accept-Encoding request header.</t>
+<li><t><tt>RPP-Queue-Size</tt>: Return the number of unacknowledged messages in the client message queue. The server MAY include this header in all RPP responses.</t>
 </li>
 </ul>
-<t>RPP does not always return an response in the HTTP message body. The <tt>Object Check</tt> request for example may return an empty HTTP response body. When the server does not return an EPP message, it MUST return at least the RPP-Svtrid, RPP-Cltrid and RPP-code headers.</t>
 </section>
 
 <section anchor="endpoints"><name>Endpoints</name>
@@ -497,14 +486,14 @@ TODO
 <section anchor="cancel"><name>Cancel</name>
 
 <ul spacing="compact">
-<li>Request: DELETE /{collection}/{id}/transfer</li>
+<li>Request: POST /{collection}/{id}/transfer/cancelation</li>
 <li>Request message: Optional</li>
 <li>Response message: Status</li>
 </ul>
-<t>The new sponsoring client MUST use the HTTP DELETE method to cancel a requested transfer.</t>
+<t>The new sponsoring client MUST use the HTTP POST method to cancel a requested transfer.</t>
 <t>Example request:</t>
 
-<sourcecode type="http"><![CDATA[DELETE /rpp/v1/domains/example.nl/transfer HTTP/2
+<sourcecode type="http"><![CDATA[POST /rpp/v1/domains/example.nl/transfer/cancelation HTTP/2
 Host: rpp.example.nl
 Authorization: Bearer <token>
 Accept: application/rpp+json
@@ -531,14 +520,14 @@ TODO
 <section anchor="reject"><name>Reject</name>
 
 <ul spacing="compact">
-<li>Request: DELETE /{collection}/{id}/transfer</li>
+<li>Request: POST /{collection}/{id}/transfer/rejection</li>
 <li>Request message:  None</li>
 <li>Response message: Status</li>
 </ul>
-<t>The currently sponsoring client of the object MUST use the HTTP DELETE method to reject a started transfer process.</t>
+<t>The currently sponsoring client of the object MUST use the HTTP POST method to reject a started transfer process.</t>
 <t>Example request:</t>
 
-<sourcecode type="http"><![CDATA[DELETE /rpp/v1/domains/example.nl/transfers/latest HTTP/2
+<sourcecode type="http"><![CDATA[POST /rpp/v1/domains/example.nl/transfer/rejection HTTP/2
 Host: rpp.example.nl
 Authorization: Bearer <token>
 Accept: application/rpp+json
@@ -566,14 +555,14 @@ TODO
 <section anchor="approve"><name>Approve</name>
 
 <ul spacing="compact">
-<li>Request: PUT /{collection}/{id}/transfers/latest</li>
+<li>Request: POST /{collection}/{id}/transfer/approval</li>
 <li>Request message: Optional</li>
 <li>Response message: Status</li>
 </ul>
-<t>The currently sponsoring client MUST use the HTTP PUT method to approve a transfer requested by the new sponsoring client.</t>
+<t>The currently sponsoring client MUST use the HTTP POST method to approve a transfer requested by the new sponsoring client.</t>
 <t>Example Approve request:</t>
 
-<sourcecode type="http"><![CDATA[PUT /rpp/v1/domains/example.nl/transfer HTTP/2
+<sourcecode type="http"><![CDATA[POST /rpp/v1/domains/example.nl/transfer/approval HTTP/2
 Host: rpp.example.nl
 Authorization: Bearer <token>
 Accept: application/rpp+json
@@ -660,6 +649,15 @@ TODO
 <section anchor="version-00-to-01"><name>Version 00 to 01</name>
 
 <ul spacing="compact">
+<li>Updated &quot;Request Headers&quot; and &quot;Response Headers&quot; section</li>
+<li>Changed transfer resource URL and HTTP method for reject, approve and cancel, in order to make the API easier to use</li>
+</ul>
+</section>
+
+<section anchor="version-00-draft-rpp-core-to-00-draft-wullink-rpp-core"><name>Version 00 (draft-rpp-core) to 00 (draft-wullink-rpp-core)</name>
+
+<ul spacing="compact">
+<li>Renamed the document name to &quot;draft-wullink-rpp-core&quot;</li>
 <li>Removed sections: Design Considerations, Resource Naming Convention, Session Management, HTTP Layer, Content Negotiation, Object Filtering, Error Handling</li>
 <li>Renamed Commands section to Endpoints</li>
 <li>Removed text about extensions</li>
@@ -691,7 +689,6 @@ TODO
 <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.5733.xml"/>
 <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.5734.xml"/>
 <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.6648.xml"/>
-<xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.7234.xml"/>
 <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.7519.xml"/>
 <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.7617.xml"/>
 <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.8259.xml"/>

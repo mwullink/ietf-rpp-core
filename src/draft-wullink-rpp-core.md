@@ -78,9 +78,7 @@ All example requests assume a RPP server using HTTP version 2 is listening on th
 
 # Request Headers
 
-In contrast to EPP over TCP [@!RFC5734], a RPP request does not always require a request message body. The information conveyed by the HTTP method, URL, and request headers may be sufficient for the server to be able to successfully processes a request for most commands. However, the client MUST include the request message in the HTTP request body when the server requires additional attributes to be present in the request message. The RPP HTTP headers listed below use the "RPP-" prefix, following the recommendations in [@!RFC6648].
-
-**TODO:** the non standard headers mentioned below are linked to EPP and may need to be removed or modified.
+A RPP request does not always require a request message body. The information conveyed by the HTTP method, URL, and request headers may be sufficient for the server to be able to successfully processes a request. However, the client MUST include a request message body when the server requires additional attributes to be present in the request message. The RPP HTTP headers listed below use the "RPP-" prefix, following the recommendations in [@!RFC6648].
 
 - `RPP-Cltrid`:  The client transaction identifier is the equivalent of the `clTRID` element defined in [@!RFC5730] and MUST be used accordingly, when the HTTP message body does not contain an EPP request that includes a cltrid.
 
@@ -88,33 +86,21 @@ In contrast to EPP over TCP [@!RFC5734], a RPP request does not always require a
 
 - `RPP-Roid`: If the authorization info, is linked to a database object, the client MAY use this header for the Repository Object IDentifier (ROID), as described in [@!RFC5730, section 4.2].
 
-- `Accept-Language`: The server MUST support the use of HTTP Accept-Language header by clients. The client MAY issue a Hello request to discover the languages supported by the server. Multiple servers in a load-balanced environment SHOULD reply with consistent "lang" elements in the Greeting response. The value of the Accept-Language header MUST match 1 of the languages from the Greeting. When the server receives a request using an unsupported language, the server MUST respond using the default language configured for the server.
-
 # Response Headers
 
 The server HTTP response contains a status code, headers, and MAY contain an RPP response message in the message body. HTTP headers are used to transmit additional data to the client and MAY be used to send RPP process related data to the client. HTTP headers used by RPP MUST use the "RPP-" prefix, the following response headers have been defined for RPP.
-
-**TODO:** the non standard headers mentioned below are linked to EPP and may need to be removed.
 
 - `RPP-Svtrid`:  This header is the equivalent of the "svTRID" element defined in [@!RFC5730] and MUST be used accordingly when the RPP response does not contain an EPP response in the HTTP message body. If an HTTP message body with the EPP XML equivalent "svTRID" exists, both values MUST be consistent.
 
 - `RPP-Cltrid`: This header is the equivalent of the "clTRID" element defined in [@!RFC5730] and MUST be used accordingly when the RPP response does not contain an EPP response in the HTTP message body. If the contents of the HTTP message body contains a "clTRID" value, then both values MUST be consistent.
   
-- `RPP-code`: This header is the equivalent of the EPP result code defined in [@!RFC5730] and MUST be used accordingly. This header MUST be added to all responses, except for the Greeting, and MAY be used by the client for easy access to the EPP result code, without having to parse the content of the HTTP response message body.
+- `RPP-Code`: This header is the equivalent of the EPP result code defined in [@!RFC5730] and MUST be used accordingly. This header MUST be added to all responses, except for the Greeting, and MAY be used by the client for easy access to the EPP result code, without having to parse the HTTP response message body.
 
-- `RPP-Check-Avail`: An alternative for the "avail" attribute of the object:name element in an Object Check response and MUST be used accordingly. The server does not return a HTTP message body in response to a RPP Object Check request.
+- `RPP-EPP-Code`: An optional that MAY be used when RPP is used as a frontend service for an EPP service. The header can be used by the client for easy access to the EPP result code, without having to parse the HTTP response message body.
+
+- `RPP-Check-Avail`: An alternative for the "avail" attribute of the object:name element in an Object Check response and MUST be used accordingly. The server does not return a HTTP message body in response to a RPP Object Check (HEAD) request.
 
 - `RPP-Queue-Size`: Return the number of unacknowledged messages in the client message queue. The server MAY include this header in all RPP responses.
-    <!--TODO ISSUE 40: return queue size for all results-->   
-
-- `Cache-Control`:  The client MUST never cache results, the server MUST always return the value "No-Store" for this header, as described in [@!RFC7234, section 5.2.1.5].
-   <!--TODO ISSUE 10: How to handle caching -->   
-
-- `Content-Language`: The server MUST include this header in every response that contains an EPP message in the message body.
-
-- `Content-Encoding`: The server MAY choose to compress the responses message body, using an   algorithm selected from the list of algorithms provided by the client using the Accept-Encoding request header.
-
-RPP does not always return an response in the HTTP message body. The `Object Check` request for example may return an empty HTTP response body. When the server does not return an EPP message, it MUST return at least the RPP-Svtrid, RPP-Cltrid and RPP-code headers.
 
 # Endpoints
 
@@ -539,16 +525,16 @@ TODO
 
 ### Cancel
 
-- Request: DELETE /{collection}/{id}/transfer
+- Request: POST /{collection}/{id}/transfer/cancelation
 - Request message: Optional
 - Response message: Status
 
-The new sponsoring client MUST use the HTTP DELETE method to cancel a requested transfer. 
+The new sponsoring client MUST use the HTTP POST method to cancel a requested transfer.
 
 Example request:
 
 ```http
-DELETE /rpp/v1/domains/example.nl/transfer HTTP/2
+POST /rpp/v1/domains/example.nl/transfer/cancelation HTTP/2
 Host: rpp.example.nl
 Authorization: Bearer <token>
 Accept: application/rpp+json
@@ -573,16 +559,16 @@ TODO
 
 ### Reject
 
-- Request: DELETE /{collection}/{id}/transfer
+- Request: POST /{collection}/{id}/transfer/rejection
 - Request message:  None
 - Response message: Status
 
-The currently sponsoring client of the object MUST use the HTTP DELETE method to reject a started transfer process.
+The currently sponsoring client of the object MUST use the HTTP POST method to reject a started transfer process.
 
 Example request:
 
 ```http
-DELETE /rpp/v1/domains/example.nl/transfers/latest HTTP/2
+POST /rpp/v1/domains/example.nl/transfer/rejection HTTP/2
 Host: rpp.example.nl
 Authorization: Bearer <token>
 Accept: application/rpp+json
@@ -608,16 +594,16 @@ TODO
 
 ### Approve
 
-- Request: PUT /{collection}/{id}/transfers/latest
+- Request: POST /{collection}/{id}/transfer/approval
 - Request message: Optional
 - Response message: Status
 
-The currently sponsoring client MUST use the HTTP PUT method to approve a transfer requested by the new sponsoring client.
+The currently sponsoring client MUST use the HTTP POST method to approve a transfer requested by the new sponsoring client.
 
 Example Approve request:
 
 ```http
-PUT /rpp/v1/domains/example.nl/transfer HTTP/2
+POST /rpp/v1/domains/example.nl/transfer/approval HTTP/2
 Host: rpp.example.nl
 Authorization: Bearer <token>
 Accept: application/rpp+json
@@ -703,6 +689,12 @@ Due to the stateless nature of RPP, the client MUST include the authentication c
 
 ## Version 00 to 01
 
+- Updated "Request Headers" and "Response Headers" section
+- Changed transfer resource URL and HTTP method for reject, approve and cancel, in order to make the API easier to use
+
+## Version 00 (draft-rpp-core) to 00 (draft-wullink-rpp-core)
+
+- Renamed the document name to "draft-wullink-rpp-core"
 - Removed sections: Design Considerations, Resource Naming Convention, Session Management, HTTP Layer, Content Negotiation, Object Filtering, Error Handling
 - Renamed Commands section to Endpoints
 - Removed text about extensions
