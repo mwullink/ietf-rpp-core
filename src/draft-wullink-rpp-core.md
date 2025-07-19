@@ -82,9 +82,7 @@ A RPP request does not always require a request message body. The information co
 
 - `RPP-Cltrid`:  The client transaction identifier is the equivalent of the `clTRID` element defined in [@!RFC5730] and MUST be used accordingly, when the HTTP message body does not contain an EPP request that includes a cltrid.
 
-- `RPP-AuthInfo`: The client MAY use this header for sending basic token-based authorization information, as described in [@!RFC5731, section 2.6] and [@!RFC5733, section 2.8]. If the authorization is linked to a contact object then the client MUST also include the RPP-Roid header.
-
-- `RPP-Roid`: If the authorization info, is linked to a database object, the client MAY use this header for the Repository Object IDentifier (ROID), as described in [@!RFC5730, section 4.2].
+- `RPP-Authorization`: The client MAY use this header to send authorization information in the format `<method> <authorization information>`, similar to the HTTP `Authorization` header. The `<method>` indicates the type of authorization being used. For the `eppauthcode` method, the authorization information MUST use a semicolon-separated key/value format: `AuthInfo=<AuthInfo>; Roid=<Roid>`, where `AuthInfo` is REQUIRED and `Roid` is OPTIONAL unless required by the context (as described in [@!RFC5731], [@!RFC5733], and [@!RFC5730]). For other methods, the authorization information format is method-specific and may not use key/value pairs unless otherwise specified.
 
 # Response Headers
 
