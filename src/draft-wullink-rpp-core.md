@@ -64,7 +64,7 @@ URL - A Uniform Resource Locator as defined in [@!RFC3986].
 
 Resource - An object having a type, data, and possible relationship to other resources, identified by a URL.
 
-RPP client - An HTTP user agent performing an RPP request 
+RPP client - An HTTP user agent performing an RPP request
 
 RPP server - An HTTP server responsible for processing requests and returning results in any supported media type.
 
@@ -81,7 +81,6 @@ All example requests assume a RPP server using HTTP version 2 is listening on th
 A RPP request does not always require a request message body. The information conveyed by the HTTP method, URL, and request headers may be sufficient for the server to be able to successfully processes a request. However, the client MUST include a request message body when the server requires additional attributes to be present in the request message. The RPP HTTP headers listed below use the "RPP-" prefix, following the recommendations in [@!RFC6648].
 
 - `RPP-Cltrid`:  The client transaction identifier is the equivalent of the `clTRID` element defined in [@!RFC5730] and MUST be used accordingly, when the HTTP message body does not contain an EPP request that includes a cltrid.
-
 - `RPP-Authorization`: The client MAY use this header to send authorization information in the format `<method> <authorization information>`, similar to the HTTP `Authorization` header. The `<method>` indicates the type of authorization being used. For the `eppauthcode` method, the authorization information MUST use a semicolon-separated key/value format: `AuthInfo=<AuthInfo>; Roid=<Roid>`, where `AuthInfo` is REQUIRED and `Roid` is OPTIONAL unless required by the context (as described in [@!RFC5731], [@!RFC5733], and [@!RFC5730]). For other methods, the authorization information format is method-specific and may not use key/value pairs unless otherwise specified.
 
 # Response Headers
@@ -89,16 +88,44 @@ A RPP request does not always require a request message body. The information co
 The server HTTP response contains a status code, headers, and MAY contain an RPP response message in the message body. HTTP headers are used to transmit additional data to the client and MAY be used to send RPP process related data to the client. HTTP headers used by RPP MUST use the "RPP-" prefix, the following response headers have been defined for RPP.
 
 - `RPP-Svtrid`:  This header is the equivalent of the "svTRID" element defined in [@!RFC5730] and MUST be used accordingly when the RPP response does not contain an EPP response in the HTTP message body. If an HTTP message body with the EPP XML equivalent "svTRID" exists, both values MUST be consistent.
-
 - `RPP-Cltrid`: This header is the equivalent of the "clTRID" element defined in [@!RFC5730] and MUST be used accordingly when the RPP response does not contain an EPP response in the HTTP message body. If the contents of the HTTP message body contains a "clTRID" value, then both values MUST be consistent.
-  
 - `RPP-Code`: This header is the equivalent of the EPP result code defined in [@!RFC5730] and MUST be used accordingly. This header MUST be added to all responses, except for the Greeting, and MAY be used by the client for easy access to the EPP result code, without having to parse the HTTP response message body.
-
 - `RPP-EPP-Code`: An optional that MAY be used when RPP is used as a frontend service for an EPP service. The header can be used by the client for easy access to the EPP result code, without having to parse the HTTP response message body.
-
 - `RPP-Check-Avail`: An alternative for the "avail" attribute of the object:name element in an Object Check response and MUST be used accordingly. The server does not return a HTTP message body in response to a RPP Object Check (HEAD) request.
-
 - `RPP-Queue-Size`: Return the number of unacknowledged messages in the client message queue. The server MAY include this header in all RPP responses.
+
+# Error handling and relation between HTTP status codes and RPP codes
+
+RESTful EPP leverages standard HTTP status codes to reflect the outcome of EPP operations. This allows clients to handle responses generically using common HTTP patterns. While the HTTP status code provides the primary, high-level outcome, the specific EPP result code MUST still be provided in the `RPP-Code` HTTP header for detailed diagnostics.
+
+The mapping strategy is to use the most specific HTTP code that accurately reflects the operation's result.
+
+For common and well-defined outcomes, a specific HTTP status code is used. For example, an attempt to access a non-existent resource (EPP code 2302) MUST return 404 Not Found, and an attempt to create a resource that already exists (EPP code 2303) MUST return 409 Conflict. This allows a client to handle these common situations based on the HTTP code alone.
+
+For all other failures, a generic HTTP status code is used. Client-side errors (e.g., syntax, parameter, or policy violations) MUST return 400 Bad Request. Server-side failures MUST return 500 Internal Server Error.
+
+MUST return status information related to the HTTP protocol, following the mapping rules in Table 1.
+
+
+Table 1: EPP result code and HTTP Status-Code mapping.
+
+| HTTP Status-Code | Description | Corresponding EPP Result Code(s) |
+| ---------------- | ----------- | -------------------------------- |
+| Success (2xx)    |             |                                  |
+| 200 OK | The request was successful (e.g., for GET or UPDATE). | 1000 (in all cases not specified otherwise),1300,1301 |
+| 201 Created | The resource was created successfully. | 1000 for resource creating requests (POST/PUT) |
+| 202 Accepted | The request was accepted for asynchronous processing. | 1001 |
+| 204 No Content | The resource was deleted successfully. | 1000 for DELETE |
+| Client Errors (4xx) |   |   |
+| 400 Bad Request | Generic client-side error (syntax, parameters, policy). | 2000-2005,2104-2106,2300-2301,2304-2308 |
+| 401 Unauthorized | Authentication or authorization failed. | 2200-2202 |
+| 404 Not Found | The requested resource does not exist. | 2303 |
+| 409 Conflict | The resource could not be created because it already exists. | 2302 |
+| Server Errors (5xx) |   |   |
+| 500 Internal Server Error | Generic server-side error; command failed. | 2400 |
+| 501 Not Implemented | The requested command or feature is not implemented. | 2100-2103 |
+
+Some EPP codes, like 1500, 2500, 2501 and 2502 are related to session management and therefore not applicable to a sessionless RPP protocoll.
 
 # Endpoints
 
@@ -152,7 +179,7 @@ The Object Info request MUST use the HTTP GET method on a resource identifying a
 - Request message: Optional
 - Response message: Info response
 
-Example request for an object not using authorization information.  
+Example request for an object not using authorization information.
 
 ```http
 GET /rpp/v1/domains/example.nl HTTP/2
@@ -164,7 +191,7 @@ RPP-Cltrid: ABC-12345
 
 ```
 
-Example request using RPP-AuthInfo and RPP-Roid headers for an object that has attached authorization information.  
+Example request using RPP-AuthInfo and RPP-Roid headers for an object that has attached authorization information.
 
 ```http
 GET /rpp/v1/domains/example.nl HTTP/2
@@ -234,7 +261,7 @@ TODO
 - Request message: None
 - Response message: Poll Ack response
 
-The client MUST use the HTTP DELETE method to acknowledge receipt of a message from the queue. The "msgID" attribute of a received RPP Poll message MUST be included in the message resource URL, using the {id} path element. The server MUST use RPP headers to return the RPP result code and the number of messages left in the queue. The server MUST NOT add content to the HTTP message body of a successful response, the server may add content to the message body of an error response. 
+The client MUST use the HTTP DELETE method to acknowledge receipt of a message from the queue. The "msgID" attribute of a received RPP Poll message MUST be included in the message resource URL, using the {id} path element. The server MUST use RPP headers to return the RPP result code and the number of messages left in the queue. The server MUST NOT add content to the HTTP message body of a successful response, the server may add content to the message body of an error response.
 
 Example request:
 
