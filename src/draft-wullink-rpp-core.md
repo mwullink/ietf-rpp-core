@@ -96,8 +96,6 @@ The server HTTP response contains a status code, headers, and MAY contain an RPP
 
 For the EPP codes related to session management (1500, 2500, 2501 and 2502) there are no corresponding RPP codes.
 
-- `RPP-Check-Avail`: An alternative for the "avail" attribute of the object:name element in an Object Check response and MUST be used accordingly. The server does not return a HTTP message body in response to a RPP Object Check (HEAD) request.
-
 - `RPP-Queue-Size`: Return the number of unacknowledged messages in the client message queue. The server MAY include this header in all RPP responses.
 
 # Endpoints
@@ -109,17 +107,27 @@ subsequent sections provide details for each endpoint. URLs are assumed to be us
 
 A RPP client MAY use the HTTP GET method for executing informational request only when no request data has to be added to the HTTP message body. Sending content using an HTTP GET request is discouraged in [@!RFC9110], there exists no generally defined semantics for content received in a GET request. When an RPP object requires additional information, the client MUST use the HTTP POST method and add the query command content to the HTTP message body.
 
-## Check for Existence
+## Availability for Creation
 
-- Request: HEAD /{collection}/{id}
+The Availability for Creation endpoint is used to check whether an object can be successfully provisioned. Two distinct methods are defined for checking the availability of provisioning of an object, the first method uses the HEAD method for a quick check to find out if the object can be provisioned. The second method uses the GET method to retrieve additional information about the object's availability for provisioning, for example about pricing or additional requirements to be able to provision the requested object.
+
+When the client uses the HTTP HEAD method, the server MUST respond with an HTTP status code 200 (OK) if the object can be provisioned or with an HTTP status code 404 (Not Found) if the object cannot be provisioned.
+
+When the client uses the HTTP GET method, the server MUST respond with an HTTP status code 200 (OK) if the object can be provisioned. The server MUST include a message body containing more detailed availability information, for example about pricing or additional requirements to be able to provision the requested object. The message body MAY be and empty JSON object if no additional information is applicable.
+
+If the object cannot be provisioned then the server MUST return an HTTP status code 404 (Not Found) and include a problem statement in the message body.
+
+As an extension point the server MAY define and the client MAY use additional HTTP query parameters to further specify the check operation or the kind of response information that shall be returned. For example Registry Fee Extension [@RFC8748] defines a possibility to request certain currency, only certain commands or periods. Such functionality would add query parameters, which could be used with GET request to receive additional pricing information with the response. HEAD request would not be affected in this case.
+
+The server MUST respond with the same HTTP status code if the same URL is requested with HEAD and with GET.
+
+```
+- Request: HEAD|GET /{collection}/{id}/availability
 - Request message: None
-- Response message: None
+- Response message: Optional availability response
+```
 
- The HTTP HEAD method MUST be used for object existence check. The response MUST contain the `RPP-Check-Avail` header. The value of the `RPP-Check-Avail` header MUST be false or true, depending on whether the object can be provisioned.
-
-The Check endpoint MUST be limited to checking only a single object-id per request, to allow the server to effiently load balance requests.
-
-Example request for a domain name:
+Example request for a domain name that is not available for provisioning:
 
 ```http
 HEAD /rpp/v1/domains/example.nl HTTP/2
@@ -133,13 +141,12 @@ RPP-Cltrid: ABC-12345
 Example response:
 
 ```http
-HTTP/2 200 OK
+HTTP/2 404 Not Found
 Date: Wed, 24 Jan 2024 12:00:00 UTC
 Server: Example RPP server v1.0
 RPP-Cltrid: ABC-12345
 RPP-Svtrid: XYZ-12345
-RPP-Check-Avail: false
-RPP-Code: 1000
+RPP-result-code: 1000
 Content-Length: 0
 
 ```
