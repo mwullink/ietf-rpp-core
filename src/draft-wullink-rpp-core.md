@@ -118,23 +118,23 @@ The server MUST return HTTP status codes, following the mapping rules in Table 1
 
 Table 1: RPP result code and HTTP Status-Code mapping.
 
-| HTTP Status-Code | Description | Corresponding EPP Result Code(s) |
+| HTTP Status-Code | Description | Corresponding RPP result code(s) |
 | ---------------- | ----------- | -------------------------------- |
 | Success (2xx)    |             |                                  |
-| 200 OK | The request was successful (e.g., for GET or UPDATE). | 1000 (in all cases not specified otherwise),1300,1301 |
-| 201 Created | The resource was created successfully. | 1000 for resource creating requests (POST/PUT) |
-| 202 Accepted | The request was accepted for asynchronous processing. | 1001 |
-| 204 No Content | The resource was deleted successfully. | 1000 for DELETE |
+| 200 OK | The request was successful (e.g., for GET or UPDATE). | 01000 (in all cases not specified otherwise),01300,01301 |
+| 201 Created | The resource was created successfully. | 01000 for resource creating requests (POST/PUT) |
+| 202 Accepted | The request was accepted for asynchronous processing. | 01001 |
+| 204 No Content | The resource was deleted successfully. | 01000 for DELETE |
 | Client Errors (4xx) |   |   |
-| 400 Bad Request | Generic client-side error (syntax, parameters, policy). | 2000-2005,2104-2106,2300-2301,2304-2308 |
-| 403 Forbidden | Authentication or authorization failed. | 2200-2202 |
-| 404 Not Found | The requested resource does not exist. | 2303 |
-| 409 Conflict | The resource could not be created because it already exists. | 2302 |
+| 400 Bad Request | Generic client-side error (syntax, parameters, policy). | 02000-02005,02104-02106,02300-02301,02304-02308 |
+| 403 Forbidden | Authentication or authorization failed. | 02200-02202 |
+| 404 Not Found | The requested resource does not exist. | 02303 |
+| 409 Conflict | The resource could not be created because it already exists. | 02302 |
 | Server Errors (5xx) |   |   |
-| 500 Internal Server Error | Generic server-side error; command failed. | 2400 |
-| 501 Not Implemented | The requested command or feature is not implemented. | 2100-2103 |
+| 500 Internal Server Error | Generic server-side error; command failed. | 02400 |
+| 501 Not Implemented | The requested command or feature is not implemented. | 02100-02103 |
 
-Some EPP result codes, like 1500, 2500, 2501 and 2502 are related to session management and therefore not applicable to a sessionless RPP protocol.
+Some EPP result codes, like 01500, 02500, 02501 and 02502 are related to session management and therefore not applicable to a sessionless RPP protocol.
 
 # Endpoints
 
@@ -184,7 +184,7 @@ Date: Wed, 24 Jan 2024 12:00:00 UTC
 Server: Example RPP server v1.0
 RPP-Cltrid: ABC-12345
 RPP-Svtrid: XYZ-12345
-RPP-result-code: 1000
+RPP-code: 01000
 Content-Length: 0
 
 ```
@@ -232,7 +232,7 @@ Server: Example RPP server v1.0
 Content-Length: 424
 Content-Type: application/rpp+json
 Content-Language: en
-RPP-code: 1000
+RPP-code: 01000
 
 TODO: JSON message here
 ```
@@ -268,7 +268,7 @@ Server: Example RPP server v1.0
 Content-Length: 312
 Content-Type: application/rpp+json
 Content-Language: en
-RPP-code: 1301
+RPP-code: 01301
 
 TODO
 ```
@@ -300,7 +300,7 @@ HTTP/2 200 OK
 Date: Wed, 24 Jan 2024 12:00:00 UTC
 Server: Example RPP server v1.0
 Content-Language: en
-RPP-code: 1000
+RPP-code: 01000
 RPP-Queue-Size: 0
 RPP-Svtrid: XYZ-12345
 RPP-Cltrid: ABC-12345
@@ -341,7 +341,7 @@ Content-Language: en
 Content-Length: 642
 Content-Type: application/rpp+json
 Location: https://rpp.example.nl/rpp/v1/domains/example.nl
-RPP-code: 1000
+RPP-code: 01000
 
 TODO
 ```
@@ -375,7 +375,7 @@ Server: Example RPP server v1.0
 Content-Length: 80
 RPP-Svtrid: XYZ-12345
 RPP-Cltrid: ABC-12345
-RPP-code: 1000
+RPP-code: 01000
 
 TODO
 ```
@@ -426,7 +426,7 @@ Content-Language: en
 Content-Length: 205
 Location: https://rpp.example.nl/rpp/v1/domains/example.nl
 Content-Type: application/rpp+json
-RPP-code: 1000
+RPP-code: 01000
 
 TODO
 ```
@@ -495,7 +495,7 @@ Content-Language: en
 Content-Length: 328
 Content-Type: application/rpp+json
 Location: https://rpp.example.nl/rpp/v1/domains/example.nl/transfer
-RPP-code: 1001
+RPP-code: 01001
 
 TODO
 ```
@@ -561,7 +561,7 @@ Server: Example RPP server v1.0
 Content-Length: 230
 Content-Type: application/rpp+json
 Content-Language: en
-RPP-code: 1000
+RPP-code: 01000
 
 TODO
 ```
@@ -595,7 +595,7 @@ Server: Example RPP server v1.0
 Content-Length: 80
 RPP-Svtrid: XYZ-12345
 RPP-Cltrid: ABC-12345
-RPP-code: 1000
+RPP-code: 01000
 
 TODO
 ```
@@ -629,7 +629,7 @@ Server: Example RPP server v1.0
 Content-Length: 80
 RPP-Svtrid: XYZ-12345
 RPP-Cltrid: ABC-12345
-RPP-code: 1000
+RPP-code: 01000
 
 TODO
 
@@ -665,7 +665,7 @@ Server: Example RPP server v1.0
 Content-Length: 80
 RPP-Svtrid: XYZ-12345
 RPP-Cltrid: ABC-12345
-RPP-code: 1000
+RPP-code: 01000
 
 TODO
 ```
@@ -703,7 +703,7 @@ Server: Example RPP server v1.0
 Content-Length: 80
 RPP-Svtrid: XYZ-12345
 RPP-Cltrid: ABC-12345
-RPP-code: 1000
+RPP-code: 01000
 
 TODO
 ```
