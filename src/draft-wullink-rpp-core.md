@@ -89,9 +89,11 @@ The server HTTP response contains a status code, headers, and MAY contain an RPP
 
 - `RPP-Svtrid`:  This header is the equivalent of the "svTRID" element defined in [@!RFC5730] and MUST be used accordingly when the RPP response does not contain an EPP response in the HTTP message body. If an HTTP message body with the EPP XML equivalent "svTRID" exists, both values MUST be consistent.
 - `RPP-Cltrid`: This header is the equivalent of the "clTRID" element defined in [@!RFC5730] and MUST be used accordingly when the RPP response does not contain an EPP response in the HTTP message body. If the contents of the HTTP message body contains a "clTRID" value, then both values MUST be consistent.
-- `RPP-Code`: This header is the equivalent of the EPP result code defined in [@!RFC5730] and MUST be used accordingly. This header MUST be added to all responses, except for the Greeting, and MAY be used by the client for easy access to the EPP result code, without having to parse the HTTP response message body.
-- `RPP-EPP-Code`: An optional that MAY be used when RPP is used as a frontend service for an EPP service. The header can be used by the client for easy access to the EPP result code, without having to parse the HTTP response message body.
-- `RPP-Check-Avail`: An alternative for the "avail" attribute of the object:name element in an Object Check response and MUST be used accordingly. The server does not return a HTTP message body in response to a RPP Object Check (HEAD) request.
+  
+- `RPP-Code`: This header is the equivalent of the EPP result code defined in [@!RFC5730] and MUST be used accordingly. This header MUST be added to all responses and MAY be used by the client for easy access to the result code, without having to parse the HTTP response message body.
+
+For the EPP codes related to session management (1500, 2500, 2501 and 2502) there are no corresponding RPP codes.
+
 - `RPP-Queue-Size`: Return the number of unacknowledged messages in the client message queue. The server MAY include this header in all RPP responses.
 
 # Error handling and relation between HTTP status codes and RPP codes
@@ -135,17 +137,27 @@ subsequent sections provide details for each endpoint. URLs are assumed to be us
 
 A RPP client MAY use the HTTP GET method for executing informational request only when no request data has to be added to the HTTP message body. Sending content using an HTTP GET request is discouraged in [@!RFC9110], there exists no generally defined semantics for content received in a GET request. When an RPP object requires additional information, the client MUST use the HTTP POST method and add the query command content to the HTTP message body.
 
-## Check for Existence
+## Availability for Creation
 
-- Request: HEAD /{collection}/{id}
+The Availability for Creation endpoint is used to check whether an object can be successfully provisioned. Two distinct methods are defined for checking the availability of provisioning of an object, the first method uses the HEAD method for a quick check to find out if the object can be provisioned. The second method uses the GET method to retrieve additional information about the object's availability for provisioning, for example about pricing or additional requirements to be able to provision the requested object.
+
+When the client uses the HTTP HEAD method, the server MUST respond with an HTTP status code 200 (OK) if the object can be provisioned or with an HTTP status code 404 (Not Found) if the object cannot be provisioned.
+
+When the client uses the HTTP GET method, the server MUST respond with an HTTP status code 200 (OK) if the object can be provisioned. The server MUST include a message body containing more detailed availability information, for example about pricing or additional requirements to be able to provision the requested object. The message body MAY be and empty JSON object if no additional information is applicable.
+
+If the object cannot be provisioned then the server MUST return an HTTP status code 404 (Not Found) and include a problem statement in the message body.
+
+As an extension point the server MAY define and the client MAY use additional HTTP query parameters to further specify the check operation or the kind of response information that shall be returned. For example Registry Fee Extension [@RFC8748] defines a possibility to request certain currency, only certain commands or periods. Such functionality would add query parameters, which could be used with GET request to receive additional pricing information with the response. HEAD request would not be affected in this case.
+
+The server MUST respond with the same HTTP status code if the same URL is requested with HEAD and with GET.
+
+```
+- Request: HEAD|GET /{collection}/{id}/availability
 - Request message: None
-- Response message: None
+- Response message: Optional availability response
+```
 
- The HTTP HEAD method MUST be used for object existence check. The response MUST contain the `RPP-Check-Avail` header. The value of the `RPP-Check-Avail` header MUST be false or true, depending on whether the object can be provisioned.
-
-The Check endpoint MUST be limited to checking only a single object-id per request, to allow the server to effiently load balance requests.
-
-Example request for a domain name:
+Example request for a domain name that is not available for provisioning:
 
 ```http
 HEAD /rpp/v1/domains/example.nl HTTP/2
@@ -159,12 +171,11 @@ RPP-Cltrid: ABC-12345
 Example response:
 
 ```http
-HTTP/2 200 OK
+HTTP/2 404 Not Found
 Date: Wed, 24 Jan 2024 12:00:00 UTC
 Server: Example RPP server v1.0
 RPP-Cltrid: ABC-12345
 RPP-Svtrid: XYZ-12345
-RPP-Check-Avail: false
 RPP-result-code: 1000
 Content-Length: 0
 
@@ -710,6 +721,10 @@ Data confidentiality and integrity MUST be enforced, all data transport between 
 Due to the stateless nature of RPP, the client MUST include the authentication credentials in each HTTP request. This MAY be done by using JSON Web Tokens (JWT) [@!RFC7519] or Basic authentication [@!RFC7617].
 
 # Change History
+
+## Version 01 to 02
+
+- Merged the RPP-EPP-Code and RPP-Code headers into a single RPP-Code header
 
 ## Version 00 to 01
 
