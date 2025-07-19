@@ -109,15 +109,17 @@ subsequent sections provide details for each endpoint. URLs are assumed to be us
 
 A RPP client MAY use the HTTP GET method for executing informational request only when no request data has to be added to the HTTP message body. Sending content using an HTTP GET request is discouraged in [@!RFC9110], there exists no generally defined semantics for content received in a GET request. When an RPP object requires additional information, the client MUST use the HTTP POST method and add the query command content to the HTTP message body.
 
-## Check for Existence
+## Availability for Creation
 
-The Check for existence endpoint is used to check whether an object can be successfully provisioned. Two distinct methods are defined for checking the availability of an object, the first method uses the HEAD method for a quick to find out if the object can be provisioned. The second method uses the GET method to retrieve additional information about the object's availability, for example about pricing or additional requirements to be able to provision the requested object.
+The Availability for Creation endpoint is used to check whether an object can be successfully provisioned. Two distinct methods are defined for checking the availability of provisioning of an object, the first method uses the HEAD method for a quick to find out if the object can be provisioned. The second method uses the GET method to retrieve additional information about the object's availability for provisioning, for example about pricing or additional requirements to be able to provision the requested object.
 
 When the client uses the HTTP HEAD method, the server MUST respond with an HTTP status code 200 (OK) if the object can be provisioned or with an HTTP status code 404 (Not Found) if the object cannot be provisioned.
 
-When the client uses the HTTP GET method, the server MUST respond with an HTTP status code 200 (OK) if the object can be provisioned, or with an HTTP status code 404 (Not Found) if the object cannot be provisioned. The server MAY also include an additional message body containing more detailed availability information, for example about pricing or additional requirements to be able to provision the requested object.
+When the client uses the HTTP GET method, the server MUST respond with an HTTP status code 200 (OK) if the object can be provisioned, or with an HTTP status code 404 (Not Found) if the object cannot be provisioned. The server MUST include message body containing more detailed availability information, for example about pricing or additional requirements to be able to provision the requested object. The message body MAY be and empty JSON object if no additional information is applicable.
 
-The Check endpoint MUST be limited to checking only a single object-id per request, to allow the server to efficiently load balance requests.
+As an extension point the server MAY define and the client MAY use additional HTTP query parameters to further specify the check or the kind of response information that shall be returned. For example Registry Fee Extension [@RFC8748] defines a possibility to request certain currency, only certain commands or periods. Such functionality would add query parameters, which could be used with GET request to receive additional pricing information with the response. HEAD request would not be affected in this case.
+
+The server MUST respond with the same HTTP status code if the same URL is requested with HEAD and with GET.
 
 ```
 - Request: HEAD|GET /{collection}/{id}/availability
@@ -125,7 +127,7 @@ The Check endpoint MUST be limited to checking only a single object-id per reque
 - Response message: Optional availability response
 ```
 
-Example request for a domain name that is not available:
+Example request for a domain name that is not available for provisioning:
 
 ```http
 HEAD /rpp/v1/domains/example.nl HTTP/2
