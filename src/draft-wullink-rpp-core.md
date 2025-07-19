@@ -88,17 +88,25 @@ A RPP request does not always require a request message body. The information co
 The server HTTP response contains a status code, headers, and MAY contain an RPP response message in the message body. HTTP headers are used to transmit additional data to the client and MAY be used to send RPP process related data to the client. HTTP headers used by RPP MUST use the "RPP-" prefix, the following response headers have been defined for RPP.
 
 - `RPP-Svtrid`:  This header is the equivalent of the "svTRID" element defined in [@!RFC5730] and MUST be used accordingly when the RPP response does not contain an EPP response in the HTTP message body. If an HTTP message body with the EPP XML equivalent "svTRID" exists, both values MUST be consistent.
+
 - `RPP-Cltrid`: This header is the equivalent of the "clTRID" element defined in [@!RFC5730] and MUST be used accordingly when the RPP response does not contain an EPP response in the HTTP message body. If the contents of the HTTP message body contains a "clTRID" value, then both values MUST be consistent.
   
 - `RPP-Code`: This header is the equivalent of the EPP result code defined in [@!RFC5730] and MUST be used accordingly. This header MUST be added to all responses and MAY be used by the client for easy access to the result code, without having to parse the HTTP response message body.
 
 For the EPP codes related to session management (1500, 2500, 2501 and 2502) there are no corresponding RPP codes.
 
+In order for RPP to be backwards compatible with EPP, RPP will use 5-digit coding of the result codes, where first digit will denote origin specification of the result codes.
+
+For [@!RFC5730] Result Codes the leading digit MUST be "0".
+For RPP result codes the leading digit MUST be "1". For avoidance of confusion RPP MUST not define new codes with the same semantic meaning as already defined in EPP.
+
+For RPP codes the remaining 4 digits MUST keep the same semantics as [@!RFC5730] Result Codes.
+
 - `RPP-Queue-Size`: Return the number of unacknowledged messages in the client message queue. The server MAY include this header in all RPP responses.
 
 # Error handling and relation between HTTP status codes and RPP codes
 
-RPP leverages standard HTTP status codes to reflect the outcome of RPP operations. The RPP status codes are based on the EPP result codes defined in [@!RFC5730]. This allows clients to handle responses generically using common HTTP patterns. While the HTTP status code provides the primary, high-level outcome, the specific RPP result code MUST still be provided in the `RPP-Code` HTTP header for detailed diagnostics.
+RPP leverages standard HTTP status codes to reflect the outcome of RPP operations. The RPP result codes are based on the EPP result codes defined in [@!RFC5730]. This allows clients to handle responses generically using common HTTP patterns. While the HTTP status code provides the primary, high-level outcome, the specific RPP result code MUST still be provided in the `RPP-Code` HTTP header for detailed diagnostics.
 
 The mapping strategy is to use the most specific HTTP code that accurately reflects the operation's result.
 
@@ -119,14 +127,14 @@ Table 1: RPP result code and HTTP Status-Code mapping.
 | 204 No Content | The resource was deleted successfully. | 1000 for DELETE |
 | Client Errors (4xx) |   |   |
 | 400 Bad Request | Generic client-side error (syntax, parameters, policy). | 2000-2005,2104-2106,2300-2301,2304-2308 |
-| 401 Unauthorized | Authentication or authorization failed. | 2200-2202 |
+| 403 Forbidden | Authentication or authorization failed. | 2200-2202 |
 | 404 Not Found | The requested resource does not exist. | 2303 |
 | 409 Conflict | The resource could not be created because it already exists. | 2302 |
 | Server Errors (5xx) |   |   |
 | 500 Internal Server Error | Generic server-side error; command failed. | 2400 |
 | 501 Not Implemented | The requested command or feature is not implemented. | 2100-2103 |
 
-Some EPP codes, like 1500, 2500, 2501 and 2502 are related to session management and therefore not applicable to a sessionless RPP protocoll.
+Some EPP result codes, like 1500, 2500, 2501 and 2502 are related to session management and therefore not applicable to a sessionless RPP protocol.
 
 # Endpoints
 

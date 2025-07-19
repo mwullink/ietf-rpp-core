@@ -5,7 +5,7 @@
         "1301": ResultCode.COMMAND_COMPLETED_ACK_TO_DEQUEUE, -> 200 OK
         "1500": ResultCode.COMMAND_COMPLETED_ENDING_SESSION, -> N/A
 
-        "2000": ResultCode.UNKNOWN_COMMAND, -> 400 Bad Request
+    "2000": ResultCode.UNKNOWN_COMMAND, -> 400 Bad Request
         "2001": ResultCode.COMMAND_SYNTAX_ERROR, -> 400 Bad Request
         "2002": ResultCode.COMMAND_USE_ERROR, -> 400 Bad Request
         "2003": ResultCode.REQUIRED_PARAMETER_MISSING, -> 400 Bad Request
@@ -18,9 +18,9 @@
         "2104": ResultCode.BILLING_FAILURE, -> 400 Bad Request
         "2105": ResultCode.OBJECT_NOT_ELIGIBLE_FOR_RENEWAL, -> 400 Bad Request
         "2106": ResultCode.OBJECT_NOT_ELIGIBLE_FOR_TRANSFER, -> 400 Bad Request
-        "2200": ResultCode.AUTHENTICATION_ERROR, -> 401 Unauthorized
-        "2201": ResultCode.AUTHORIZATION_ERROR, -> 401 Unauthorized
-        "2202": ResultCode.INVALID_AUTHORIZATION_INFORMATION, -> 401 Unauthorized
+        "2200": ResultCode.AUTHENTICATION_ERROR, -> 403 Forbidden
+        "2201": ResultCode.AUTHORIZATION_ERROR, -> 403 Forbidden
+        "2202": ResultCode.INVALID_AUTHORIZATION_INFORMATION, -> 403 Forbidden
         "2300": ResultCode.OBJECT_PENDING_TRANSFER, -> 400 Bad Request
         "2301": ResultCode.OBJECT_NOT_PENDING_TRANSFER, -> 400 Bad Request
         "2302": ResultCode.OBJECT_EXISTS, -> 409 Conflict
