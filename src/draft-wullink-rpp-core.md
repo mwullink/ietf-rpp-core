@@ -96,7 +96,7 @@ The server HTTP response contains a status code, headers, and MAY contain an RPP
 
 # Error handling and relation between HTTP status codes and RPP codes
 
-RESTful EPP leverages standard HTTP status codes to reflect the outcome of EPP operations. This allows clients to handle responses generically using common HTTP patterns. While the HTTP status code provides the primary, high-level outcome, the specific EPP result code MUST still be provided in the `RPP-Code` HTTP header for detailed diagnostics.
+RPP leverages standard HTTP status codes to reflect the outcome of RPP operations. The RPP status codes are based on the EPP result codes defined in [@!RFC5730]. This allows clients to handle responses generically using common HTTP patterns. While the HTTP status code provides the primary, high-level outcome, the specific RPP result code MUST still be provided in the `RPP-Code` HTTP header for detailed diagnostics.
 
 The mapping strategy is to use the most specific HTTP code that accurately reflects the operation's result.
 
@@ -104,10 +104,9 @@ For common and well-defined outcomes, a specific HTTP status code is used. For e
 
 For all other failures, a generic HTTP status code is used. Client-side errors (e.g., syntax, parameter, or policy violations) MUST return 400 Bad Request. Server-side failures MUST return 500 Internal Server Error.
 
-MUST return status information related to the HTTP protocol, following the mapping rules in Table 1.
+The server MUST return HTTP status codes, following the mapping rules in Table 1.
 
-
-Table 1: EPP result code and HTTP Status-Code mapping.
+Table 1: RPP result code and HTTP Status-Code mapping.
 
 | HTTP Status-Code | Description | Corresponding EPP Result Code(s) |
 | ---------------- | ----------- | -------------------------------- |
