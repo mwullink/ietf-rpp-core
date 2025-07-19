@@ -98,8 +98,6 @@ The server HTTP response contains a status code, headers, and MAY contain an RPP
 
 - `RPP-EPP-Code`: An optional that MAY be used when RPP is used as a frontend service for an EPP service. The header can be used by the client for easy access to the EPP result code, without having to parse the HTTP response message body.
 
-- `RPP-Check-Avail`: An alternative for the "avail" attribute of the object:name element in an Object Check response and MUST be used accordingly. The server does not return a HTTP message body in response to a RPP Object Check (HEAD) request.
-
 - `RPP-Queue-Size`: Return the number of unacknowledged messages in the client message queue. The server MAY include this header in all RPP responses.
 
 # Endpoints
@@ -113,15 +111,21 @@ A RPP client MAY use the HTTP GET method for executing informational request onl
 
 ## Check for Existence
 
-- Request: HEAD /{collection}/{id}
+The Check for existence endpoint is used to check whether an object can be successfully provisioned. Two distinct methods are defined for checking the availability of an object, the first method uses the HEAD method for a quick to find out if the object can be provisioned. The second method uses the GET method to retrieve additional information about the object's availability, for example about pricing or additional requirements to be able to provision the requested object.
+
+When the client uses the HTTP HEAD method, the server MUST respond with an HTTP status code 200 (OK) if the object can be provisioned or with an HTTP status code 404 (Not Found) if the object cannot be provisioned.
+
+When the client uses the HTTP GET method, the server MUST respond with an HTTP status code 200 (OK) if the object can be provisioned, or with an HTTP status code 404 (Not Found) if the object cannot be provisioned. The server MAY also include an additional message body containing more detailed availability information, for example about pricing or additional requirements to be able to provision the requested object.
+
+The Check endpoint MUST be limited to checking only a single object-id per request, to allow the server to efficiently load balance requests.
+
+```
+- Request: HEAD|GET /{collection}/{id}/availability
 - Request message: None
-- Response message: None
+- Response message: Optional availability response
+```
 
- The HTTP HEAD method MUST be used for object existence check. The response MUST contain the `RPP-Check-Avail` header. The value of the `RPP-Check-Avail` header MUST be false or true, depending on whether the object can be provisioned.
-
-The Check endpoint MUST be limited to checking only a single object-id per request, to allow the server to effiently load balance requests.
-
-Example request for a domain name:
+Example request for a domain name that is not available:
 
 ```http
 HEAD /rpp/v1/domains/example.nl HTTP/2
@@ -135,12 +139,11 @@ RPP-Cltrid: ABC-12345
 Example response:
 
 ```http
-HTTP/2 200 OK
+HTTP/2 404 Not Found
 Date: Wed, 24 Jan 2024 12:00:00 UTC
 Server: Example RPP server v1.0
 RPP-Cltrid: ABC-12345
 RPP-Svtrid: XYZ-12345
-RPP-Check-Avail: false
 RPP-result-code: 1000
 Content-Length: 0
 
