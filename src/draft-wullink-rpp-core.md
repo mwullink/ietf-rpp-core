@@ -380,6 +380,49 @@ RPP-code: 01000
 TODO
 ```
 
+## Processes Path Segment
+
+Each provisioning object may be linked to one or more running tasks, such as a transfer or deletion. Tasks can be started, stopped, or interacted with using their own specific set of representations and operations.
+
+All tasks in RPP MUST exist under the `/tasks/{task_name}/{id}` path.
+
+### Generic task interface
+
+A generic interface for interacting with the tasks is defined as follows:
+
+#### Starting
+
+`POST /{collection}/{id}/{task_name}`
+
+A started task MAY create a resource at `/tasks/{task_name}/latest` to access and interact with the latest task instance. In such case the response MUST be a 303 See Other with a `Location` header pointing to the created task resource.
+When a task is created, executed and immediately completed by the server, a 303 See Other response MAY still be provided where the result of the task could be obtained by the client.
+
+Server MAY decide not to expose any resource for interaction with a created task, in such case a 202 Accepted MUST be provided.
+
+#### Cancelling
+
+A client MAY choose to use the "latest" mnemonic to refer to the latest task instance, in such case the request MUST be:
+`DELETE /tasks/{task_name}/latest`.
+
+If the client wants to delete a specific task instance, the request MUST be:
+`DELETE /tasks/{task_name}/{id}`
+
+This request is intended to stop the running task. The server MUST return a 204 response if the task has been stopped and the resource is gone, or a 202 response if the task has been stopped but the resource remains.
+
+#### Status
+
+A client MAY choose to use the "latest" mnemonic to refer to the latest task instance, in such case the request MUST be:
+`GET /tasks/{task_name}/latest`.
+
+If the client wants to delete a specific task instance, the request MUST be:
+`GET /tasks/{task_name}/{id}`
+
+This retrieves the representation of the task status. If no task is running, the server MAY return the status of the last completed task or return a 404 response.
+
+#### Other operations
+
+Other operations on a task can be performed by adding path segments to the `/tasks/{task_name}/latest|<id>` URL path.
+
 ## Renew Resource
 
 - Request: POST /{collection}/{id}/renewal
