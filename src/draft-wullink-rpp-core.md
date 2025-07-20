@@ -380,7 +380,7 @@ RPP-code: 01000
 TODO
 ```
 
-## Processes Path Segment
+## Tasks
 
 Each provisioning object may be linked to one or more running tasks, such as a transfer or deletion. Tasks can be started, stopped, or interacted with using their own specific set of representations and operations.
 
