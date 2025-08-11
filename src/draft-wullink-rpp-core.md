@@ -384,7 +384,13 @@ TODO
 
 Each provisioning object may be linked to one or more running tasks, such as a transfer or deletion. Tasks can be started, stopped, or interacted with using their own specific set of representations and operations.
 
-All tasks in RPP MUST exist under the `/tasks/{task_name}/{id}` path.
+POST {collection}/{id}/processes/renewal
+
+POST {collection}/{id}/processes/renewals
+All tasks in RPP MUST exist under the `/{collection}/{id}/renewals/{xid}|latest` path.
+
+POST {collection}/{id}/transfers
+All tasks in RPP MUST exist under the `/{collection}/{id}/transfers/{xid}|latest` path.
 
 ### Generic task interface
 
